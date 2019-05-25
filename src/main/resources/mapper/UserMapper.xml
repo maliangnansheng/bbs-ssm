@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liang.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.liang.bean.User">
+    <id column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="family" jdbcType="VARCHAR" property="family" />
+    <result column="intro" jdbcType="VARCHAR" property="intro" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    userid, name, age, sex, password, email, family, intro, time
+  </sql>
+  
+  <!-- 登录，按姓名和密码查询 -->
+  <select id="selectByUser" parameterType="com.liang.bean.User" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where name = #{name,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 注册，按姓名查询 -->
+  <select id="selectByUserName" parameterType="com.liang.bean.User" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where name = #{name,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 查询所有用户（分页） -->
+  <select id="selectByUserAll" parameterType="com.liang.bean.User" resultMap="BaseResultMap">
+    select 
+    u.userid, u.name, u.age, u.sex, u.password, u.email, u.family, u.intro, u.time, v.photo userphoto
+    from user u left join via v on u.userid=v.userid
+    order by u.userid desc
+    limit #{offset},#{limit}
+  </select>
+  
+  <!-- 按userid查询用户 -->
+  <select id="selectByUserId" parameterType="com.liang.bean.User" resultMap="BaseResultMap">
+	select 
+    u.userid, u.name, u.age, u.sex, u.password, u.email, u.family, u.intro, u.time, v.photo userphoto
+    from user u left join via v on u.userid=v.userid
+    where u.userid = #{userid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 按userid查询用户 -->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    u.userid, u.name, u.age, u.sex, u.password, u.email, u.family, u.intro, u.time, v.photo userphoto, count(*) attcount
+    from user u left join via v on u.userid=v.userid join attention att on u.userid=att.beuserid
+    where u.userid = #{userid,jdbcType=INTEGER}
+  </select>
+
+  <!-- 查询用户总数 -->
+  <select id="selectCount" resultType="java.lang.Integer">
+    select count(1) as total from user
+  </select>
+  
+  <!-- 删除用户 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where userid = #{userid,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.liang.bean.User">
+    insert into user (userid, name, age, 
+      sex, password, email, 
+      family, intro, time
+      )
+    values (#{userid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
+      #{sex,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{family,jdbcType=VARCHAR}, #{intro,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.liang.bean.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="family != null">
+        family,
+      </if>
+      <if test="intro != null">
+        intro,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="family != null">
+        #{family,jdbcType=VARCHAR},
+      </if>
+      <if test="intro != null">
+        #{intro,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" parameterType="map">
+    update user
+    <set>
+      <if test="record.userid != null">
+        userid = #{record.userid,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.age != null">
+        age = #{record.age,jdbcType=INTEGER},
+      </if>
+      <if test="record.sex != null">
+        sex = #{record.sex,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null">
+        password = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null">
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.family != null">
+        family = #{record.family,jdbcType=VARCHAR},
+      </if>
+      <if test="record.intro != null">
+        intro = #{record.intro,jdbcType=VARCHAR},
+      </if>
+      <if test="record.time != null">
+        time = #{record.time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update user
+    set userid = #{record.userid,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      age = #{record.age,jdbcType=INTEGER},
+      sex = #{record.sex,jdbcType=VARCHAR},
+      password = #{record.password,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      family = #{record.family,jdbcType=VARCHAR},
+      intro = #{record.intro,jdbcType=VARCHAR},
+      time = #{record.time,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.liang.bean.User">
+    update user
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="family != null">
+        family = #{family,jdbcType=VARCHAR},
+      </if>
+      <if test="intro != null">
+        intro = #{intro,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where userid = #{userid,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 编辑个人资料（修改user表） -->
+  <update id="updateByPrimaryKey" parameterType="com.liang.bean.User">
+    update user
+    set age = #{age,jdbcType=INTEGER},
+	    sex = #{sex,jdbcType=VARCHAR},
+	    family = #{family,jdbcType=VARCHAR},
+	    intro = #{intro,jdbcType=VARCHAR}
+    where userid = #{userid,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 基本设置信息的修改（修改user表） -->
+  <update id="updateSetupByPrimaryKey" parameterType="com.liang.bean.User">
+    update user
+    set name = #{name,jdbcType=VARCHAR},
+	    password = #{password,jdbcType=VARCHAR},
+	    email = #{email,jdbcType=VARCHAR}
+    where userid = #{userid,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

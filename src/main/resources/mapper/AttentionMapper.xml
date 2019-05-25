@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liang.dao.AttentionMapper">
+  <resultMap id="BaseResultMap" type="com.liang.bean.Attention">
+    <id column="gid" jdbcType="INTEGER" property="gid" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="beuserid" jdbcType="INTEGER" property="beuserid" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    gid, userid, beuserid
+  </sql>
+  
+  <!-- 添加关注 -->
+  <insert id="insert" parameterType="com.liang.bean.Attention">
+    insert into attention
+    values (#{gid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+    	#{beuserid,jdbcType=INTEGER})
+  </insert>
+  
+  <!-- 查询关注信息(无条件) -->
+  <select id="selectByAttention" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from attention
+  </select>
+  
+  <!-- 查询关注信息(按userid) -->
+  <select id="selectByUserid" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from attention
+    where userid = #{userid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询关注信息(按beuserid) -->
+  <select id="selectByBeuserid" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from attention
+    where beuserid = #{beuserid,jdbcType=INTEGER}
+  </select>
+
+  <!-- 按关注者id和被关注者id进行查询 -->
+  <select id="getAttentionBeuserid" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from attention
+    where userid = #{userid,jdbcType=INTEGER} and beuserid = #{beuserid,jdbcType=INTEGER}
+  </select>
+
+  <!-- 取消关注（首页） -->
+  <delete id="deleteByAttention" parameterType="com.liang.bean.Attention">
+    delete from attention
+    where gid = #{gid,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 取消关注（个人主页） -->
+  <delete id="deleteByAttentionMyself" parameterType="com.liang.bean.Attention">
+    delete from attention
+    where userid = #{userid,jdbcType=INTEGER} and beuserid = #{beuserid,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 删除该用户对应的关注和被关注信息 -->
+  <delete id="deleteAttentionUseridOrBeuserid" parameterType="java.lang.Integer">
+    delete from attention
+    where userid = #{userid,jdbcType=INTEGER} or beuserid = #{userid,jdbcType=INTEGER}
+  </delete>
+  
+</mapper>

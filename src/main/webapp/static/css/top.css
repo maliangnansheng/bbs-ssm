@@ -1,0 +1,27 @@
+/* jump */
+#jump {
+    position: fixed;
+    top: 400px;
+    right: 100px;
+    width: 40px;
+    z-index: 400;
+}
+
+* html #jump {
+    position: absolute;
+    /*top: expression(documentElement.scrollTop + "px");*/
+    margin: 300px 0 0 0;
+}
+
+#jump li {
+    height: 50px;
+    overflow: hidden;
+}
+
+#top {
+    display: block;
+    width: 40px;
+    height: 42px;
+    overflow: hidden;
+    cursor: pointer;
+}

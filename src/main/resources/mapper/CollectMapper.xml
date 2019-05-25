@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liang.dao.CollectMapper">
+  <resultMap id="BaseResultMap" type="com.liang.bean.Collect">
+    <id column="sid" jdbcType="INTEGER" property="sid" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="fid" jdbcType="INTEGER" property="fid" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    sid, userid, fid
+  </sql>
+  
+  <!-- 查询收藏信息(无条件) -->
+  <select id="selectByCollect" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from collect
+  </select>
+  
+  <!-- 按userid查询收藏信息（收藏了哪些帖子） -->
+  <select id="selectByCollectUserid" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from collect
+    where userid = #{userid,jdbcType=INTEGER}
+  </select>
+
+  <!-- 按收藏者id和被收藏帖子id进行查询 -->
+  <select id="getCollectFid" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from collect
+    where userid = #{userid,jdbcType=INTEGER} and fid = #{fid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 添加收藏 -->
+  <insert id="insert" parameterType="com.liang.bean.Collect">
+    insert into collect
+    values (#{sid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+    	#{fid,jdbcType=INTEGER})
+  </insert>
+  
+  <!-- 删除收藏信息 -->
+  <delete id="deleteByCollect" parameterType="com.liang.bean.Collect">
+    delete from collect
+    where sid = #{sid,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 删除收藏（按userid和fid） -->
+  <delete id="deleteCollectUseridAndFid" parameterType="com.liang.bean.Collect">
+    delete from collect
+    where userid = #{userid,jdbcType=INTEGER} and fid = #{fid,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 按fid删除收藏信息 -->
+  <delete id="deleteByCollectFid" parameterType="java.lang.Integer">
+    delete from collect
+    where fid = #{fid,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 删除该用户对应的收藏信息(按userid) -->
+   <delete id="deleteCollectUserid" parameterType="java.lang.Integer">
+    delete from collect
+    where userid = #{userid,jdbcType=INTEGER}
+  </delete>
+  
+  
+</mapper>

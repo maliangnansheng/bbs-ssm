@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liang.dao.ArticleMapper">
+  <resultMap id="BaseResultMap" type="com.liang.bean.Article">
+    <id column="fid" jdbcType="INTEGER" property="fid" />
+    <result column="titles" jdbcType="VARCHAR" property="titles" />
+    <result column="fcontent" jdbcType="VARCHAR" property="fcontent" />
+    <result column="photo" jdbcType="VARCHAR" property="photo" />
+    <result column="bname" jdbcType="VARCHAR" property="bname" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    fid, titles, fcontent, photo, bname, time, userid, username, status
+  </sql>
+  
+  <!-- 查询发帖表信息（分页）（并获取每张帖子所对应评论的条数） -->
+  <select id="selectByArticle" parameterType="com.liang.bean.Article" resultMap="BaseResultMap">
+    select 
+    a.fid, a.titles, a.fcontent, a.photo, a.bname, a.time, a.userid, a.username, a.status,count(c.pid) sum,v.photo userphoto
+    from article a left join comment c on a.fid=c.fid left join via v on a.userid=v.userid
+    where status = 1
+	group by a.fid
+	order by fid desc
+	limit #{offset},#{limit}
+  </select>
+
+  <!-- 查询发帖表信息（分页）-管理员 -->
+  <select id="selectByArticleAdmin" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    fid, titles, fcontent, photo, bname, time, userid, username, status
+    from article
+	order by fid desc
+    limit #{offset},#{limit}
+  </select>
+  
+  <!-- 按帖子标题模糊查询（搜索框搜索）（并获取每张帖子所对应评论的条数） -->
+  <select id="selectByArticleTitle" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    a.fid, a.titles, a.fcontent, a.photo, a.bname, a.time, a.userid, a.username, a.status,count(*) sum
+    from article a left join comment c on a.fid=c.fid
+    where a.titles like "%" #{articleTitle,jdbcType=VARCHAR} "%"
+	group by a.fid
+	order by fid desc
+  </select>
+  
+  <!-- 按帖子板块查询出帖子（并获取每张帖子所对应评论的条数） -->
+  <select id="selectByArticleBname" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    a.fid, a.titles, a.fcontent, a.photo, a.bname, a.time, a.userid, a.username, a.status,count(c.pid) sum,v.photo userphoto
+    from article a left join comment c on a.fid=c.fid left join via v on a.userid=v.userid
+    where a.bname = #{bname,jdbcType=VARCHAR}
+	group by a.fid
+	order by fid desc
+  </select>
+  
+  <!-- 按userid查询发帖表信息 -->
+  <select id="selectByArticleId" parameterType="com.liang.bean.Article" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from article
+    where userid = #{userid,jdbcType=INTEGER}
+    order by fid desc
+  </select>
+  
+  <!-- 按fid查询发帖表信息 -->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    a.fid, a.titles, a.fcontent, a.photo, a.bname, a.time, a.userid, a.username, a.status,count(c.pid) sum,v.photo userphoto
+    from article a left join comment c on a.fid=c.fid left join via v on a.userid=v.userid
+    where a.fid = #{fid,jdbcType=INTEGER}
+  </select>
+
+  <!-- 总帖数 -->
+  <select id="selectCount" resultType="java.lang.Integer">
+    select count(1) from article
+  </select>
+  
+  <!-- 按fid删除帖子 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from article
+    where fid = #{fid,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 删除用户对应的帖子信息(按userid) -->
+  <delete id="deleteByUserid" parameterType="java.lang.Integer">
+    delete from article
+    where userid = #{userid,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 向数据库插入发帖信息 -->
+  <insert id="insert" parameterType="com.liang.bean.Article">
+    insert into article (fid, titles, fcontent, 
+      photo, bname, time, 
+      userid, username, status
+      )
+    values (#{fid,jdbcType=INTEGER}, #{titles,jdbcType=VARCHAR}, #{fcontent,jdbcType=VARCHAR}, 
+      #{photo,jdbcType=VARCHAR}, #{bname,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP}, 
+      #{userid,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.liang.bean.Article">
+    insert into article
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fid != null">
+        fid,
+      </if>
+      <if test="titles != null">
+        titles,
+      </if>
+      <if test="fcontent != null">
+        fcontent,
+      </if>
+      <if test="photo != null">
+        photo,
+      </if>
+      <if test="bname != null">
+        bname,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fid != null">
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="titles != null">
+        #{titles,jdbcType=VARCHAR},
+      </if>
+      <if test="fcontent != null">
+        #{fcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null">
+        #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="bname != null">
+        #{bname,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" parameterType="map">
+    update article
+    <set>
+      <if test="record.fid != null">
+        fid = #{record.fid,jdbcType=INTEGER},
+      </if>
+      <if test="record.titles != null">
+        titles = #{record.titles,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fcontent != null">
+        fcontent = #{record.fcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.photo != null">
+        photo = #{record.photo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bname != null">
+        bname = #{record.bname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.time != null">
+        time = #{record.time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.userid != null">
+        userid = #{record.userid,jdbcType=INTEGER},
+      </if>
+      <if test="record.username != null">
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update article
+    set fid = #{record.fid,jdbcType=INTEGER},
+      titles = #{record.titles,jdbcType=VARCHAR},
+      fcontent = #{record.fcontent,jdbcType=VARCHAR},
+      photo = #{record.photo,jdbcType=VARCHAR},
+      bname = #{record.bname,jdbcType=VARCHAR},
+      time = #{record.time,jdbcType=TIMESTAMP},
+      userid = #{record.userid,jdbcType=INTEGER},
+      username = #{record.username,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.liang.bean.Article">
+    update article
+    <set>
+      <if test="titles != null">
+        titles = #{titles,jdbcType=VARCHAR},
+      </if>
+      <if test="fcontent != null">
+        fcontent = #{fcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null">
+        photo = #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="bname != null">
+        bname = #{bname,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 修改帖子表 -->
+  <update id="updateByPrimaryKey" parameterType="com.liang.bean.Article">
+    update article
+    set titles = #{titles,jdbcType=VARCHAR},
+      fcontent = #{fcontent,jdbcType=VARCHAR},
+      photo = #{photo,jdbcType=VARCHAR},
+      bname = #{bname,jdbcType=VARCHAR}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 修改article表的status属性（修改审核状态） -->
+  <update id="updateArticleStatus" parameterType="com.liang.bean.Article">
+    update article
+    set status = #{status,jdbcType=INTEGER}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 修改article表中的username -->
+  <update id="updateArticleSetup" parameterType="com.liang.bean.Article">
+    update article
+    set username = #{username,jdbcType=VARCHAR}
+    where userid = #{userid,jdbcType=INTEGER}
+  </update>
+</mapper>

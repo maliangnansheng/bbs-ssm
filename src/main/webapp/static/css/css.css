@@ -1,0 +1,128 @@
+body {
+    padding-top: 60px;
+    background-color: #f6f6f6;
+}
+.img_logo{
+    position:relative;
+    height: 40px;
+    top: -10px;
+}
+.myself_img{
+    position: relative;
+    left: 20px;
+}
+.myself_text{
+    position: relative;
+    left: -40px;
+    top: 10px
+}
+.bottom_left{
+    position:relative;
+    left: 8%;
+    /* width: 60%; */
+    background-color: #ffffff;
+    border-radius: 2px;
+}
+.bottom_left_phones{ 
+    background-color: #ffffff;
+    border-radius: 2px;
+}
+.bottom_right{
+    position:relative;
+    left: 9%;
+    /* width: 24%; */
+    background-color: #ffffff;
+    border-radius: 2px;
+}
+.img_head{
+    position:relative;
+    width: 35px;
+    height: 35px;
+    padding-top: 5px;
+    border-radius: 8px;
+}
+.bottom_left_name{
+    position:relative;
+    top: 5px;
+}
+.img_content{
+    position:relative;
+    width: 50%;
+    height: 50%;
+}
+.img_right_logo{
+    position:relative;
+    width: 45%;
+    height: 45%;
+}
+.img_right_logo_bankuai{
+	position:relative;
+    width: 70%;
+    height: 70%;
+}
+
+
+
+
+.attention{ margin-top:20px;height:33px;line-height:35px;overflow:hidden;padding-left:10px;}
+.attention a {float:left;overflow:hidden;}
+.attention a:hover {padding-top:35px;}
+.attention .button2 {display:block;margin-top:-35px;}
+
+.attention_content{ height:33px;line-height:35px;overflow:hidden;padding-left:10px;}
+.attention_content a {float:left;overflow:hidden;}
+.attention_content a:hover {padding-top:35px;}
+.attention_content .button2 {display:block;margin-top:-35px;}
+
+.collect_start{
+	position:relative;
+	top:-2px; 
+	color: #c0c0c0;
+	font-size: 20px;
+}
+.collect_start:hover{
+	color: red;
+}
+
+.collect_end{
+	position:relative;
+	top:-2px; 
+	color: red;
+	font-size: 20px;
+}
+.collect_end:hover{
+	color: #c0c0c0;
+}
+
+
+a{
+    color: #737373;
+}
+.a_b{
+    color: #09121f;
+}
+.a_p{
+    color: #337ab7;
+}
+a:hover{
+    color: #164c90;
+}
+
+div{
+    /*遇到div边界自动换行*/
+    word-wrap: break-word;
+}
+
+/*下面连着的4个作用是：去掉html里超链接下的横线。*/
+a:link {
+    text-decoration: none;
+}
+a:visited {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: none;
+}
+a:active {
+    text-decoration: none;
+}

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liang.dao.CommentMapper">
+  <resultMap id="BaseResultMap" type="com.liang.bean.Comment">
+    <id column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="pcontent" jdbcType="VARCHAR" property="pcontent" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="fid" jdbcType="INTEGER" property="fid" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    pid, pcontent, userid, fid, time
+  </sql>
+  <sql id="Base_Column_List2">
+    pid, pcontent, userid, fid, time,name
+  </sql>
+  
+  <!-- 按帖子id（fid）查询评论表信息（并通过userid查询出name）
+  		先查询出参与过评论的所有人，然后再按评论表的fid查询
+   -->
+  <select id="selectByCommentFid" parameterType="com.liang.bean.Comment" resultMap="BaseResultMap">
+    select 
+    c.pid, c.pcontent, c.userid, c.fid, c.time,u.name
+    from comment c,user u
+    where u.userid = c.userid
+    and fid=#{fid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 按用户id（userid）查询评论表的fid信息（去重） -->
+  <select id="selectByCommentUserid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from comment
+    where userid = #{userid,jdbcType=INTEGER}
+    GROUP BY fid
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from comment
+    where pid = #{pid,jdbcType=INTEGER}
+  </select>
+
+  <!-- 按帖子id（fid）查询该条帖子的评论数 -->
+  <select id="selectByCountFid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select count(1)
+    from comment
+    where fid = #{fid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 按pid删除评论表 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from comment
+    where pid = #{pid,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 删除该用户对应的所有评论信息(按userid) -->
+  <delete id="deleteByUserid" parameterType="java.lang.Integer">
+    delete from comment
+    where userid = #{userid,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 添加评论 -->
+  <insert id="insert" parameterType="com.liang.bean.Comment">
+    insert into 
+    comment (pid, pcontent, userid, fid, time)
+    values (#{pid,jdbcType=INTEGER}, #{pcontent,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}, 
+      #{fid,jdbcType=INTEGER}, #{time,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.liang.bean.Comment">
+    insert into comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="pcontent != null">
+        pcontent,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="fid != null">
+        fid,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="pcontent != null">
+        #{pcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="fid != null">
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" parameterType="map">
+    update comment
+    <set>
+      <if test="record.pid != null">
+        pid = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.pcontent != null">
+        pcontent = #{record.pcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userid != null">
+        userid = #{record.userid,jdbcType=INTEGER},
+      </if>
+      <if test="record.fid != null">
+        fid = #{record.fid,jdbcType=INTEGER},
+      </if>
+      <if test="record.time != null">
+        time = #{record.time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update comment
+    set pid = #{record.pid,jdbcType=INTEGER},
+      pcontent = #{record.pcontent,jdbcType=VARCHAR},
+      userid = #{record.userid,jdbcType=INTEGER},
+      fid = #{record.fid,jdbcType=INTEGER},
+      time = #{record.time,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.liang.bean.Comment">
+    update comment
+    <set>
+      <if test="pcontent != null">
+        pcontent = #{pcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="fid != null">
+        fid = #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.liang.bean.Comment">
+    update comment
+    set pcontent = #{pcontent,jdbcType=VARCHAR},
+      userid = #{userid,jdbcType=INTEGER},
+      fid = #{fid,jdbcType=INTEGER},
+      time = #{time,jdbcType=TIMESTAMP}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+</mapper>
