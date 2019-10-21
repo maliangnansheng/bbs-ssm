@@ -36,9 +36,11 @@
 > > ![](picture/clone.png)
 > >
 > > - 将bbs_test.sql导入MySQL数据库：
-> >   1. 创建数据库bbs_test：`create database bbs_test;`
-> >   2. 进入bbs_test数据库：`use bbs_test;`
-> >   3. 将bbs_test.sql导入bbs_test数据库：`source 你的路径\bbs_test.sql;`
+> >   - 创建数据库bbs_test：`create database bbs_test;`
+> >
+> >   - 进入bbs_test数据库：`use bbs_test;`
+> >
+> >   - 将bbs_test.sql导入bbs_test数据库：`source 你的路径\bbs_test.sql;`
 >
 > #### 针对eclipse
 >
@@ -60,7 +62,7 @@
 >
 > #### 针对idea
 >
-> > **注：对应的Tomcat配置等自己搞定...**
+> > **注：对应的Tomcat配置、Maven配置等自己搞定...**
 > >
 > > - 使用idea将ssm-bbs导入
 > >
