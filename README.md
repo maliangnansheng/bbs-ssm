@@ -25,38 +25,64 @@
 >
 > > > 作者QQ：924818949
 >
-> ## 引用本项目流程（以eclipse为例）：
-> **推荐使用IDEA（只需对应着修改项目部署路径即可）**
+> ## 引用本项目流程：
 >
-> > - ### 将本项目导入编辑器
-> >
-> > 1. 通过git将该项目(bbs-ssm)clone到本地
+> **推荐使用IDEA**
+>
+> #### 通用操作
+>
+> > - 通过git将该项目(bbs-ssm)`clone`到本地
 > >
 > > ![](picture/clone.png)
 > >
-> > 2. 使用eclipse将ssm-bbs以maven的方式导入
-> >
-> > ![](picture/maven1.png)
-> >
-> > ![](picture/maven2.png)
-> >
-> > 然后等待Maven下载依赖包完成...
+> > - 将bbs_test.sql导入MySQL数据库：
+> >   1. 创建数据库bbs_test：`create database bbs_test;`
+> >   2. 进入bbs_test数据库：`use bbs_test;`
+> >   3. 将bbs_test.sql导入bbs_test数据库：`source 你的路径\bbs_test.sql;`
 >
-> > ### 修改项目部署路径
-> >
-> > ![](picture/tomcat.png)
+> #### 针对eclipse
 >
-> > ### 将bbs_test.sql导入MySQL数据库：
+> > - 使用eclipse将ssm-bbs以maven的方式导入
 > >
-> > 1. 创建数据库bbs_test：`create database bbs_test;`
-> > 2. 进入bbs_test数据库：`use bbs_test;`
-> > 3. 将bbs_test.sql导入bbs_test数据库：`source 你的路径\bbs_test.sql;`
+> >   ![](picture/maven1.png)
+> >
+> >   ![](picture/maven2.png)
+> >
+> >   等待Maven下载依赖包完成...
+> >
+> > - 修改项目部署路径
+> >
+> >   ![](picture/tomcat.png)
+> >
+> > - 启动项目
+> >
+> >   ![](picture/run.png)可以正常访问与操作了...真好
 >
-> > ### 启动项目
+> #### 针对idea
+>
+> > **注：对应的Tomcat配置等自己搞定...**
 > >
-> > ![](picture/run.png)
+> > - 使用idea将ssm-bbs导入
 > >
-> > 可以正常访问与操作了...真好
+> >   ![](picture/idea001.png)
+> >
+> >   点击“Enable Auto-Import”让其自动下载依赖包
+> >
+> >   ![](picture/idea002.png)
+> >
+> >   等待Maven下载依赖包完成...
+> >
+> > - 修改项目部署路径
+> >
+> >   ![](/picture/idea003.png)
+> >
+> >   ![](picture/idea004.png)
+> >
+> > - 启动项目
+> >
+> >   ![](picture/idea005.png)
+> >
+> >   可以正常访问与操作了...真好
 >
 > ## 静态展示：
 > ### 用户系统
