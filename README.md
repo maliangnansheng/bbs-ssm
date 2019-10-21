@@ -15,7 +15,7 @@
 >
 > > ### 我的环境
 >
-> > **jdk1.8** 、**tomcat9** 、**mysql6.3** 、**maven3.5.4** 、**eclipse4.7.1a**
+> > **jdk1.8** 、**tomcat9** 、**mysql5.7** 、**maven3.5.4** 、**eclipse4.7.1a**
 > ## 在线演示：
 > > [用户系统（手机上也有不错的展示效果）](http://www.nanshengbbs.top)
 >
