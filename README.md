@@ -1,9 +1,14 @@
 > # 南生论坛基于SSM框架，自适应手机端和电脑端，界面简洁美观，功能完整。分为[用户系统](http://www.nanshengbbs.top)和[管理员系统](http://www.nanshengbbs.top/admin)两部分
-> > 1，用户登录用户系统后可以发帖（需要管理员审核通过后才能在首页显示，但可以在“我的主页”查看帖子状态）、修改帖子、删除帖子、评论、删除评论、修改个人信息、关注他人、收藏帖子。
-> >
-> > 2，管理员登录管理员系统后可以管理用户（查看用户、删除用户信息）、管理帖子（查看帖子、审核帖子信息）、管理板块（新增板块、修改板块、删除板块信息）、访问记录。
+> > - 用户系统功能结构图
+> ![](picture/用户系统功能结构图.png)
+>
+> 注：发布的帖子需要管理员“审核通”过后才能在首页显示，可以在“我的主页”查看帖子状态
+>
+> > - 管理员系统给你结构图
+> ![](picture/管理员系统功能结构图.png)
+>
 > ### 数据库获取or疑问解答
-> > 需要数据库或者有疑问的同学加作者QQ：924818949
+> > 需要数据库或者有疑问的同学加作者`QQ：924818949`
 > ### 版本更新
 > > 1，整体更新为异步实现
 > >
@@ -23,7 +28,7 @@
 >
 > > > 由于总是有人随意删除他人用户信息，故暂不再开放管理员权限，望理解！
 >
-> > > 作者QQ：924818949
+> > > 作者`QQ：924818949`
 >
 > ## 引用本项目流程：
 >
@@ -88,51 +93,157 @@
 >
 > ## 静态展示：
 > ### 用户系统
+>
 > - > #### 登录
 >
-> > ![image](picture/用户-登录.png)
+> > ![image](picture/用户-登录2.png)
+> >
+> > - 手机上的效果：
+> >
+> > <img src="picture/手机-登录.jpg" alt="image" style="zoom:25%;" />
 >
-> - > #### 首页
+> - > #### 注册
 >
-> > ![image](picture/用户-首页.png)
+> > ![image](picture/用户-注册.png)
+> >
+> > - 手机上的效果：
+> >
+> > <img src="picture/手机-注册.jpg" alt="image" style="zoom:25%;" />
+>
+> - > #### 首页-登录前
+>
+> > ![image](picture/用户-首页（登录前）.png)
+> >
+> > - 手机上的效果：
+> >
+> > <img src="picture/手机-首页（登录前）.jpg" alt="image" style="zoom:25%;" />
+>
+> - > #### 首页-登录后
+>
+> > ![image](picture/用户-首页（登陆后）.png)
+> >
+> > - 手机上的效果：
+> >
+> > <img src="picture/手机-首页（登录后）.jpg" alt="image" style="zoom: 25%;" />
 >
 > - > #### 发帖
 >
-> > ![image](picture/用户-发帖.png)
+> > ![image](picture/用户-发帖2.png)
+> >
+> > - 手机上的效果：
+> >
+> > <img src="picture/手机-发帖.jpg" alt="image" style="zoom: 25%;" />
 >
 > - > #### 个人主页
 >
-> > ![image](picture/用户-个人主页.png)
+> > ![image](picture/用户-个人主页2.png)
+> >
+> > - 手机上的效果：
+> >
+> > <img src="picture/手机-个人主页.jpg" alt="image" style="zoom: 25%;" />
 >
 > - > #### 编辑个人资料
 >
-> > ![image](picture/用户-编辑个人资料.png)
+> > ![image](picture/用户-编辑个人资料2.png)
+> >
+> > - 手机上的效果：
+> >
+> > <img src="picture/手机-编辑个人资料.jpg" alt="image" style="zoom: 25%;" />
 >
 > - > #### 基本信息设置
 >
-> > ![image](picture/用户-基本信息设置.png)
+> > ![image](picture/用户-基本信息设置2.png)
+> >
+> > - 手机上的效果：
+> >
+> > <img src="picture/手机-基本信息设置.jpg" alt="image" style="zoom: 25%;" />
 >
 > - > #### 修改头像（点击头像弹出模态框）
 >
-> > ![image](picture/用户-上传头像.png)
+> > ![image](picture/用户-上传头像2.png)
+> >
+> > - 手机上的效果：
+> >
+> > <img src="picture/手机-修改头像.jpg" alt="image" style="zoom: 25%;" />
 >
-> - > #### 动态.回答.关注.收藏
+> - > #### 动态
 >
-> > ![image](picture/用户-动态.回答.关注.收藏.png)
+> > ![image](picture/用户-动态.png)
+> >
+> > - 手机上的效果：
+> >
+> > <img src="picture/手机-动态.jpg" alt="image" style="zoom: 25%;" />
+>
+> - > #### 回答
+>
+> > ![image](picture/用户-回答.png)
+> >
+> > - 手机上的效果：
+> >
+> > <img src="picture/手机-回复.jpg" alt="image" style="zoom: 25%;" />
+>
+> - > #### 关注
+>
+> > ![image](picture/用户-关注.png)
+> >
+> > - 手机上的效果：
+> >
+> > <img src="picture/手机-关注.jpg" alt="image" style="zoom: 25%;" />
+>
+> - > #### 收藏
+>
+> > ![image](picture/用户-收藏.png)
+> >
+> > - 手机上的效果：
+> >
+> > <img src="picture/手机-收藏.jpg" alt="image" style="zoom: 25%;" />
+>
+> - > #### 相册
+>
+> > ![image](picture/用户-相册.png)
+> >
+> > - 手机上的效果：
+> >
+> > <img src="picture/手机-相册.jpg" alt="image" style="zoom: 25%;" />
+>
+> - > #### 有照片的相册
+>
+> > ![image](picture/用户-照片（有）.png)
+> >
+> > - 手机上的效果：
+> >
+> > <img src="picture/手机-有照片的相册.jpg" alt="image" style="zoom: 25%;" />
+>
+> - > #### 无照片的相册
+>
+> > ![image](picture/用户-照片（无）.png)
+> >
+> > - 手机上的效果：
+> >
+> > <img src="picture/手机-无照片的相册.jpg" alt="image" style="zoom: 25%;" />
 >
 > ### 管理员系统
+>
 > - > #### 登录
 >
-> > ![image](picture/管理员-登录.png)
+> > ![image](picture/管理员-登录2.png)
+>
+> - > #### 初始页面
+>
+> > ![image](picture/管理员-初始页面.png)
 >
 > - > #### 用户管理
 >
-> > ![image](picture/管理员-用户管理.png)
+> > ![image](picture/管理员-用户管理2.png)
 >
 > - > #### 帖子管理
 >
-> > ![image](picture/管理员-帖子管理.png)
+> > ![image](picture/管理员-帖子管理2.png)
 >
 > - > #### 版块管理
 >
-> > ![image](picture/管理员-版块管理.png)
+> > ![image](picture/管理员-版块管理2.png)
+>
+> - > #### 访问记录
+>
+> > ![image](picture/管理员-访问记录.png)
