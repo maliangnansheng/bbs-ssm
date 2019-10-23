@@ -101,7 +101,7 @@
 > >
 > > - 手机上的效果：
 > >
-> > <img src="picture/手机-登录.jpg" alt="image" style="zoom:25%;" />
+> > <img src="picture/手机-登录.jpg" alt="image" width="30%;" />
 >
 > - > #### 注册
 >
@@ -109,7 +109,7 @@
 > >
 > > - 手机上的效果：
 > >
-> > <img src="picture/手机-注册.jpg" alt="image" style="zoom:25%;" />
+> > <img src="picture/手机-注册.jpg" alt="image" width="30%;" />
 >
 > - > #### 首页-登录前
 >
@@ -117,7 +117,7 @@
 > >
 > > - 手机上的效果：
 > >
-> > <img src="picture/手机-首页（登录前）.jpg" alt="image" style="zoom:25%;" />
+> > <img src="picture/手机-首页（登录前）.jpg" alt="image" width="30%;" />
 >
 > - > #### 首页-登录后
 >
@@ -125,7 +125,7 @@
 > >
 > > - 手机上的效果：
 > >
-> > <img src="picture/手机-首页（登录后）.jpg" alt="image" style="zoom: 25%;" />
+> > <img src="picture/手机-首页（登录后）.jpg" alt="image" width="30%;" />
 >
 > - > #### 发帖
 >
@@ -133,7 +133,7 @@
 > >
 > > - 手机上的效果：
 > >
-> > <img src="picture/手机-发帖.jpg" alt="image" style="zoom: 25%;" />
+> > <img src="picture/手机-发帖.jpg" alt="image" width="30%;" />
 >
 > - > #### 个人主页
 >
@@ -141,7 +141,7 @@
 > >
 > > - 手机上的效果：
 > >
-> > <img src="picture/手机-个人主页.jpg" alt="image" style="zoom: 25%;" />
+> > <img src="picture/手机-个人主页.jpg" alt="image" width="30%;" />
 >
 > - > #### 编辑个人资料
 >
@@ -149,7 +149,7 @@
 > >
 > > - 手机上的效果：
 > >
-> > <img src="picture/手机-编辑个人资料.jpg" alt="image" style="zoom: 25%;" />
+> > <img src="picture/手机-编辑个人资料.jpg" alt="image" width="30%;" />
 >
 > - > #### 基本信息设置
 >
@@ -157,7 +157,7 @@
 > >
 > > - 手机上的效果：
 > >
-> > <img src="picture/手机-基本信息设置.jpg" alt="image" style="zoom: 25%;" />
+> > <img src="picture/手机-基本信息设置.jpg" alt="image" width="30%;" />
 >
 > - > #### 修改头像（点击头像弹出模态框）
 >
@@ -165,7 +165,7 @@
 > >
 > > - 手机上的效果：
 > >
-> > <img src="picture/手机-修改头像.jpg" alt="image" style="zoom: 25%;" />
+> > <img src="picture/手机-修改头像.jpg" alt="image" width="30%;" />
 >
 > - > #### 动态
 >
@@ -173,7 +173,7 @@
 > >
 > > - 手机上的效果：
 > >
-> > <img src="picture/手机-动态.jpg" alt="image" style="zoom: 25%;" />
+> > <img src="picture/手机-动态.jpg" alt="image" width="30%;" />
 >
 > - > #### 回答
 >
@@ -181,7 +181,7 @@
 > >
 > > - 手机上的效果：
 > >
-> > <img src="picture/手机-回复.jpg" alt="image" style="zoom: 25%;" />
+> > <img src="picture/手机-回复.jpg" alt="image" width="30%;" />
 >
 > - > #### 关注
 >
@@ -189,7 +189,7 @@
 > >
 > > - 手机上的效果：
 > >
-> > <img src="picture/手机-关注.jpg" alt="image" style="zoom: 25%;" />
+> > <img src="picture/手机-关注.jpg" alt="image" width="30%;" />
 >
 > - > #### 收藏
 >
@@ -197,7 +197,7 @@
 > >
 > > - 手机上的效果：
 > >
-> > <img src="picture/手机-收藏.jpg" alt="image" style="zoom: 25%;" />
+> > <img src="picture/手机-收藏.jpg" alt="image" width="30%;" />
 >
 > - > #### 相册
 >
@@ -205,7 +205,7 @@
 > >
 > > - 手机上的效果：
 > >
-> > <img src="picture/手机-相册.jpg" alt="image" style="zoom: 25%;" />
+> > <img src="picture/手机-相册.jpg" alt="image" width="30%;" />
 >
 > - > #### 有照片的相册
 >
@@ -213,7 +213,7 @@
 > >
 > > - 手机上的效果：
 > >
-> > <img src="picture/手机-有照片的相册.jpg" alt="image" style="zoom: 25%;" />
+> > <img src="picture/手机-有照片的相册.jpg" alt="image" width="30%;" />
 >
 > - > #### 无照片的相册
 >
@@ -221,7 +221,7 @@
 > >
 > > - 手机上的效果：
 > >
-> > <img src="picture/手机-无照片的相册.jpg" alt="image" style="zoom: 25%;" />
+> > <img src="picture/手机-无照片的相册.jpg" alt="image" width="30%;" />
 >
 > ### 管理员系统
 >
