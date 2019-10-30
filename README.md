@@ -1,4 +1,4 @@
-> # 南生论坛基于SSM框架，自适应手机端和电脑端，界面简洁美观，功能完整。分为[用户系统](http://www.nanshengbbs.top)和[管理员系统](http://www.nanshengbbs.top/admin)两部分
+> # 南生论坛基于SSM框架，自适应手机端和电脑端，界面简洁美观，功能完整。分为[用户系统](http://www.nanshengbbs.top:8080/)和[管理员系统](http://www.nanshengbbs.top:8080/admin)两部分
 > > - 用户系统-功能结构图
 > >   ![](picture/用户系统功能结构图.png)
 > >
@@ -23,9 +23,9 @@
 >
 > > **jdk1.8** 、**tomcat9** 、**mysql5.7** 、**maven3.5.4** 、**eclipse4.7.1a**
 > ## 在线演示：
-> > [用户系统（手机上也有不错的展示效果）](http://www.nanshengbbs.top)
+> > [用户系统（手机上也有不错的展示效果）](http://www.nanshengbbs.top:8080/)
 >
-> > [管理员系统（用户名：admin密码：......）](http://www.nanshengbbs.top/admin) **↓↓↓**
+> > [管理员系统（用户名：admin密码：......）](http://www.nanshengbbs.top:8080/admin) **↓↓↓**
 >
 > > > 由于总是有人随意删除他人用户信息，故暂不再开放管理员权限，望理解！
 >
