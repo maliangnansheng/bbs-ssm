@@ -57,9 +57,23 @@
 
 - 将bbs_test.sql导入MySQL数据库：
 
-  - 创建数据库bbs_test：`create database bbs_test;`
-  - 进入bbs_test数据库：`use bbs_test;`
-  - 将bbs_test.sql导入bbs_test数据库：`source 你的路径\bbs_test.sql;`
+  - 创建数据库bbs_test
+
+    ```sql
+    create database bbs_test;
+    ```
+
+  - 进入bbs_test数据库
+
+    ```sql
+    use bbs_test;
+    ```
+
+  - 将bbs_test.sql导入bbs_test数据库
+
+    ```sql
+    source 你的路径\bbs_test.sql;
+    ```
 
 ### 针对eclipse
 
