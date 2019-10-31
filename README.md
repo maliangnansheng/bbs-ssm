@@ -63,6 +63,10 @@
 
 ### 针对eclipse
 
+- 确保你安装了 Maven
+
+  没有用过 `Maven` 的童鞋，赶快去学一下，安装一下；为了避免麻烦，请尽量使用`3.5.4 +`版本
+
 - 使用eclipse将ssm-bbs以maven的方式导入
 
   ![](picture/maven1.png)
@@ -83,7 +87,9 @@
 
 ### 针对idea
 
-`注：对应的Tomcat配置、Maven配置等自己搞定...`
+- 确保你安装了 Maven
+
+  没有用过 `Maven` 的童鞋，赶快去学一下，安装一下；为了避免麻烦，请尽量使用`3.5.4 +`版本
 
 - 使用idea将ssm-bbs导入
 
