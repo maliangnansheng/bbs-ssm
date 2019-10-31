@@ -1,15 +1,17 @@
 ## 关于项目
 
-- 南生论坛基于SSM框架，自适应手机端和电脑端，界面简洁美观，功能完整。分为[用户系统](http://www.nanshengbbs.top)和[管理员系统](http://www.nanshengbbs.top/admin)两部分
+- 南生论坛基于`SSM`框架，自适应手机端和电脑端，界面简洁美观，功能完整。分为[用户系统](http://www.nanshengbbs.top)和[管理系统](http://www.nanshengbbs.top/admin)两部分
 - 该博客适合`初学SSM`的同学学习。 主要涉及技术包括的包括`Spring 、SpringMVC 、MyBatis 、MySQL 、Bootstrap 、jQuery 、Ajax 、Layer、ECharts`
 
 ## 在线演示
 
-[用户系统（手机上也有不错的展示效果）](http://www.nanshengbbs.top)
+<!--手机上也有不错的展示效果-->
 
-[管理员系统（用户名：admin密码：......）](http://www.nanshengbbs.top/admin) **↓↓↓**
+用户系统：[http://www.nanshengbbs.top](http://www.nanshengbbs.top)
 
-> 由于总是有人随意删除他人用户信息，故暂不再开放管理员权限，望理解！
+管理系统：[http://www.nanshengbbs.top/admin](http://www.nanshengbbs.top/admin)    **↓↓↓**
+
+> 为了避免大家删除数据，暂时不给后台账号，望理解！
 >
 > 作者`QQ：924818949`
 
@@ -21,9 +23,9 @@
 
   `注：发布的帖子需要管理员“审核通”过后才能在首页显示，可以在“我的主页”查看帖子状态`
 
-- 管理员系-功能结构图
+- 管理系统-功能结构图
 
-  ![](picture/管理员系统功能结构图.png)
+  ![](picture/管理系统功能结构图.png)
 
 ## 数据库获取or疑问解答
 
@@ -127,19 +129,19 @@
 
 - **首页-登录前**
 
-  ![image](picture/用户-首页(登录前).png)
+  ![image](picture/用户-首页-登录前.png)
 
   `手机上的效果：`
 
-  <img src="picture/手机-首页（登录前）.jpg" alt="image" width="30%;" />
+  <img src="picture/手机-首页-登录前.jpg" alt="image" width="30%;" />
 
 - **首页-登录后**
 
-  ![image](picture/用户-首页(登陆后).png)
+  ![image](picture/用户-首页-登陆后.png)
 
   `手机上的效果：`
 
-  <img src="picture/手机-首页（登录后）.jpg" alt="image" width="30%;" />
+  <img src="picture/手机-首页-登录后.jpg" alt="image" width="30%;" />
 
 - **发帖**
 
@@ -223,7 +225,7 @@
 
 - **有照片的相册**
 
-  ![image](picture/用户-照片(有).png)
+  ![image](picture/用户-照片-有.png)
 
   `手机上的效果：`
 
@@ -231,7 +233,7 @@
 
 - **无照片的相册**
 
-  ![image](picture/用户-照片(无).png)
+  ![image](picture/用户-照片-无.png)
 
   `手机上的效果：`
 
