@@ -1,11 +1,11 @@
 ## 关于项目
 
-- 南生论坛基于`SSM`框架，自适应手机端和电脑端，界面简洁美观，功能完整。分为[用户系统](http://www.nanshengbbs.top)和[管理系统](http://www.nanshengbbs.top/admin)两部分
-- 该博客适合`初学SSM`的同学学习。 主要涉及技术包括的包括`Spring 、SpringMVC 、MyBatis 、MySQL 、Bootstrap 、jQuery 、Ajax 、Layer、ECharts`
+- 南生论坛基于`SSM`框架，自适应手机端和电脑端，界面简洁美观，功能完善。分为[用户系统](http://www.nanshengbbs.top)和[管理系统](http://www.nanshengbbs.top/admin)两部分
+- 该论坛适合`初学SSM`的同学学习。主要涉及技术包括`Spring 、SpringMVC 、MyBatis 、MySQL 、Bootstrap 、jQuery 、Ajax 、Layer、ECharts`
 
 ## 在线演示
 
-<!--手机上也有不错的展示效果-->
+`手机上也有不错的展示效果...`
 
 用户系统：[http://www.nanshengbbs.top](http://www.nanshengbbs.top)
 
