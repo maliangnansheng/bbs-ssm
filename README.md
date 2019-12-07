@@ -115,6 +115,10 @@ Github地址：[https://github.com/maliangnansheng/bbs-ssm](https://github.com/m
 
 ### 针对idea
 
+- IntelliJIDEA-tomcat在浏览器js乱码问题解决
+
+  [IntelliJIDEA-tomcat在浏览器js乱码问题解决](http://blog.nanshengbbs.top:8080/2019/04/28/IntelliJIDEA-tomcat%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8js%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/)
+
 - 确保你安装了 Maven
 
   没有用过 `Maven` 的童鞋，赶快去学一下，安装一下；为了避免麻烦，请尽量使用`3.5.4 +`版本
