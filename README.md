@@ -33,8 +33,8 @@
 
 ## 南生论坛APP
 
-`链接：https://pan.baidu.com/s/1-q_fH_gR-RLkM252CtlU-Q` 
-`提取码：qz5e` 
+链接：[南生论坛APP 下载](https://pan.baidu.com/s/1-q_fH_gR-RLkM252CtlU-Q) 
+提取码：`qz5e`
 
 ## 版本更新
 
