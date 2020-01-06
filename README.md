@@ -68,7 +68,7 @@
 
 ## 技术栈
 
-> `Spring 、SpringMVC 、MyBatis 、MySQL 、Bootstrap 、jQuery 、Ajax 、Layer、ECharts`
+> `Spring 、SpringMVC 、MyBatis 、MySQL 、Bootstrap 、jQuery 、Ajax 、Layer、ECharts、Editor.md`
 
 ## 我的环境
 
