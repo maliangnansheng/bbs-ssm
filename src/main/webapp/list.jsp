@@ -17,8 +17,6 @@
 	<jsp:include page="/content/content.jsp"></jsp:include>
 	<!-- 首页-登录、注册 -->
 	<jsp:include page="/login/login.jsp"></jsp:include>
-	<!-- 首页-发帖 -->
-	<jsp:include page="/head/posted.jsp"></jsp:include>
 	<!-- 首页-基本信息设置 -->
 	<jsp:include page="/head/setup.jsp"></jsp:include>
 </body>

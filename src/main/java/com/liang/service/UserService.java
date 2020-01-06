@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.liang.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,9 @@ public class UserService {
 
 	@Autowired
 	UserMapper userMapper;
+
+	// 管理系统-用户初始条数（第一页）
+	private static final int adminUserPageSize = PageUtil.getAdminUserPageSize();
 
 	/**
 	 * 登录查询（按姓名和密码）
@@ -56,7 +60,11 @@ public class UserService {
 	 */
 	public List<User> getUser(int pageStart, int pageSize) {
 		Map<Object,Object> map = new HashMap<>();
-		map.put("offset",(pageStart-1)*pageSize);
+		if (pageStart == 1) {
+			map.put("offset",(pageStart-1)*pageSize);
+		} else {
+			map.put("offset",(pageStart-2)*pageSize + adminUserPageSize);
+		}
 		map.put("limit",pageSize);
 		return userMapper.selectByUserAll(map);
 	}

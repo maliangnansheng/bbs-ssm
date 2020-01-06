@@ -77,8 +77,8 @@
   
   <!-- 查询所有访问信息 -->
   <select id="selectByVisit" parameterType="com.liang.bean.Visit" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
+    select
+    VisitCountry, VisitProvince, VisitCity, VisitHostName, VisitTime
     from visit
     order by VisitTime desc
     limit #{offset},#{limit}
@@ -103,6 +103,24 @@
   <!-- 总访问数 -->
   <select id="selectCount" resultType="java.lang.Integer">
     select count(1) from visit
+  </select>
+
+  <!-- 月访问数 -->
+  <select id="getMonthCount" resultType="java.lang.Integer">
+    <!-- 最近30天 -->
+    select count(1) from visit where VisitTime > DATE_SUB(CURDATE(),INTERVAL 30 DAY) and VisitTime <![CDATA[<]]> DATE(now())
+    <!-- 本月 -->
+    /*select count(1) from visit WHERE DATE_FORMAT(VisitTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' );*/
+  </select>
+
+  <!-- 周访问数 -->
+  <select id="getWeekCount" resultType="java.lang.Integer">
+    select count(1) from visit where VisitTime > DATE_SUB(CURDATE(),INTERVAL 7 DAY) and VisitTime <![CDATA[<]]> DATE(now())
+  </select>
+
+  <!-- 日访问数 -->
+  <select id="getDayCount" resultType="java.lang.Integer">
+    select count(1) from visit where VisitTime >= CURDATE()
   </select>
 
   <!-- 新增访问信息 -->

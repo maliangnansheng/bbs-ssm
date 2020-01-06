@@ -4,11 +4,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>管理员-主体</title>
-<%
-	pageContext.setAttribute("APP_PATH", request.getContextPath());
-%>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>管理员-主体</title>
+	<%
+		pageContext.setAttribute("APP_PATH", request.getContextPath());
+	%>
+	<link href="${APP_PATH}/static/css/admin.css" rel="stylesheet">
+</head>
 <body>
 	<%-- 方便ajax获取APP_PATH --%>
 	<input id="APP_PATH" type="hidden" value="${APP_PATH}" >
@@ -25,7 +27,7 @@
 				<div class="nav-list">
 					<ul>
 						<li><a id="yhgl" href="#">用户管理</a></li>
-						<li><a id="tzgl" href="#">帖子管理</a></li>
+						<li><a id="tzgl" href="#">文章管理</a></li>
 						<li><a id="bkgl" href="#">板块管理</a></li>
 						<li><a id="fwjl" href="#">访问记录</a></li>
 					</ul>
@@ -49,7 +51,7 @@
 										<td>Email</td>
 										<td>住址</td>
 										<td>简介</td>
-										<td>创建时间</td>
+										<td>更新时间</td>
 										<td>用户头像</td>
 										<td class="text-center">操作</td>
 									</tr>
@@ -61,21 +63,19 @@
 					</div>
 				</div>
 
-				<!--帖子管理-->
+				<!--文章管理-->
 				<div class="col-md-12 tzgl" style="">
 					<div class="panel panel-default ">
-						<div class="panel-heading">帖子管理 <small class="text-primary" id="article_total"></small></div>
+						<div class="panel-heading">文章管理 <small class="text-primary" id="article_total"></small></div>
 						<div class="panel-body">
 							<table class="table table-bordered tb-hover">
 								<thead>
 									<tr>
 										<td>序号</td>
 										<td>标题</td>
-										<td>内容</td>
-										<td>图片</td>
 										<td>发布者</td>
 										<td>所属板块</td>
-										<td>创建时间</td>
+										<td>更新时间</td>
 										<td>审核状态</td>
 										<td class="text-center">操作</td>
 									</tr>
@@ -104,7 +104,7 @@
 									<tr>
 										<td>序号</td>
 										<td>板块名</td>
-										<td>创建时间</td>
+										<td>更新时间</td>
 										<td class="text-center">操作</td>
 									</tr>
 								</thead>
@@ -119,7 +119,10 @@
 					<div class="panel panel-default ">
 						<div class="panel-heading">
 							<div class="row">
-								<div class="col-md-10">访问记录 <small class="text-primary" id="visit_total"></small></div>
+								<div class="col-md-3 col-xs-3">【总】访问量 <small class="text-primary" id="visit_total"></small></div>
+								<div class="col-md-3 col-xs-3">【月】访问量 <small class="text-primary" id="visit_month"></small></div>
+								<div class="col-md-3 col-xs-3">【周】访问量 <small class="text-primary" id="visit_week"></small></div>
+								<div class="col-md-3 col-xs-3">【日】访问量 <small class="text-primary" id="visit_day"></small></div>
 							</div>
 						</div>
 						

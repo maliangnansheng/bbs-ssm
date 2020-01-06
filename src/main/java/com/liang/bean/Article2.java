@@ -1,7 +1,5 @@
 package com.liang.bean;
 
-import java.util.Date;
-
 public class Article2 {
     private Integer fid;
 
@@ -9,13 +7,11 @@ public class Article2 {
 
     private String fcontent;
 
-    private String bname;
+    private Integer bid;
 
     private String time;
 
     private Integer userid;
-
-    private String username;
 
     private Integer status;
 
@@ -23,16 +19,14 @@ public class Article2 {
 		super();
 	}
 
-	public Article2(Integer fid, String titles, String fcontent, String bname, String time, Integer userid,
-			String username, Integer status) {
+	public Article2(Integer fid, String titles, String fcontent, Integer bid, String time, Integer userid, Integer status) {
 		super();
 		this.fid = fid;
 		this.titles = titles;
 		this.fcontent = fcontent;
-		this.bname = bname;
+		this.bid = bid;
 		this.time = time;
 		this.userid = userid;
-		this.username = username;
 		this.status = status;
 	}
 
@@ -60,12 +54,12 @@ public class Article2 {
         this.fcontent = fcontent == null ? null : fcontent.trim();
     }
 
-    public String getBname() {
-        return bname;
+    public Integer getBid() {
+        return bid;
     }
 
-    public void setBname(String bname) {
-        this.bname = bname == null ? null : bname.trim();
+    public void setBid(Integer bid) {
+        this.bid = bid;
     }
 
     public String getTime() {
@@ -84,14 +78,6 @@ public class Article2 {
         this.userid = userid;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
-    }
-
     public Integer getStatus() {
         return status;
     }
@@ -102,9 +88,9 @@ public class Article2 {
 
 	@Override
 	public String toString() {
-		return "Article [fid=" + fid + ", titles=" + titles + ", fcontent=" + fcontent + ", bname="
-				+ bname + ", time=" + time + ", userid=" + userid + ", username=" + username + ", status=" + status
+		return "Article [fid=" + fid + ", titles=" + titles + ", fcontent=" + fcontent + ", bid="
+				+ bid + ", time=" + time + ", userid=" + userid + ", status=" + status
 				+ "]";
 	}
-    
+
 }

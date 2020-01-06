@@ -1,0 +1,59 @@
+/*---------------------------------------------------相册----------------------------------------------------------------*/
+/* 共用css */
+* {
+    margin: 0;
+    padding: 0
+}
+
+ul, li {
+    list-style: none;
+}
+
+.menu {
+    position: relative;
+    margin-left: 70px;
+    padding-top: 10px
+}
+
+.menu li {
+    float: left;
+    width: 80px;
+    text-align: center;
+    position: relative;
+    line-height: 46px;
+}
+
+.menu li a {
+    display: block;
+    text-decoration: none;
+    color: rgb(44, 138, 187);
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.menu li a:hover {
+    color: #ffffff;
+}
+
+.menu li ul {
+    display: none;
+    width: 80px;
+    position: absolute;
+    top: 15px;
+    left: -50px;
+    background-color: rgba(0, 0, 0, 0.07);
+}
+
+.menu li ul li {
+    font-size: 12px;
+    height: 28px;
+    line-height: 28px
+}
+
+.menu li ul li a {
+    font-size: 14px;
+}
+
+.menu li ul li a:hover {
+    background: #00aef3;
+}

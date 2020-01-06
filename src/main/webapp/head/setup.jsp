@@ -11,7 +11,6 @@
 %>
 </head>
 <body>
-
 	<div class="modal fade" id="setup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content col-md-12">
@@ -35,7 +34,7 @@
 							</div>
 							<div class="row" id="setup_username" style="display: none;">
 	                            <div class="col-xs-10 col-sm-5 col-md-offset-2">
-	                                <input type="text" id="setup_name_id" name="name" value="${username }" class="form-control" required>
+	                                <input type="text" id="setup_name_id" name="name" value="${username }" class="form-control" onkeyup="onkeyupUsernameUpdate()" required>
 	                            </div>
 	                            <div class="col-xs-2 col-sm-2">
 	                                <a href="#" id="setup_username_off" style="position:absolute; top: 8px;">
@@ -44,9 +43,9 @@
 	                            </div>
 							</div>
                         </div>
-
-						<div class="row">
+                        
                         <div class="form-group">
+                        	<div class="row">
 	                            <label for="password" class="col-sm-2 control-label">密码</label>
 	                            <div class="col-sm-10">
 	                            	<p class="form-control-static">*********
@@ -56,7 +55,7 @@
 	                        </div>
 	                        <div class="row" id="setup_password" style="display: none;">
 	                            <div class="col-xs-10 col-sm-5 col-md-offset-2">
-	                                <input type="password" id="setup_password_id" name="password" value="${password }" class="form-control" required>
+	                                <input type="password" id="setup_password_id" name="password" value="${password }" class="form-control" onkeyup="onkeyupUserpasswordUpdate()" required>
 	                            </div>
 	                            <div class="col-xs-2 col-sm-2">
 	                                <a href="#" id="setup_password_off" style="position:absolute; top: 8px;">
@@ -89,7 +88,7 @@
 
                        <div class="modal-footer">
                             <button type="reset" class="btn btn-default">还原</button>
-                            <button type="submit" class="btn btn-primary">保存</button>
+                            <button type="submit" class="btn btn-primary" onclick="return submitSetup();">保存</button>
                         </div>
                     </form>
                 </div>
@@ -131,7 +130,49 @@
 		/* 向指定输入框赋值 */
 		document.getElementById("setup_email_id").value = "${email}";
 	});
-	
+
+    /* 用户名修改预览 */
+    function onkeyupUsernameUpdate() {
+        var name = $.trim($("#setup_name_id").val());   //去掉前后空格
+        var count_num = chEnWordCount(name);
+        if (count_num > userNameLength){
+            layer.tips('不能超过【'+userNameLength+'】个字符，当前数 - '+count_num, '#setup_name_id', {
+                tips: [1, '#ff6620'] //还可配置颜色
+            });
+            return false;
+        } else {
+            var index = layer.tips("满足");
+            // 立即关闭
+            layer.close(index);
+            return true;
+        }
+    }
+    /* 用户密码修改预览 */
+    function onkeyupUserpasswordUpdate() {
+        var password = $.trim($("#setup_password_id").val());   //去掉前后空格
+        var count_num = chEnWordCount(password);
+        if (count_num < userPasswordLength){
+            layer.tips('不能少于【'+userPasswordLength+'】个字符，当前数 - '+count_num, '#setup_password_id', {
+                tips: [1, '#ff6620'] //还可配置颜色
+            });
+            return false;
+        } else {
+            var index = layer.tips("满足");
+            // 立即关闭
+            layer.close(index);
+            return true;
+        }
+    }
+
+    /* 提交前验证 */
+    function submitSetup() {
+		if (onkeyupUsernameUpdate() && onkeyupUserpasswordUpdate()){
+            return true;
+		} else {
+            return false;
+		}
+    }
+
 	</script>
 	
 </body>

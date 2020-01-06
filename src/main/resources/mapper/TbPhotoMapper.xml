@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liang.dao.TbPhotoMapper">
+  <resultMap id="BaseResultMap" type="com.liang.bean.TbPhoto">
+    <id column="xid" jdbcType="INTEGER" property="xid" />
+    <result column="fid" jdbcType="INTEGER" property="fid" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="photo" jdbcType="VARCHAR" property="photo" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    xid, fid, userid, photo, time
+  </sql>
+
+  <!-- 按xid查询照片信息 -->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_photo
+    where xid = #{xid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 获取相册分类下的对应的照片 -->
+  <select id="selectByFidAndUserid" parameterType="com.liang.bean.TbPhoto" resultMap="BaseResultMap">
+    select 
+    tp.xid, tp.fid, tp.userid, tp.photo, tp.time, pr.name
+    from tb_photo tp join photo_pro pr on tp.fid=pr.fid
+    where tp.fid = #{fid,jdbcType=INTEGER} and tp.userid = #{userid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 删除某一张照片 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_photo
+    where xid = #{xid,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 删除相册对应的照片 -->
+  <delete id="deleteByFid" parameterType="java.lang.Integer">
+    delete from tb_photo
+    where fid = #{fid,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 上传照片 -->
+  <insert id="insert" parameterType="com.liang.bean.TbPhoto">
+    insert into tb_photo (xid, fid, userid, 
+      photo, time)
+    values (#{xid,jdbcType=INTEGER}, #{fid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+      #{photo,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.liang.bean.TbPhoto">
+    insert into tb_photo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="xid != null">
+        xid,
+      </if>
+      <if test="fid != null">
+        fid,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="photo != null">
+        photo,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="xid != null">
+        #{xid,jdbcType=INTEGER},
+      </if>
+      <if test="fid != null">
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="photo != null">
+        #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.liang.bean.TbPhoto">
+    update tb_photo
+    <set>
+      <if test="fid != null">
+        fid = #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="photo != null">
+        photo = #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where xid = #{xid,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.liang.bean.TbPhoto">
+    update tb_photo
+    set fid = #{fid,jdbcType=INTEGER},
+      userid = #{userid,jdbcType=INTEGER},
+      photo = #{photo,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP}
+    where xid = #{xid,jdbcType=INTEGER}
+  </update>
+</mapper>

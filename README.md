@@ -1,7 +1,7 @@
 ## 关于项目
 
 - 南生论坛基于`SSM`框架，自适应手机端和电脑端，界面简洁美观，功能完善。分为[用户系统](http://www.nanshengbbs.top)和[管理系统](http://www.nanshengbbs.top/admin)两部分
-- 该论坛适合`初学SSM`的同学学习。主要涉及技术包括`Spring 、SpringMVC 、MyBatis 、MySQL 、Bootstrap 、jQuery 、Ajax 、Layer、ECharts`
+- 该论坛适合`初学SSM`的同学学习。主要涉及技术包括`Spring 、SpringMVC 、MyBatis 、MySQL 、Bootstrap 、jQuery 、Ajax 、Layer、ECharts、Editor.md`
 
 ## 在线演示
 
@@ -38,20 +38,30 @@
 
 ## 版本更新
 
-- 第二次更新`v2.0`：`2019年5月25日`
-  1. 整体更新为异步实现
-  2. 增加和优化人机交互提示
-  3. 实现分页，减少页面加载时间，提升效率
+| 版本号 | `github`下载地址 |  `码云`下载地址  |
+| :----: | :--------------: | :--------------: |
+| `v2.6` | [南生论坛v2.6]() | [南生论坛v2.6]() |
+| `v2.0` | [南生论坛v2.0]() | [南生论坛v2.0]() |
+| `v1.0` | [南生论坛v1.0]() | [南生论坛v1.0]() |
 
-- 首次提交`v1.0`：`2018年8月4日`
+- 第三次更新`v2.6`：`2019年11月`
 
-## 下载地址
+   `支持Markdown、新增分享功能` 
 
-Github地址：[https://github.com/maliangnansheng/bbs-ssm](https://github.com/maliangnansheng/bbs-ssm)（如果可以帮忙点一次`Star`和`Fork`）
+- 第二次更新`v2.0`：`2019年5月`
+  
+   `整体异步实现、新增统计饼图、优化人机交互、实现分页、新增相册功能、新增月周日访问记录` 
+  
+- 首次提交`v1.0`：`2018年8月`
+
+  `登录【用户系统】可以：发帖、修改帖子、删除帖子、评论、删除评论、修改个人信息、关注、收藏`
+  `登录【管理系统】可以：管理用户、管理帖子、管理板块、访问记录` 
 
 ## 项目源码
 
-|          |                     源码                     |
+如果可以帮忙点一次`Star`和`Fork`
+
+|   来源   |                   最新源码                   |
 | :------: | :------------------------------------------: |
 | `github` | <https://github.com/maliangnansheng/bbs-ssm> |
 |  `码云`  | <https://gitee.com/maliangnansheng/bbs-ssm>  |
@@ -156,37 +166,29 @@ Github地址：[https://github.com/maliangnansheng/bbs-ssm](https://github.com/m
 
 - **登录**
 
-  ![image](picture/用户-登录2.png)
+  ![image](picture/用户-登录v2.6.png)
 
   `手机上的效果：`
 
-  <img src="picture/手机-登录.jpg" alt="image" width="30%;" />
-
-- **注册**
-
-  ![image](picture/用户-注册.png)
-
-  `手机上的效果：`
-
-  <img src="picture/手机-注册.jpg" alt="image" width="30%;" />
-
-- **首页-登录前**
-
-  ![image](picture/用户-首页-登录前.png)
-
-  `手机上的效果：`
-
-  <img src="picture/手机-首页-登录前.jpg" alt="image" width="30%;" />
+  <img src="picture/手机-登录v2.6.jpg" alt="image" width="30%;" />
 
 - **首页-登录后**
-  ![image](picture/用户-首页-登陆后.png)
+
+  ![image](picture/用户-首页-登陆后v2.6.png)
+
+  `手机上的效果：`
+
+  <img src="picture/手机-首页-登录后v2.6.jpg" alt="image" width="30%;" />
+
+- **首页-文章详情**
+  ![image](picture/用户-文章详情v2.6.png)
   
   `手机上的效果：`
   
-  <img src="picture/手机-首页-登录后.jpg" alt="image" width="30%;" />
+  <img src="picture/手机-文章详情v2.6.jpg" alt="image" width="30%;" />
 
-[查看全部](http://blog.nanshengbbs.top:8080/2019/12/19/%E5%8D%97%E7%94%9F%E8%AE%BA%E5%9D%9B%E9%A1%B5%E9%9D%A2%E9%9D%99%E6%80%81%E5%B1%95%E7%A4%BA/)
+[查看全部]( [http://blog.nanshengbbs.top:8080/2020/01/06/%E5%8D%97%E7%94%9F%E8%AE%BA%E5%9D%9B%E9%A1%B5%E9%9D%A2%E9%9D%99%E6%80%81%E5%B1%95%E7%A4%BAv2-6/](http://blog.nanshengbbs.top:8080/2020/01/06/南生论坛页面静态展示v2-6/) )
 
 **↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓**
 
-[前往查看南生论坛所有页面的展示效果：](http://blog.nanshengbbs.top:8080/2019/12/19/%E5%8D%97%E7%94%9F%E8%AE%BA%E5%9D%9B%E9%A1%B5%E9%9D%A2%E9%9D%99%E6%80%81%E5%B1%95%E7%A4%BA/)
+[前往查看南生论坛所有页面的展示效果：]( [http://blog.nanshengbbs.top:8080/2020/01/06/%E5%8D%97%E7%94%9F%E8%AE%BA%E5%9D%9B%E9%A1%B5%E9%9D%A2%E9%9D%99%E6%80%81%E5%B1%95%E7%A4%BAv2-6/](http://blog.nanshengbbs.top:8080/2020/01/06/南生论坛页面静态展示v2-6/) )

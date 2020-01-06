@@ -17,8 +17,6 @@
 	<jsp:include page="/content/otherscontent.jsp"></jsp:include>
 	<!-- 他人主页-登录、注册 -->
 	<jsp:include page="/login/login.jsp"></jsp:include>
-	<!-- 他人主页-发帖 -->
-	<jsp:include page="/head/posted.jsp"></jsp:include>
 	<!-- 他人主页-基本信息设置 -->
 	<jsp:include page="/head/setup.jsp"></jsp:include>
 </body>

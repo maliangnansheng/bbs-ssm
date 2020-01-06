@@ -17,8 +17,11 @@
 <%-- 方便ajax获取session中的userid --%>
 <input id="session_userid" type="hidden" value="${userid}" >
 <div class="container">
+	<!--加载中...-->
+	<div id="mycontent_loading"></div>
+
 	<!--上半部分-->
-	<div class="row">
+	<div class="row" id="mycontent_top" style="display: none;">
 		<div class="col-md-10 col-md-offset-1" style="background-color: #ffffff; border-radius: 2px;">
 			<div class="row">
 				<div>
@@ -31,9 +34,9 @@
 					<!-- 用户头像 -->
 					<a href="#" data-toggle="modal" data-target="#userPhoto" id="myself_userphoto" onclick="userPhotoShow()"></a>
 				</div>
-				<div class="col-md-12 col-xs-12">
+				<div class="col-md-10 col-xs-12">
 					<div class="row">
-						<div class="col-md-12">
+						<div class="col-md-10">
 							<!-- 用户名 -->
 							<b id="myself_name" style="font-size: 22px;"></b> &nbsp;&nbsp;&nbsp; <span>克己复礼</span>
 						</div>
@@ -61,13 +64,19 @@
 					</div>
 					<br>
 					<div class="row">
-						<div class="col-md-10 col-xs-7">
+						<div class="col-md-6 col-xs-8">
 							<!-- 性别年龄 -->
 							<b>性别年龄</b> &nbsp;&nbsp;&nbsp; <span id="myself_sex_age"></span>
 						</div>
-						<div class="col-md-2 col-xs-2">
+
+						<div class="col-md-3 col-xs-7">
 							<button type="button" class="btn btn-info" data-toggle="modal" data-target="#edit" onclick="editUser()">
-							编辑个人资料</button>
+								<span class="glyphicon glyphicon-pencil"></span> 编辑个人资料</button>
+						</div>
+						<div class="col-md-3 col-xs-5">
+							<a href="${APP_PATH}/album.jsp">
+								<button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-road"></span> 进入我的相册</button>
+							</a>
 						</div>
 					</div>
 					<br>
@@ -78,7 +87,7 @@
 	</div>
 
 	<!--下半部分-->
-	<div class="row" style="position: relative; top: 10px;">
+	<div class="row" id="mycontent_bottom" style="position: relative; top: 10px; display: none;">
 		<div class="col-md-10 col-md-offset-1"
 			style="background-color: #ffffff; border-radius: 2px;">
 			<div>
@@ -129,10 +138,10 @@
 					<div role="tabpanel" class="tab-pane" id="attention">
 						<ul class="nav nav-tabs" role="tablist">
 							<li role="presentation" class="active">
-								<a href="#icare" aria-controls="icare" role="tab" data-toggle="tab">我关注的人 <samp id="attention_count"></samp></a>
+								<a href="#icare" aria-controls="icare" role="tab" data-toggle="tab">我的关注 <samp id="attention_count"></samp></a>
 							</li>
 							<li role="presentation">
-								<a href="#careme" aria-controls="careme" role="tab" data-toggle="tab">关注我的人 <samp id="attention_count_be"></samp></a>
+								<a href="#careme" aria-controls="careme" role="tab" data-toggle="tab">我的粉丝 <samp id="attention_count_be"></samp></a>
 							</li>
 						</ul>
 						<div class="tab-content">
@@ -175,11 +184,9 @@
 <script src="${APP_PATH }/static/js/content/mycontent.js"></script>
 <script src="${APP_PATH }/static/js/content/comment.js"></script>
 <script src="${APP_PATH }/static/js/content/article.js"></script>
-<script src="${APP_PATH }/static/js/content/articleEdit.js"></script>
 <script src="${APP_PATH }/static/js/content/userEdit.js"></script>
 <script src="${APP_PATH }/static/js/content/attention.js"></script>
 <script src="${APP_PATH }/static/js/content/collect.js"></script>
-
 
 </body>
 </html>

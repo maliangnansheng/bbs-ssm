@@ -101,5 +101,17 @@
 	<script src="${APP_PATH }/static/bootstrap/js/npm.js"></script>
 	<script src="${APP_PATH }/static/js/layer/layer.js"></script>
 
+	<script>
+        // 板块名字数限制
+        const plateNameLength = 8;
+
+        /**
+         * 中英文统计(一个中文算两个字符)
+         */
+        function chEnWordCount(str){
+            var count = str.replace(/[^\x00-\xff]/g,"**").length;
+            return count;
+        }
+	</script>
 </body>
 </html>

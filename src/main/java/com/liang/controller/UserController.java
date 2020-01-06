@@ -51,6 +51,9 @@ public class UserController {
 	@Autowired
 	CollectService collectService;
 
+	// 管理系统-用户追加条数（出第一页外）
+	private static final String adminUserDefaultPageSize = "10";
+
 	/**
 	 * 用户登录判断-ajax
 	 * 
@@ -207,26 +210,26 @@ public class UserController {
 		List<Article> myListArticles = articleService.getArticleId(userid);
 		map.put("myListArticles", myListArticles);
 
-		/**
-		 * 按fid查询每个帖子下对应的评论信息（动态）
-		 */
-		for (int i = 0; i < myListArticles.size(); i++) {
-
-			// 将每一条帖子对应的id单独抽出来
-			int fid = myListArticles.get(i).getFid();
-
-			// 再通过每一个帖子的id查找出对应的评论信息
-			commentService.getCommentFidMap(fid, map);
-			// 将上一步查出的对应的评论信息存放到listComment里
-			List<Comment> myListComment = (List<Comment>) map.get("listComment");
-
-			// 为map预设一个随帖子id变化而变化的key
-			String myListCommentFid = "myListComment_" + fid;
-			// 将每一个帖子下对应的所有评论存入map中（其key是随帖子id变化而变化的）
-			map.put(myListCommentFid, myListComment);
-		}
-		//去除多余信息
-		map.remove("listComment");
+//		/**
+//		 * 按fid查询每个帖子下对应的评论信息（动态）
+//		 */
+//		for (int i = 0; i < myListArticles.size(); i++) {
+//
+//			// 将每一条帖子对应的id单独抽出来
+//			int fid = myListArticles.get(i).getFid();
+//
+//			// 再通过每一个帖子的id查找出对应的评论信息
+//			commentService.getCommentFidMap(fid, map);
+//			// 将上一步查出的对应的评论信息存放到listComment里
+//			List<Comment> myListComment = (List<Comment>) map.get("listComment");
+//
+//			// 为map预设一个随帖子id变化而变化的key
+//			String myListCommentFid = "myListComment_" + fid;
+//			// 将每一个帖子下对应的所有评论存入map中（其key是随帖子id变化而变化的）
+//			map.put(myListCommentFid, myListComment);
+//		}
+//		//去除多余信息
+//		map.remove("listComment");
 
 		/**
 		 * 按userid查询评论信息（回复）
@@ -449,7 +452,7 @@ public class UserController {
 	 */
 	@RequestMapping("/getUser")
 	@ResponseBody
-	public Map getUser(Map<Object, Object> map, @RequestParam(required=true,defaultValue="1") int pageStart, @RequestParam(required=true,defaultValue="10")int pageSize) {
+	public Map getUser(Map<Object, Object> map, @RequestParam(required=true,defaultValue="1") int pageStart, @RequestParam(required=true,defaultValue=adminUserDefaultPageSize)int pageSize) {
 		Map<Object, Object> map2 = new HashMap<>();
 		int tail = 1;
 		List<User> listUser = userService.getUser(pageStart, pageSize);
@@ -605,15 +608,13 @@ public class UserController {
 		}else{
 			//1，修改user表
 			userService.updateUserSetup(user);
-			//2，修改article表中的username
-			articleService.updateArticleSetup(article);
 			map.put("username", user.getName());
 			map.put("password", user.getPassword());
 			map.put("email", user.getEmail());
 		}
 		
-		//重定向到getMyself这个方法
-		return "redirect:/myself.jsp";// 重定向;
+		//重定向
+		return "redirect:/myself.jsp";
 	}
 
 	

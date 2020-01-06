@@ -1,3 +1,37 @@
+/* 板块新增预览 */
+function onkeyupPlateAdd() {
+    var bname = $.trim($("#bname_Add").val());   //去掉前后空格
+    var count_num = chEnWordCount(bname);
+    if (count_num > plateNameLength){
+        layer.tips('不能超过【'+plateNameLength+'】个字符，当前数 - '+count_num, '#bname_Add', {
+            tips: [1, '#ff6620'] //还可配置颜色
+        });
+        return false;
+    } else {
+        var index = layer.tips("满足");
+        // 立即关闭
+        layer.close(index);
+        return true;
+    }
+}
+
+/* 板块修改预览 */
+function onkeyupPlateUpdate() {
+    var bname = $.trim($("#bname_Update").val());   //去掉前后空格
+    var count_num = chEnWordCount(bname);
+    if (count_num > plateNameLength){
+        layer.tips('不能超过【'+plateNameLength+'】个字符，当前数 - '+count_num, '#bname_Update', {
+            tips: [1, '#ff6620'] //还可配置颜色
+        });
+        return false;
+    } else {
+        var index = layer.tips("满足");
+        // 立即关闭
+        layer.close(index);
+        return true;
+    }
+}
+
 /*新增板块信息*/
 function plateAdd(){
     var APP_PATH = document.getElementById("APP_PATH").value;
@@ -8,7 +42,10 @@ function plateAdd(){
         layer.tips('请输入板块名', '#bname_Add', {
             tips: [1, '#ff6620'] //还可配置颜色
         });
-        return ;
+        return false;
+    }
+    if (!onkeyupPlateAdd()){
+        return false;
     }
     //调ajax
     $.ajax({
@@ -191,7 +228,7 @@ function plateShow(bid){
             '<div class="form-group">' +
                 '<input type="hidden" name="bid" value="'+bid+'">' +
                 '<input type="text" class="form-control" value="'+bname+'" placeholder="取一个板块名吧" ' +
-                '   id="bname_Update" name="bname" required>' +
+                '   id="bname_Update" name="bname" onkeyup="onkeyupPlateUpdate()" required>' +
             '</div>' +
             '' +
             '<div class="modal-footer">' +
@@ -212,7 +249,10 @@ function plateUpdate(){
         layer.tips('请输入板块名', '#bname_Update', {
             tips: [1, '#ff6620'] //还可配置颜色
         });
-        return ;
+        return false;
+    }
+    if (!onkeyupPlateUpdate()){
+        return false;
     }
     //调ajax
     $.ajax({

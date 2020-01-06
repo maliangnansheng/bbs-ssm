@@ -1,22 +1,17 @@
 package com.liang.controller;
 
-import java.net.InetAddress;
 import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.liang.bean.*;
 import com.liang.service.*;
+import com.liang.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import com.liang.bean.Article;
-import com.liang.bean.Attention;
-import com.liang.bean.Collect;
-import com.liang.bean.Comment;
-import com.liang.bean.Plate;
 import com.liang.utils.PathUtil;
 
 @RequestMapping("/common")
@@ -31,6 +26,8 @@ public class Common {
 	@Autowired
 	ArticleController articleController;
 	@Autowired
+	ArticleService articleService;
+	@Autowired
 	CommentController commentController;
 	@Autowired
 	CommentService commentService;
@@ -41,9 +38,25 @@ public class Common {
 	@Autowired
 	CollectService collectService;
 	@Autowired
+	EnjoyService enjoyService;
+	@Autowired
 	VisitController visitController;
 	@Autowired
 	VisitService visitService;
+	@Autowired
+	PhotoProService photoProService;
+
+	// 用户系统-帖子初始条数（第一页）
+	private static final int articlePageSize = PageUtil.getArticlePageSize();
+	// 用户系统-帖子追加条数（出第一页外）
+	private static final String articleDefaultPageSize = "10";
+
+	// 管理系统-帖子初始条数（第一页）
+	private static final int adminArticlePageSize = PageUtil.getAdminArticlePageSize();
+	// 管理系统-用户初始条数（第一页）
+	private static final int adminUserPageSize = PageUtil.getAdminUserPageSize();
+	// 管理系统-访问记录初始条数（第一页）
+	private static final int adminVisitPageSize = PageUtil.getAdminVisitPageSize();
 
 	/**
 	 * 查询输出首页全部信息（不包含head）
@@ -55,7 +68,7 @@ public class Common {
 	public Map getAll(Map<Object, Object> map2, HttpServletRequest request, HttpSession session) {
 
 		Map<Object, Object> map = new HashMap<>();
-		articleController.getArticle(map, 1, 10);
+		articleController.getArticle(map, 1, articlePageSize);
 		List<Article> listArticle = (List<Article>) map.get("listArticle");
 		int count = listArticle.size();
 
@@ -88,6 +101,14 @@ public class Common {
 		List<Collect> collect = collectService.getCollect();
 		map.put("collect", collect);
 
+		// 查询点赞信息（无条件）
+		List<Enjoy> enjoy = enjoyService.getEnjoy();
+		map.put("enjoy", enjoy);
+
+		// 热门帖子
+		List<Article> listHotArticle = articleService.getHotArticle();
+		map.put("listHotArticle", listHotArticle);
+
 		// 统计访问信息-国家
 		visitService.visitCountryStatistic(map);
 
@@ -104,7 +125,7 @@ public class Common {
 	 */
 	@RequestMapping("/appendMore")
 	@ResponseBody
-	public Map appendMore(@RequestParam(required=true,defaultValue="1") int pageStart, @RequestParam(required=true,defaultValue="10")int pageSize) {
+	public Map appendMore(@RequestParam(required=true,defaultValue="1") int pageStart, @RequestParam(required=true,defaultValue=articleDefaultPageSize)int pageSize) {
 
 		Map<Object, Object> map = new HashMap<>();
 		articleController.getArticle(map, pageStart, pageSize);
@@ -136,6 +157,10 @@ public class Common {
 		List<Collect> collect = collectService.getCollect();
 		map.put("collect", collect);
 
+		// 查询点赞信息（无条件）
+		List<Enjoy> enjoy = enjoyService.getEnjoy();
+		map.put("enjoy", enjoy);
+
 		return map;
 	}
 
@@ -151,11 +176,11 @@ public class Common {
 		// 查询板块信息（无条件）
 		plateController.getPlate(map);
 		// 查询用户信息（分页）
-		userController.getUser(map,1,10);
+		userController.getUser(map,1,adminUserPageSize);
 		// 查询帖子信息（分页）
-		articleController.getArticleAdmin(map, 1, 10);
+		articleController.getArticleAdmin(map, 1, adminArticlePageSize);
 		// 查询访问信息（分页）
-		visitController.getVisit(map, 1, 15);
+		visitController.getVisit(map, 1, adminVisitPageSize);
 
 		return map;
 	}
@@ -201,16 +226,15 @@ public class Common {
 	}
 
 	/**
-	 * 按帖子板块查询出帖子
+	 * 按帖子板块查询出帖子（通过审核的）
 	 * 
-	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/getArticleBname/{bname}")
+	@RequestMapping("/getArticleBid/{bid}")
 	@ResponseBody
-	public Map getArticleBname(@PathVariable String bname, HttpServletRequest request) {
+	public Map getArticleBid(@PathVariable int bid) {
 		Map<Object, Object> map = new HashMap<>();
-		articleController.getArticleBname(bname, map);
+		articleController.getArticleBid(bid, map);
 		List<Article> listArticle = (List<Article>) map.get("listArticle");
 		int count = listArticle.size();
 
@@ -242,6 +266,26 @@ public class Common {
 		// 查询收藏信息（无条件）
 		List<Collect> collect = collectService.getCollect();
 		map.put("collect", collect);
+
+		// 查询点赞信息（无条件）
+		List<Enjoy> enjoy = enjoyService.getEnjoy();
+		map.put("enjoy", enjoy);
+
+		return map;
+	}
+
+	/**
+	 * 获取相册信息
+	 * @return
+	 */
+	@RequestMapping("/getPhoto")
+	@ResponseBody
+	public Map<Object, Object> getPhoto(HttpSession session) {
+		Map<Object, Object> map = new HashMap<>();
+
+		int userid=(int) session.getAttribute("userid");
+		//获取相册分类信息(按userid)
+		map.put("listPhotoPros", photoProService.getPhotoPro(userid));
 
 		return map;
 	}

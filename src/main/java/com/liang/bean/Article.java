@@ -1,7 +1,5 @@
 package com.liang.bean;
 
-import java.util.Date;
-
 public class Article {
     private Integer fid;
 
@@ -11,52 +9,55 @@ public class Article {
 
     private String photo;
 
-    private String bname;
+    private Integer bid;
 
     private String time;
 
     private Integer userid;
 
-    private String username;
-
     private Integer status;
-    
+
+    /* 附加 */
     private String sum;
-    
+
     private String userphoto;
 
+    private String username;
+
+    private String bname;
+
     public Article() {
-		super();
-	}
-    
+        super();
+    }
+
     public Article(Article2 article2,String photo) {
-		super();
-		this.fid = article2.getFid();
-		this.titles = article2.getTitles();
-		this.fcontent = article2.getFcontent();
-		this.bname = article2.getBname();
-		this.time = article2.getTime();
-		this.userid = article2.getUserid();
-		this.username = article2.getUsername();
-		this.status = article2.getStatus();
-		this.photo = photo;
-	}
+        super();
+        this.fid = article2.getFid();
+        this.titles = article2.getTitles();
+        this.fcontent = article2.getFcontent();
+        this.bid = article2.getBid();
+        this.time = article2.getTime();
+        this.userid = article2.getUserid();
+        this.status = article2.getStatus();
+        this.photo = photo;
+    }
 
-	public Article(Integer fid, String titles, String fcontent, String photo, String bname, String time, Integer userid,
-			String username, Integer status) {
-		super();
-		this.fid = fid;
-		this.titles = titles;
-		this.fcontent = fcontent;
-		this.photo = photo;
-		this.bname = bname;
-		this.time = time;
-		this.userid = userid;
-		this.username = username;
-		this.status = status;
-	}
+    public Article(Integer fid, String titles, String fcontent, String photo, Integer bid, String time, Integer userid, Integer status, String sum, String userphoto, String username, String bname) {
+        this.fid = fid;
+        this.titles = titles;
+        this.fcontent = fcontent;
+        this.photo = photo;
+        this.bid = bid;
+        this.time = time;
+        this.userid = userid;
+        this.status = status;
+        this.sum = sum;
+        this.userphoto = userphoto;
+        this.username = username;
+        this.bname = bname;
+    }
 
-	public Integer getFid() {
+    public Integer getFid() {
         return fid;
     }
 
@@ -86,6 +87,14 @@ public class Article {
 
     public void setPhoto(String photo) {
         this.photo = photo == null ? null : photo.trim();
+    }
+
+    public Integer getBid() {
+        return bid;
+    }
+
+    public void setBid(Integer bid) {
+        this.bid = bid;
     }
 
     public String getBname() {
@@ -128,27 +137,37 @@ public class Article {
         this.status = status;
     }
 
-	public String getSum() {
-		return sum;
-	}
+    public String getSum() {
+        return sum;
+    }
 
-	public void setSum(String sum) {
-		this.sum = sum;
-	}
+    public void setSum(String sum) {
+        this.sum = sum;
+    }
 
-	public String getUserphoto() {
-		return userphoto;
-	}
+    public String getUserphoto() {
+        return userphoto;
+    }
 
-	public void setUserphoto(String userphoto) {
-		this.userphoto = userphoto;
-	}
+    public void setUserphoto(String userphoto) {
+        this.userphoto = userphoto;
+    }
 
-	@Override
-	public String toString() {
-		return "Article [fid=" + fid + ", titles=" + titles + ", fcontent=" + fcontent + ", photo=" + photo + ", bname="
-				+ bname + ", time=" + time + ", userid=" + userid + ", username=" + username + ", status=" + status
-				+ ", sum=" + sum + ", userphoto=" + userphoto + "]";
-	}
-    
+    @Override
+    public String toString() {
+        return "Article{" +
+                "fid=" + fid +
+                ", titles='" + titles + '\'' +
+                ", fcontent='" + fcontent + '\'' +
+                ", photo='" + photo + '\'' +
+                ", bid=" + bid +
+                ", time='" + time + '\'' +
+                ", userid=" + userid +
+                ", status=" + status +
+                ", sum='" + sum + '\'' +
+                ", userphoto='" + userphoto + '\'' +
+                ", username='" + username + '\'' +
+                ", bname='" + bname + '\'' +
+                '}';
+    }
 }

@@ -81,21 +81,6 @@ function articlePage(pageStart) {
             for (var i=0;i<listArticles.length;i++){
                 article_num++;
                 var listArticle = listArticles[i];
-                var listArticle_photo = "";
-                if (listArticle["photo"] != "photo"){   //有配图
-                    var listArticle_photo_type = "";
-                    if (listArticle["photo"].endsWith(".mp4") || listArticle["photo"].endsWith(".avi")){    //视频
-                        listArticle_photo_type =
-                            '<video controls="controls" src="'+APP_PATH+'/static/upload/article/'+listArticle["photo"]+'"' +
-                            'style="position: relative; width: 100%; height: 100%;"></video>';
-                    } else {
-                        listArticle_photo_type =
-                            '<img src="'+APP_PATH+'/static/upload/article/'+listArticle["photo"]+'"' +
-                            'style="position: relative; width: 100%; height: 100%;">';
-                    }
-                    listArticle_photo =
-                        '<a href="'+APP_PATH+'/static/upload/article/'+listArticle["photo"]+'" target="_brank" id="listArticle_photo_type">'+listArticle_photo_type+'</a>';
-                }
 
                 //审核状态
                 var listArticle_status = "";
@@ -146,17 +131,11 @@ function articlePage(pageStart) {
                 }
                 listArticle_all = listArticle_all +
                     '<tr>' +
-                    '<td>' +
-                    '<div style="width:10px;word-wrap:break-word;">'+article_num+'</div>' +
+                    '<td width="50px">' +
+                    '<div style="width:50px;word-wrap:break-word;">'+article_num+'</div>' +
                     '</td>' +
-                    '<td>' +
-                    '<div style="width:50px;word-wrap:break-word;">'+listArticle["titles"]+'</div>' +
-                    '</td>' +
-                    '<td>' +
-                    '<div style="width:300px;word-wrap:break-word;">'+listArticle["fcontent"]+'</div>' +
-                    '</td>' +
-                    '<td>' +
-                    '<div style="position: relative;width:100px;height:100px;" id="listArticle_photo">'+listArticle_photo+'</div>' +
+                    '<td width="300px">' +
+                    '<div style="width:300px;word-wrap:break-word;"><a href="javascript:void(0);" onclick="skipArticle('+listArticle["fid"]+')" data-toggle="modal" data-target="#adminArticle">'+listArticle["titles"]+'</a></div>' +
                     '</td>' +
                     '<td>'+listArticle["username"]+'</td>' +
                     '<td>'+listArticle["bname"]+'</td>' +
@@ -205,4 +184,11 @@ function articlePage(pageStart) {
             layer.msg("异常！",{icon: 5});
         }
     });
+}
+
+/*跳转到帖子详情（新开一个tab）*/
+function skipArticle(fid) {
+    var APP_PATH = document.getElementById("APP_PATH").value;
+    var url = APP_PATH+'/article.jsp?fid=' + fid;
+    window.open(url,"_blank");
 }

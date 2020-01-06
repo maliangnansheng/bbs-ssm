@@ -96,12 +96,12 @@
 							<form id="register">
 								<div class="form-group">
 									<input type="text" class="form-control" name="name" id="name2"
-										required="required" placeholder="用户名">
+										required="required" placeholder="用户名" onkeyup="onkeyupUserNameAdd()">
 									<div class="text-danger text-center" id="registerName"
 										style="position: relative; top: 8px; font-size: 10px;"></div>
 								</div>
 								<div class="form-group">
-									<input type="password" class="form-control" name="password"
+									<input type="password" class="form-control" name="password" onkeyup="onkeyupUserPasswordAdd()"
 										id="password2" required="required" placeholder="密码">
 								</div>
 								<div class="form-group">
@@ -139,86 +139,125 @@
 	</div>
 
 	<script type="text/javascript">
-	//页面的跳转
-	function go(){ 
-		window.location.href="${APP_PATH}/index.jsp";
-	} 
-	//登录验证
-	$("#login").submit(function(){
-        //获取用户名和密码
-        var name = $("#name").val();//输入的用户名
-        var password = $("#password").val();//输入的密码
-        
-        //调ajax
-        $.ajax({            
-            url:"${APP_PATH}/userController/getLoginAjax",
-            data:{name:name,password:password},
-            type:"POST",
-            dataType:"text",
-            success: function(data){
-                    if(data.trim()=="OK")//要加上去空格，防止内容里面有空格引起错误。
-                    {
-                    	var str = "登陆成功";
-        				/* 显示提示信息 */
-        				document.getElementById("loginSuccess").innerHTML = str;
-                        setTimeout(go, 500);//0.5秒后页面跳转
-                    }
-                    else
-                    {
-                    	var str = "用户名或密码错误！";
-        				/* 显示提示信息 */
-        				document.getElementById("loginExit").innerHTML = str;
-                    }
-                }
-            });
-        
-       		document.getElementById("loginExit").innerHTML = "";
-        	return false;
+        /* 用户注册预览-用户名 */
+        function onkeyupUserNameAdd() {
+            var name = $.trim($("#name2").val());   //去掉前后空格
+            var count_num = chEnWordCount(name);
+            if (count_num > userNameLength){
+                layer.tips('不能超过【'+userNameLength+'】个字符，当前数 - '+count_num, '#name2', {
+                    tips: [1, '#ff6620'] //还可配置颜色
+                });
+                return false;
+            } else {
+                var index = layer.tips("满足");
+                // 立即关闭
+                layer.close(index);
+                return true;
+            }
+        }
+        /* 用户注册预览-密码 */
+        function onkeyupUserPasswordAdd() {
+            var pass = $.trim($("#password2").val());   //去掉前后空格
+            var count_num = chEnWordCount(pass);
+            if (count_num < userPasswordLength){
+                layer.tips('不能少于【'+userPasswordLength+'】个字符，当前数 - '+count_num, '#password2', {
+                    tips: [1, '#ff6620'] //还可配置颜色
+                });
+                return false;
+            } else {
+                var index = layer.tips("满足");
+                // 立即关闭
+                layer.close(index);
+                return true;
+            }
+        }
+
+		//页面的跳转
+		function go(){
+			window.location.href="${APP_PATH}/index.jsp";
+		}
+
+		//登录验证
+		$("#login").submit(function(){
+			//获取用户名和密码
+			var name = $.trim($("#name").val());//输入的用户名
+			var password = $.trim($("#password").val());//输入的密码
+
+			//调ajax
+			$.ajax({
+				url:"${APP_PATH}/userController/getLoginAjax",
+				data:{name:name,password:password},
+				type:"POST",
+				dataType:"text",
+				success: function(data){
+						if(data.trim()=="OK")//要加上去空格，防止内容里面有空格引起错误。
+						{
+							var str = "登陆成功";
+							/* 显示提示信息 */
+							document.getElementById("loginSuccess").innerHTML = str;
+							setTimeout(go, 500);//0.5秒后页面跳转
+						}
+						else
+						{
+							var str = "用户名或密码错误！";
+							/* 显示提示信息 */
+							document.getElementById("loginExit").innerHTML = str;
+						}
+					}
+			});
+
+			document.getElementById("loginExit").innerHTML = "";
+			return false;
 		});
-	
+
 		//注册验证
 		$("#register").submit(function() {
 			//获取用户名、密码、确认密码和邮箱值
-	        var name = $("#name2").val();//输入的用户名
-	        var pass = $("#password2").val();//输入的密码
-	        var repass = $("#repassword").val();//输入的确认密码
-	        var email = $("#email").val();//输入的邮箱
-	        
-	      	//调ajax
-	        $.ajax({            
-	            url:"${APP_PATH}/userController/setSignUp",
-	            data:{name:name,pass:pass,email:email,repass:repass},
-	            type:"POST",
-	            dataType:"text",
-	            success: function(data){
-	                    if(data.trim()=="OK")//要加上去空格，防止内容里面有空格引起错误。
-	                    {
-	                    	var str = "注册成功";
-	        				/* 显示提示信息 */
-	        				document.getElementById("registerSuccess").innerHTML = str;
-	                        setTimeout(go, 500);//0.5秒后页面跳转
-	                    }else if (data.trim()=="PASS") {
-	                    	var str = "两次输入的密码不一致！";
-	        				/* 显示提示信息 */
-	        				document.getElementById("confirmPassExit").innerHTML = str;
-	        				/* 清空指定输入框 */
-	        				document.getElementById("password2").value = "";
-	        				document.getElementById("repassword").value = "";
-	        				/* 将光标定为到指定文本框 */
-	        				document.getElementById("password2").focus();
-	                    }else if (data.trim()=="NO") {
-	                    	var str = "该用户名已存在！";
-	        				/* 显示提示信息 */
-	        				document.getElementById("registerName").innerHTML = str;
-	                    }
-	                }
-	            });
-	        
+			var name = $.trim($("#name2").val());//输入的用户名
+			var pass = $.trim($("#password2").val());//输入的密码
+			var repass = $.trim($("#repassword").val());//输入的确认密码
+			var email = $.trim($("#email").val());//输入的邮箱
+
+            if (onkeyupUserNameAdd() && onkeyupUserPasswordAdd()){
+            } else {
+                return false;
+			}
+
+			//调ajax
+			$.ajax({
+				url:"${APP_PATH}/userController/setSignUp",
+				data:{name:name,pass:pass,email:email,repass:repass},
+				type:"POST",
+				dataType:"text",
+				success: function(data){
+						if(data.trim()=="OK") {	//要加上去空格，防止内容里面有空格引起错误。
+							var str = "注册成功";
+							/* 显示提示信息 */
+							document.getElementById("registerSuccess").innerHTML = str;
+							setTimeout(go, 500);//0.5秒后页面跳转
+						}else if (data.trim()=="PASS") {
+							var str = "两次输入的密码不一致！";
+							/* 显示提示信息 */
+							document.getElementById("confirmPassExit").innerHTML = str;
+							/* 清空指定输入框 */
+							document.getElementById("password2").value = "";
+							document.getElementById("repassword").value = "";
+							/* 将光标定为到指定文本框 */
+							document.getElementById("password2").focus();
+						}else if (data.trim()=="NO") {
+							var str = "该用户名已存在！";
+							/* 显示提示信息 */
+							document.getElementById("registerName").innerHTML = str;
+						}
+					}
+				});
+
 			/* 清空指定div */
 			document.getElementById("confirmPassExit").innerHTML = "";
 			document.getElementById("registerName").innerHTML = "";
 			return false;
 		});
+
 	</script>
 
 </body>

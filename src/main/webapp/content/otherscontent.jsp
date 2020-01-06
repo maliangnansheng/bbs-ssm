@@ -94,52 +94,31 @@
 											<!-- 时间 -->
 											<small>${othersListArticle.time }</small>
 										</div>
-									
-										<div class="col-xs-12 col-md-12">
-											<h4>
-												<!-- 标题 -->
-												<b>${othersListArticle.titles }</b>
-											</h4>
-										</div>
-										<div class="col-xs-12 col-md-12">
-											<!-- 内容 -->
-											<p>${othersListArticle.fcontent }</p>
-										</div>
-										<div class="col-xs-12 col-md-12">
+										<div onclick="skipArticle(${othersListArticle.fid})" class="col-xs-12 col-md-3" style="cursor:pointer;">
 											<c:if test="${othersListArticle.photo!=\"photo\" }">
-												<a href="${APP_PATH }/static/upload/article/${othersListArticle.photo }" target="_blank">
-													<c:if test="${othersListArticle.photo.endsWith(\".mp4\")||othersListArticle.photo.endsWith(\".avi\") }">
-														<video controls="controls" src="${APP_PATH }/static/upload/article/${othersListArticle.photo }"
-															style="position: relative; width: 30%; height: 30%;"></video>
-													</c:if>
-													<c:if test="${!othersListArticle.photo.endsWith(\".mp4\")&&!othersListArticle.photo.endsWith(\".avi\") }">
-														<img src="${APP_PATH }/static/upload/article/${othersListArticle.photo }"
-															style="position: relative; width: 30%; height: 30%;">
-													</c:if>
-												</a>
+												<c:if test="${othersListArticle.photo.endsWith(\".mp4\")||othersListArticle.photo.endsWith(\".avi\") }">
+													<video controls="controls" src="${APP_PATH }/static/upload/article/${othersListArticle.photo }"
+														   style="position: relative; width: 100%; height: 100%;border-radius: 3px;"></video>
+												</c:if>
+												<c:if test="${!othersListArticle.photo.endsWith(\".mp4\")&&!othersListArticle.photo.endsWith(\".avi\") }">
+													<img src="${APP_PATH }/static/upload/article/${othersListArticle.photo }"
+														 style="position: relative; width: 100%; height: 100%;border-radius: 3px;">
+												</c:if>
 											</c:if>
 										</div>
-									</div>
-		
-									<!--评论-循环开始-->
-									<c:set var="othersListComment_Fid" value="othersListComment_${othersListArticle.fid }"></c:set>
-									<c:forEach var="othersComment_list" items="${map[othersListComment_Fid]}">
-										<hr style="position: relative; margin-top: 2px;height:1px;border:none;border-top:1px dashed #dddddd;">
-										<div class="row" style="position: relative; margin-top: -10px;">
-											<div class="col-md-11">
-												<a href="${APP_PATH}/userController/getOthers?userid=${othersComment_list.userid }" class="a_p">
-													<!-- 评论者姓名 -->
-													<b>${othersComment_list.name }</b>
+										<div class="col-xs-12 col-md-9">
+											<div onclick="skipArticle(${othersListArticle.fid})" style="overflow: hidden;white-space: nowrap;text-overflow:ellipsis;">
+												<!-- 标题 -->
+												<a style="color: #000000;">
+													<b id="other_article_titles" style="cursor:pointer; font-size:18px;">${othersListArticle.titles }</b>
 												</a>
-												&nbsp;&nbsp;&nbsp;
-												<!-- 时间 -->
-												<small>${othersComment_list.time }</small>
-												<!-- 评论者内容 -->
-												<p>${othersComment_list.pcontent }</p>
+											</div>
+											<div onclick="skipArticle(${othersListArticle.fid})" id="other_article_content" style="cursor:pointer;overflow: hidden;text-overflow:ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 3;">
+												<!-- 内容 -->
+												<span style="word-break: break-word;line-height: 1.6;">${othersListArticle.fcontent }</span>
 											</div>
 										</div>
-									</c:forEach>
-									<!-- 评论-循环结束 -->
+									</div>
 								</div>
 							<hr style="height:1px;border:none;border-top:1px solid #bbbbbb;">
 							</c:if>
@@ -151,5 +130,13 @@
 		</div>
 		<br>
 	</div>
+
+    <script>
+        /*跳转到帖子详情（新开一个tab）*/
+        function skipArticle(fid) {
+            var url = '${APP_PATH}/article.jsp?fid=' + fid;
+            window.open(url,"_blank");
+        }
+    </script>
 </body>
 </html>

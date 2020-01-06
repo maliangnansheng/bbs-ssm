@@ -2,11 +2,27 @@
 $(function () {
     var APP_PATH = document.getElementById("APP_PATH").value;
     var userid = document.getElementById("session_userid").value;
+
+    var loading =
+        '<div class="text-center">' +
+            '<br><br><br><br><br><br><br><br><br><br>' +
+        '   <img src="'+APP_PATH+'/static/img/loading.gif" alt="加载中...">' +
+        '</div>';
+    // 显示加载loading
+    $("#mycontent_loading").html(loading);
+
     $.ajax({
         url: "userController/getMyself",
         type: "post",
         dataType: "json",
         success: function (data) {
+            // 隐藏加载loading
+            $("#mycontent_loading").hide();
+            // 恢复上半部分的显示
+            $("#mycontent_top").show();
+            // 恢复下半部分的显示
+            $("#mycontent_bottom").show();
+
             /*上半部分*/
             var myself_userphoto = "";
             var myself_name = "";
@@ -115,22 +131,20 @@ $(function () {
                     var img_video;
                     if (article["photo"].endsWith(".mp4")||article["photo"].endsWith(".avi")){  //视频
                         img_video = '<video controls="controls" src="'+ APP_PATH +'/static/upload/article/'+article["photo"]+'" ' +
-                            'style="position: relative; width: 30%; height: 30%;"></video>';
+                            'style="position: relative; width: 100%; height: 100%;border-radius: 3px;"></video>';
                     }else {     //图片
                         img_video = '<img src="'+ APP_PATH +'/static/upload/article/'+article["photo"]+'"' +
-                            'style="position: relative; width: 30%; height: 30%;">';
+                            'style="position: relative; width: 100%; height: 100%;border-radius: 3px;">';
                     }
-                    myself_article_photo = '<a href="'+ APP_PATH +'/static/upload/article/'+article["photo"]+'" target="_blank">'+img_video+'</a>';
+                    myself_article_photo = img_video;
                 }
 
                 /*修改*/
                 myself_article_update =
                     '<form id="form_articleUpdate_'+article["fid"]+'">' +
-                        '<input type="hidden" name="titles" value="'+article["titles"]+'">' +
+                        '<input type="hidden" name="fid" value="'+article["fid"]+'">' +
                         '<input type="hidden" name="bname" value="'+article["bname"]+'">' +
-                        '<input type="hidden" name="fcontent" value="'+article["fcontent"]+'">' +
-                        '<input type="hidden" name="photo" value="'+article["photo"]+'">' +
-                        '<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#articleEdit" onclick="setArticleEdit('+article["fid"]+')">修改</button>' +
+                        '<button type="button" class="btn btn-info btn-sm" onclick="skipUpdateArticle('+article["fid"]+')">修改</button>' +
                     '</form>';
 
                 /*删除*/
@@ -138,33 +152,6 @@ $(function () {
                     '<form>' +
                         '<button type="button" class="btn btn-danger btn-sm" onclick="f_del('+article["fid"]+')">删除</button>' +
                     '</form>';
-
-                /*评论*/
-                var myself_article_comment = "";
-                var myListComment_Fid = "myListComment_"+article["fid"];
-                var comments = data[myListComment_Fid];
-                for (var j=0;j<comments.length;j++){
-                    var comment = comments[j];
-                    myself_article_comment = myself_article_comment +
-                        '<hr style="position: relative; margin-top: 2px;height:1px;border:none;border-top:1px dashed #dddddd;">' +
-                        '<div class="row" style="position: relative; margin-top: -10px;">' +
-                            '<div class="col-xs-9 col-md-11">' +
-                                '<a href="'+ APP_PATH +'/userController/getOthers?userid='+comment["userid"]+'" class="a_p">' +
-                                '<!-- 评论者姓名 -->' +
-                                '<b>'+comment["name"]+'</b>' +
-                                '</a>' +
-                                '&nbsp;&nbsp;&nbsp;' +
-                                '<small>'+comment["time"]+'</small>' +
-                                '<!-- 评论者内容 -->' +
-                                '<p>'+comment["pcontent"]+'</p>' +
-                            '</div>' +
-                            '<div class="col-xs-3 col-md-1">' +
-                                '<form>' +
-                                    '<button type="button" class="btn btn-danger btn-sm" onclick="p_del('+article["fid"]+","+comment["pid"]+')">删除</button>' +
-                                '</form>' +
-                            '</div>' +
-                        '</div>';
-                }
 
                 myself_article_all = myself_article_all +
                     '<!--动态-->' +
@@ -179,32 +166,29 @@ $(function () {
                             '<!-- 时间 -->' +
                             '<small id="myself_article_time">'+myself_article_time+'</small>' +
                         '</div>' +
-                        '' +
-                        '<div class="col-xs-12 col-md-12">' +
-                            '<h4>' +
-                                '<!-- 标题 -->' +
-                                '<b id="myself_article_titles">'+myself_article_titles+'</b>' +
-                            '</h4>' +
-                        '</div>' +
-                        '<div class="col-xs-12 col-md-12">' +
-                            '<!-- 内容 -->' +
-                            '<p id="myself_article_fcontent">'+myself_article_fcontent+'</p>' +
-                        '</div>' +
                         '<!-- 配图 -->' +
-                        '<div class="col-xs-12 col-md-12" id="myself_article_photo">'+myself_article_photo+'</div>' +
+                        '<div onclick="skipArticle('+article["fid"]+')" class="col-xs-12 col-md-3" id="myself_article_photo" style="cursor:pointer;">'+myself_article_photo+'</div>' +
+                        '<div class="col-xs-12 col-md-9">' +
+                        '   <div onclick="skipArticle('+article["fid"]+')" style="overflow: hidden;white-space: nowrap;text-overflow:ellipsis;color: #000000;">' +
+                        '       <!-- 标题 -->' +
+                        '       <b id="myself_article_titles" style="cursor:pointer; font-size:18px;">'+myself_article_titles+'</b>' +
+                        '   </div>' +
+                        '   <div onclick="skipArticle('+article["fid"]+')" id="myself_article_content" style="cursor:pointer;overflow: hidden;text-overflow:ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 3;">' +
+                        '       <span style="word-break: break-word;line-height: 1.6;">'+myself_article_fcontent+'</span>' +
+                        '   </div>' +
+                        '</div>' +
                         '<div class="col-xs-7 col-md-10"></div>' +
                         '<!-- 修改 -->' +
                         '<div class="col-xs-2 col-md-1" id="myself_article_update">'+myself_article_update+'</div>' +
                         '<!-- 删除 -->' +
-                        '<div class="col-xs-3 col-md-1" id="myself_article_del">'+myself_article_del+'</div>' +
+                        '<div class="col-xs-2 col-md-1" id="myself_article_del">'+myself_article_del+'</div>' +
                     '</div>' +
                     '' +
-                    '<!--评论-循环开始（动态）-->' +
-                    '<div id="myself_article_comment'+article["fid"]+'">'+myself_article_comment+'</div>' +
                     '<!--评论-循环结束（动态）-->' +
-                    '<hr style="height:1px;border:none;border-top:3px solid #bbbbbb;">';
+                    '<hr style="height:1px;border:none;border-top:1px solid #bbbbbb;">';
             }
             $("#myself_article_all").html(myself_article_all);
+
             /*########################################### 帖子循环-开始（动态）-end ############################################################*/
 
             /*########################################### 帖子循环-开始（回复）############################################################*/
@@ -233,48 +217,20 @@ $(function () {
                         if (huifu_article["photo"].endsWith(".mp4") || huifu_article["photo"].endsWith(".avi")){  //视频
                             huifu_article_photo_type =
                                 '<video controls="controls" src="'+APP_PATH+'/static/upload/article/'+huifu_article["photo"]+'"' +
-                                    'style="position: relative; width: 30%; height: 30%;"></video>';
+                                    'style="position: relative; width: 100%; height: 100%;border-radius: 3px;"></video>';
                         } else {    //图片
                             huifu_article_photo_type =
                                 '<img src="'+APP_PATH+'/static/upload/article/'+huifu_article["photo"]+'"' +
-                                    'style="position: relative; width: 30%; height: 30%;">';
+                                    'style="position: relative; width: 100%; height: 100%;border-radius: 3px;">';
                         }
-                        huifu_article_photo =
-                            '<a href="'+APP_PATH+'/static/upload/article/'+huifu_article["photo"]+'" target="_blank">'+huifu_article_photo_type+'</a>';
+                        huifu_article_photo = huifu_article_photo_type;
                     }
 
                     /*评论*/
                     var huifu_comment_all = "";
                     var myListComment_Fid = "myListComment_huifu_"+huifu_article["fid"];
                     var huifu_comments = data[myListComment_Fid];
-                    for (var j =0 ;j<huifu_comments.length;j++){
-                        var huifu_comment = huifu_comments[j];
-                        var huifu_comment_del = "";
-                        // 如果该评论者是本用户时可以修改自己的评论，否则不能
-                        if (huifu_comment["userid"] == userid){
-                            huifu_comment_del =
-                                '<form>' +
-                                    '<button type="button" class="btn btn-danger btn-sm" onclick="p_del_huifu('+huifu_article["fid"]+","+huifu_comment["pid"]+')">删除</button>' +
-                                '</form>';
-                        }
-                        huifu_comment_all = huifu_comment_all +
-                            '<hr style="position: relative; margin-top: 2px;height:1px;border:none;border-top:1px dashed #dddddd;">' +
-                            '<div class="row" style="position: relative; margin-top: -10px;">' +
-                                '<div class="col-xs-10 col-md-11">' +
-                                '<a href="'+APP_PATH+'/userController/getOthers?userid='+huifu_comment["userid"]+'" class="a_p">' +
-                                '<!-- 评论者姓名 -->' +
-                                '<b>'+huifu_comment["name"]+'</b>' +
-                                '</a>' +
-                                '&nbsp;&nbsp;&nbsp;' +
-                                '<!-- 时间 -->' +
-                                '<small>'+huifu_comment["time"]+'</small>' +
-                                '<!-- 评论者内容 -->' +
-                                '<p>'+huifu_comment["pcontent"]+'</p>' +
-                                '</div>' +
-                                '<!-- 如果该评论者是本用户时可以修改自己的评论，否则不能 -->' +
-                                '<div id="huifu_comment_del">'+huifu_comment_del+'</div>' +
-                            '</div>';
-                    }
+
                     huifu_all = huifu_all +
                         '<div class="row">' +
                             '<div class="col-xs-7 col-md-6">' +
@@ -285,22 +241,17 @@ $(function () {
                                 '<!-- 时间 -->' +
                                 '<small>'+huifu_article["time"]+'</small>' +
                             '</div>' +
-                            '' +
-                            '<div class="col-xs-12 col-md-12">' +
-                                '<h4>' +
-                                    '<!-- 标题 -->' +
-                                    '<b>'+huifu_article["titles"]+'</b>' +
-                                '</h4>' +
+                            '<div onclick="skipArticle('+huifu_article["fid"]+')" class="col-xs-12 col-md-3" id="huifu_article_photo" style="cursor:pointer;">'+huifu_article_photo+'</div>' +
+                            '<div class="col-xs-12 col-md-9">' +
+                            '   <div onclick="skipArticle('+huifu_article["fid"]+')" style="overflow: hidden;white-space: nowrap;text-overflow:ellipsis;color: #000000;">' +
+                            '       <!-- 标题 -->' +
+                            '       <b id="huifu_article_titles" style="cursor:pointer; font-size:18px;">'+huifu_article["titles"]+'</b>' +
+                            '   </div>' +
+                            '   <div onclick="skipArticle('+huifu_article["fid"]+')" id="huifu_article_content" style="cursor:pointer;overflow: hidden;text-overflow:ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 3;">' +
+                            '       <span>'+huifu_article["fcontent"]+'</span>' +
+                            '   </div>' +
                             '</div>' +
-                            '<div class="col-xs-12 col-md-12">' +
-                                '<!-- 内容 -->' +
-                                '<p>'+huifu_article["fcontent"]+'</p>' +
-                            '</div>' +
-                            '<div class="col-xs-12 col-md-12" id="huifu_article_photo">'+huifu_article_photo+'</div>' +
                         '</div>' +
-                        '' +
-                        '<!--评论-循环开始（回复）-->' +
-                        '<div id="huifu_comment_all_'+huifu_article["fid"]+'">'+huifu_comment_all+'</div>' +
                         '<hr style="height:1px;border:none;border-top:1px solid #bbbbbb;">';
                 }
             }
@@ -354,7 +305,7 @@ $(function () {
                                 '<br>' +
                                 '<samp>'+myAttention["intro"]+'</samp>' +
                                 '<br>' +
-                                '<samp>有<b class="text-success">'+myAttention["attcount"]+'</b>人关注</samp>' +
+                                '<samp>有 <b class="text-success">'+myAttention["attcount"]+'</b> 粉丝</samp>' +
                             '</div>' +
                             '<div class="col-xs-4 col-md-2 attention">' +
                                 '<form id="form_attentionDel_'+myAttention["userid"]+'">' +
@@ -409,7 +360,7 @@ $(function () {
                                 '<br>' +
                                 '<samp>'+myAttention_be["intro"]+'</samp>' +
                                 '<br>' +
-                                '<samp>有<b class="text-success">'+myAttention_be["attcount"]+'</b>人关注</samp>' +
+                                '<samp>有 <b class="text-success">'+myAttention_be["attcount"]+'</b> 粉丝</samp>' +
                             '</div>' +
                         '</div>' +
                         '<hr>';
@@ -445,7 +396,7 @@ $(function () {
                                 '</form>' +
                             '</div>' +
                             '<div class="col-xs-10 col-md-9">' +
-                                '<a href="javascript:void(0)" onclick="collectShow('+collect["fid"]+')" data-toggle="modal" data-target="#collectArticle" >'+collect["titles"]+'</a>' +
+                                '<a href="javascript:void(0)" onclick="skipArticle('+collect["fid"]+')">'+collect["titles"]+'</a>' +
                             '</div>' +
                             '<div class="col-xs-5 col-md-2 col-xs-offset-7">' +
                                 '<small>'+collect["time"]+'</small>' +
@@ -464,3 +415,17 @@ $(function () {
 
     });
 });
+
+/*跳转到帖子详情（新开一个tab）*/
+function skipArticle(fid) {
+    var APP_PATH = document.getElementById("APP_PATH").value;
+    var url = APP_PATH+'/article.jsp?fid=' + fid;
+    window.open(url,"_blank");
+}
+
+/*跳转到修改帖子（不新开一个tab）*/
+function skipUpdateArticle(fid) {
+    var APP_PATH = document.getElementById("APP_PATH").value;
+    var url = APP_PATH+'/update.jsp?fid=' + fid + "&source=myself";
+    window.location.href = url;
+}

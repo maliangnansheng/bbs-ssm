@@ -25,8 +25,8 @@ public interface ArticleMapper {
 	//按帖子标题模糊查询（搜索框搜索）
 	List<Article> selectByArticleTitle(String articleTitle);
 	
-	//按帖子板块查询出帖子
-	List<Article> selectByArticleBname(String bname);
+	//按帖子板块查询出帖子（通过审核的）
+	List<Article> selectByArticleBid(int bid);
 
 	// 按userid查询发帖表信息
 	List<Article> selectByArticleId(int userid);
@@ -45,9 +45,9 @@ public interface ArticleMapper {
 	//删除用户对应的帖子信息(按userid)
 	void deleteByUserid(int userid);
 
-	//修改article表中的username
-	void updateArticleSetup(Article article);
-
 	//总帖数
     int selectCount();
+
+    //热门帖子
+    List<Article> getHotArticle();
 }

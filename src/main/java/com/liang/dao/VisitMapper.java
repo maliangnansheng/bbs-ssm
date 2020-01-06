@@ -20,4 +20,13 @@ public interface VisitMapper {
 
     //总访问数
     int selectCount();
+
+    //月总访量
+    int getMonthCount();
+
+    //周总访量
+    int getWeekCount();
+
+    //日总访量
+    int getDayCount();
 }

@@ -61,7 +61,9 @@ function userDel(userid, pageStart) {
                             listUser_all = listUser_all +
                                 '<tr>' +
                                 '<td>'+user_num+'</td>' +
-                                '<td>'+listUser["name"]+'</td>' +
+                                '<td>' +
+                                '   <a href=' + APP_PATH + '/userController/getOthers?userid=' + listUser["userid"] + ' target="_blank">'+listUser["name"]+'</a>' +
+                                '</td>' +
                                 '<td>'+listUser["age"]+'</td>' +
                                 '<td>'+listUser["sex"]+'</td>' +
                                 '<td>'+listUser["email"]+'</td>' +
@@ -169,7 +171,9 @@ function userPage(pageStart) {
                 listUser_all = listUser_all +
                     '<tr>' +
                     '<td>'+user_num+'</td>' +
-                    '<td>'+listUser["name"]+'</td>' +
+                    '<td>' +
+                    '   <a href=' + APP_PATH + '/userController/getOthers?userid=' + listUser["userid"] + ' target="_blank">'+listUser["name"]+'</a>' +
+                    '</td>' +
                     '<td>'+listUser["age"]+'</td>' +
                     '<td>'+listUser["sex"]+'</td>' +
                     '<td>'+listUser["email"]+'</td>' +

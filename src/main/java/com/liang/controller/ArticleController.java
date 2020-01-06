@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import com.liang.bean.*;
 import com.liang.service.*;
+import com.liang.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,9 +33,19 @@ public class ArticleController {
 	@Autowired
 	CollectService collectService;
 	@Autowired
+	EnjoyService enjoyService;
+	@Autowired
 	PlateService plateService;
 	@Autowired
 	AttentionService attentionService;
+	@Autowired
+	VisitService visitService;
+
+	// 用户系统-帖子追加条数（出第一页外）
+	private static final String articleDefaultPageSize = "10";
+
+	// 管理系统-帖子追加条数（出第一页外）
+	private static final String adminArticleDefaultPageSize = "10";
 	
 	/**
 	 * 向数据库插入发帖信息（包括图片）
@@ -48,7 +59,6 @@ public class ArticleController {
 	//有MultipartFile file的时候不能有 Article article，因为Article中包含了文件（file）????!!!
 	public String setArticle(@RequestParam("photo") MultipartFile file, Article2 article2, HttpSession session,HttpServletRequest request)
 			throws IOException {
-		
 		String projectname;	//项目名称
 		projectname = request.getSession().getServletContext().getRealPath("/");
 		projectname=projectname.substring(0,projectname.length()-1);
@@ -99,13 +109,71 @@ public class ArticleController {
 	}
 
 	/**
+	 * 上传图片
+	 * @param file
+	 * @param session
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value="/uploadPicture",method=RequestMethod.POST)
+	@ResponseBody
+	public Map uploadPicture(@RequestParam(value = "editormd-image-file", required = false)MultipartFile file, HttpSession session, HttpServletRequest request){
+		Map<Object, Object> map = new HashMap<>();
+		try {
+			String projectname;	//项目名称
+			projectname = request.getSession().getServletContext().getRealPath("/");
+			projectname=projectname.substring(0,projectname.length()-1);
+			if (projectname.indexOf("/")==-1) {//在非linux系统下
+				projectname = projectname.substring(projectname.lastIndexOf("\\"),projectname.length());
+			} else {//在linux系统下
+				projectname = projectname.substring(projectname.lastIndexOf("/"),projectname.length());
+			}
+			System.out.println("项目名称:"+projectname);
+
+			//文件（图片）路径
+			String filePath = PathUtil.getCommonPath()+projectname+PathUtil.getIllustrationPath();
+			//用于存放新生成的文件名字(不重复)
+			String newFileName = "";
+
+			String username=(String) session.getAttribute("username");
+			//用户登录情况下才可发帖
+			if(username!=null) {
+				// 获取上传图片的文件名及其后缀(获取原始图片的拓展名)
+				String fileName = file.getOriginalFilename();
+
+				if(!fileName.equals("")) {
+					//生成新的文件名字(不重复)
+					newFileName = UUID.randomUUID() + fileName;
+					// 封装上传文件位置的全路径
+					File targetFile = new File(filePath, newFileName);
+					System.out.println("封装上传文件位置的全路径:"+targetFile);
+					// 把本地文件上传到封装上传文件位置
+					file.transferTo(targetFile);
+				}
+			}
+
+			// 注意：1一定要是数字不能是字符
+			map.put("success", 1);
+			map.put("message", "上传成功");
+			map.put("url", projectname+PathUtil.getIllustrationPath()+File.separator+newFileName);
+		}catch (Exception e){
+			// 注意：0一定要是数字不能是字符
+			map.put("success", 0);
+			map.put("message", "上传失败！");
+		}
+
+		return map;
+	}
+
+	/**
 	 * 查询发帖表信息（首页-分页）
 	 * @param map
 	 * @return
 	 */
 	@RequestMapping("/getArticle")
 	@ResponseBody
-	public Map getArticle(Map<Object, Object> map, @RequestParam(required=true,defaultValue="1") int pageStart, @RequestParam(required=true,defaultValue="10")int pageSize) {
+	public Map getArticle(Map<Object, Object> map, @RequestParam(required=true,defaultValue="1") int pageStart, @RequestParam(required=true,defaultValue=articleDefaultPageSize)int pageSize) {
 		Map<Object, Object> map2 = new HashMap<>();
 		List<Article> listArticle = articleService.getArticle(pageStart, pageSize);
 		map.put("listArticle", listArticle);
@@ -123,7 +191,7 @@ public class ArticleController {
 	 */
 	@RequestMapping("/getArticleManagement")
 	@ResponseBody
-	public Map getArticleAdmin(Map<Object, Object> map, @RequestParam(required=true,defaultValue="1") int pageStart, @RequestParam(required=true,defaultValue="10")int pageSize) {
+	public Map getArticleAdmin(Map<Object, Object> map, @RequestParam(required=true,defaultValue="1") int pageStart, @RequestParam(required=true,defaultValue=adminArticleDefaultPageSize)int pageSize) {
 		Map<Object, Object> map2 = new HashMap<>();
 		int tail = 1;
 		List<Article> listArticle = articleService.getArticleAdmin(pageStart, pageSize);
@@ -161,13 +229,13 @@ public class ArticleController {
 	}
 	
 	/**
-	 * 按帖子板块查询出帖子
-	 * @param bname
+	 * 按帖子板块查询出帖子（通过审核的）
+	 * @param bid
 	 * @param map
 	 */
-	public void getArticleBname(String bname, Map<Object, Object> map) {
+	public void getArticleBid(int bid, Map<Object, Object> map) {
 		
-		List<Article> listArticle = articleService.getArticleBname(bname);
+		List<Article> listArticle = articleService.getArticleBid(bid);
 		map.put("listArticle", listArticle);
 	}
 	
@@ -217,16 +285,17 @@ public class ArticleController {
 
 		return map;
 	}
-	
+
 	/**
-	 * 获取mycontent.jsp页面传来的数据，获取板块信息
-	 * @param article
+	 * 获取帖子和板块信息
+	 * @param fid
 	 * @return
 	 */
-	@RequestMapping("/getUpdateArticle")
+	@RequestMapping("/getUpdateArticle/{fid}")
 	@ResponseBody
-	public Map getUpdateArticle(Article article) {
+	public Map getUpdateArticle(@PathVariable int fid) {
 		Map<Object, Object> map = new HashMap<>();
+		Article article = articleService.getArticleKey(fid);
 		map.put("article_Edit", article);
 		//无条件获取板块信息
 		List<Plate> plate=plateService.getPlate();
@@ -236,7 +305,7 @@ public class ArticleController {
 	}
 	
 	/**
-	 * 修改帖子表
+	 * 修改帖子表（更改题图）
 	 * @return
 	 * @throws IOException 
 	 */
@@ -274,6 +343,30 @@ public class ArticleController {
 
 			//调用删除帖子对应图片的方法
 			articlePhotoDelete(fid,request);
+
+			System.out.println("图："+article);
+			//修改帖子表（数据库）
+			articleService.updateArticle(article);
+
+			map.put("resultCode",200);
+		}catch (Exception e){
+			map.put("resultCode",404);
+		}
+
+		return map;
+	}
+
+	/**
+	 * 修改帖子表（题图未更改）
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/updateArticleNotPhoto")
+	@ResponseBody
+	public Map updateArticleNotPhoto(Article article) {
+		Map<Object, Object> map = new HashMap();
+		try {
+			System.out.println("无图："+article);
 			//修改帖子表（数据库）
 			articleService.updateArticle(article);
 
@@ -364,8 +457,34 @@ public class ArticleController {
 		List<Collect> collect = collectService.getCollect();
 		map.put("collect", collect);
 
+		// 查询收藏信息（无条件）
+		List<Enjoy> enjoy = enjoyService.getEnjoy();
+		map.put("enjoy", enjoy);
+
+		// 热门帖子
+		List<Article> listHotArticle = articleService.getHotArticle();
+		map.put("listHotArticle", listHotArticle);
+
+		// 统计访问信息-国家
+		visitService.visitCountryStatistic(map);
+
+		// 统计访问信息-中国省份
+		visitService.visitProvinceStatistic(map);
+
 		return map;
 	}
 
-	
+	/**
+	 * 热门帖子
+	 * @return
+	 */
+	@RequestMapping("/getHotArticle")
+	@ResponseBody
+    public Map getHotArticle() {
+		Map<Object, Object> map = new HashMap<>();
+		List<Article> listHotArticle = articleService.getHotArticle();
+		map.put("listHotArticle", listHotArticle);
+
+		return map;
+    }
 }

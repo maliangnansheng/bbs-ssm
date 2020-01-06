@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.liang.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,13 @@ public class ArticleService {
 	@Autowired
 	ArticleMapper articleMapper;
 
-	/**
+	// 用户系统-帖子初始条数（第一页）
+	private static final int articlePageSize = PageUtil.getArticlePageSize();
+
+	// 管理系统-帖子初始条数（第一页）
+	private static final int adminArticlePageSize = PageUtil.getAdminArticlePageSize();
+
+    /**
 	 * 向数据库插入发帖信息
 	 * @param article
 	 */
@@ -31,7 +38,11 @@ public class ArticleService {
 	 */
 	public List<Article> getArticle(int pageStart, int pageSize) {
 		Map<Object,Object> map = new HashMap<>();
-		map.put("offset",(pageStart-1)*pageSize);
+		if (pageStart == 1) {
+			map.put("offset",(pageStart-1)*pageSize);
+		} else {
+			map.put("offset",(pageStart-2)*pageSize + articlePageSize);
+		}
 		map.put("limit",pageSize);
 		return articleMapper.selectByArticle(map);
 	}
@@ -44,7 +55,11 @@ public class ArticleService {
 	 */
 	public List<Article> getArticleAdmin(int pageStart, int pageSize) {
 		Map<Object,Object> map = new HashMap<>();
-		map.put("offset",(pageStart-1)*pageSize);
+		if (pageStart == 1) {
+			map.put("offset",(pageStart-1)*pageSize);
+		} else {
+			map.put("offset",(pageStart-2)*pageSize + adminArticlePageSize);
+		}
 		map.put("limit",pageSize);
 		return articleMapper.selectByArticleAdmin(map);
 	}
@@ -60,13 +75,13 @@ public class ArticleService {
 	}
 	
 	/**
-	 * 按帖子板块查询出帖子
-	 * @param bname
+	 * 按帖子板块查询出帖子（通过审核的）
+	 * @param bid
 	 * @return
 	 */
-	public List<Article> getArticleBname(String bname) {
+	public List<Article> getArticleBid(int bid) {
 
-		return articleMapper.selectByArticleBname(bname);
+		return articleMapper.selectByArticleBid(bid);
 	}
 
 	/**
@@ -124,19 +139,18 @@ public class ArticleService {
 	}
 
 	/**
-	 * 修改article表中的username
-	 * @param article
-	 */
-	public void updateArticleSetup(Article article) {
-		
-		articleMapper.updateArticleSetup(article);
-	}
-
-	/**
 	 * 总贴数
 	 * @return
 	 */
     public int getCount() {
     	return articleMapper.selectCount();
     }
+
+	/**
+	 * 热门帖子
+	 * @return
+	 */
+	public List<Article> getHotArticle() {
+		return articleMapper.getHotArticle();
+	}
 }

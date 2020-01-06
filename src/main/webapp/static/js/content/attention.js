@@ -22,8 +22,8 @@ function attentionAdd(fid,fuserid,userid) {
                                 '<input type="hidden" name="gid" value=' + attention["gid"] + '>' +
                                 '<div class="attention_content">' +
                                     '<a href="javascript:void(0)">' +
-                                        '<button type="button" onclick="attentionDel('+fid+","+fuserid+","+userid+')" class="btn button2" style="width:80px;">取消关注</button>' +
-                                        '<button type="button" onclick="attentionDel('+fid+","+fuserid+","+userid+')" class="btn" style="width:80px;">已关注</button>' +
+                                        '<button type="button" onclick="attentionDel('+fid+","+fuserid+","+userid+')" class="btn button2">取消关注</button>' +
+                                        '<button type="button" onclick="attentionDel('+fid+","+fuserid+","+userid+')" class="btn">已关注</button>' +
                                     '</a>' +
                                 '</div>' +
                             '</form>';

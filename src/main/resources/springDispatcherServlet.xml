@@ -29,5 +29,15 @@
 	<mvc:default-servlet-handler/>
 	<!-- 能支持springmvc更高级的一些功能，JSR303校验，快捷的ajax...映射动态请求 -->
 	<mvc:annotation-driven/>
-	
+
+	<mvc:interceptors>
+		<!--登录拦截器-->
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<!-- 不拦截 -->
+			<mvc:exclude-mapping path="/static/**"/>
+			<bean class="com.liang.interceptor.LoginInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
 </beans>

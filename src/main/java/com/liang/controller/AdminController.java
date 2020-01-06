@@ -13,7 +13,7 @@ import com.liang.bean.Admin;
 import com.liang.service.AdminService;
 
 @Controller
-@RequestMapping("adminController")
+@RequestMapping("/adminController")
 @SessionAttributes(value="adminList")
 public class AdminController {
 

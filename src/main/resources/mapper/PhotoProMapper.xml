@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liang.dao.PhotoProMapper">
+  <resultMap id="BaseResultMap" type="com.liang.bean.PhotoPro">
+    <id column="fid" jdbcType="INTEGER" property="fid" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    fid, userid, name, time
+  </sql>
+  
+  <!-- 获取相册分类信息(按userid) -->
+  <select id="selectByUserid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    pr.fid, pr.userid, pr.name, pr.time,tp.photo
+    from photo_pro pr left join tb_photo tp on pr.fid=tp.fid
+    where pr.userid = #{userid,jdbcType=INTEGER}
+	group by fid
+  </select>
+
+  <!-- 按fid（相册id）查询相册信息 -->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from photo_pro
+    where fid = #{fid,jdbcType=INTEGER}
+  </select>
+
+  <!-- 按userid和name（相册名）查询相册信息 -->
+  <select id="selectByName" parameterType="com.liang.bean.PhotoPro" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from photo_pro
+    where name = #{name,jdbcType=VARCHAR} and userid = #{userid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 删除相册 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from photo_pro
+    where fid = #{fid,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 创建相册 -->
+  <insert id="insert" parameterType="com.liang.bean.PhotoPro">
+    insert into photo_pro (fid, userid, name, 
+      time)
+    values (#{fid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{time,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.liang.bean.PhotoPro">
+    insert into photo_pro
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fid != null">
+        fid,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fid != null">
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.liang.bean.PhotoPro">
+    update photo_pro
+    <set>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.liang.bean.PhotoPro">
+    update photo_pro
+    set userid = #{userid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+
+  <!-- 编辑相册 -->
+  <update id="updateName" parameterType="com.liang.bean.PhotoPro">
+    update photo_pro
+    set name = #{name,jdbcType=VARCHAR}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+</mapper>

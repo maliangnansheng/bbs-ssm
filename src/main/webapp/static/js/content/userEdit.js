@@ -150,7 +150,7 @@ function editUser() {
                     '<div class="form-group">' +
                         '<label for="age" class="col-sm-2 control-label">年龄</label>' +
                         '<div class="col-sm-10">' +
-                            '<input type="text" class="form-control" id="age" name="age" value="'+age+'">' +
+                            '<input type="number" class="form-control" id="age" name="age" onkeyup="onkeyupUserageUpdate()" value="'+age+'">' +
                         '</div>' +
                     '</div>' +
                     '<div class="form-group">' +
@@ -173,13 +173,13 @@ function editUser() {
                     '<div class="form-group">' +
                         '<label for="family" class="col-sm-2 control-label">家庭住址</label>' +
                         '<div class="col-sm-10">' +
-                            '<input type="text" class="form-control" id="family" name="family" value="'+family+'">' +
+                            '<input type="text" class="form-control" id="family" name="family" onkeyup="onkeyupUserfamilyUpdate()" value="'+family+'">' +
                         '</div>' +
                     '</div>' +
                     '<div class="form-group">' +
                         '<label for="intro" class="col-sm-2 control-label">个人简介</label>' +
                         '<div class="col-sm-10">' +
-                            '<textarea class="form-control" id="intro" name="intro" style="position: relative;height: 150px;">'+intro+'</textarea>' +
+                            '<textarea class="form-control" id="intro" name="intro" style="position: relative;height: 150px;" onkeyup="onkeyupUserintroUpdate()">'+intro+'</textarea>' +
                         '</div>' +
                     '</div>' +
                     '' +
@@ -201,6 +201,12 @@ function editUser() {
 function updateUser() {
     var APP_PATH = document.getElementById("APP_PATH").value;
     var userid = document.getElementById("session_userid").value;
+
+    if (onkeyupUserageUpdate() && onkeyupUserfamilyUpdate() && onkeyupUserintroUpdate()) {
+    } else {
+        return false;
+    }
+
     $.ajax({
         //几个参数需要注意一下
         type: "post",//方法类型
@@ -251,4 +257,52 @@ function updateUser() {
             layer.msg("异常！",{icon: 5});
         }
     });
+}
+
+/* 年龄修改预览 */
+function onkeyupUserageUpdate() {
+    var age = $("#age").val();   //去掉前后空格
+    if (age > userAgeSize){
+        layer.tips('年龄不能大于【'+userAgeSize+'】岁', '#age', {
+            tips: [1, '#ff6620'] //还可配置颜色
+        });
+        return false;
+    } else {
+        var index = layer.tips("满足");
+        // 立即关闭
+        layer.close(index);
+        return true;
+    }
+}
+/* 家庭住址修改预览 */
+function onkeyupUserfamilyUpdate() {
+    var family = $.trim($("#family").val());   //去掉前后空格
+    var count_num = chEnWordCount(family);
+    if (count_num > userFamilyLength){
+        layer.tips('不能超过【'+userFamilyLength+'】个字符，当前数 - '+count_num, '#family', {
+            tips: [1, '#ff6620'] //还可配置颜色
+        });
+        return false;
+    } else {
+        var index = layer.tips("满足");
+        // 立即关闭
+        layer.close(index);
+        return true;
+    }
+}
+/* 个人简介修改预览 */
+function onkeyupUserintroUpdate() {
+    var intro = $.trim($("#intro").val());   //去掉前后空格
+    var count_num = chEnWordCount(intro);
+    if (count_num > userIntroLength){
+        layer.tips('不能超过【'+userIntroLength+'】个字符，当前数 - '+count_num, '#intro', {
+            tips: [1, '#ff6620'] //还可配置颜色
+        });
+        return false;
+    } else {
+        var index = layer.tips("满足");
+        // 立即关闭
+        layer.close(index);
+        return true;
+    }
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.liang.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,9 @@ public class VisitService {
 	
 	@Autowired
 	VisitMapper visitMapper;
+
+	// 管理系统-访问记录初始条数（第一页）
+	private static final int adminVisitPageSize = PageUtil.getAdminVisitPageSize();
 	
 	public void setVisit(Visit visit) {
 
@@ -29,7 +33,11 @@ public class VisitService {
 	 */
 	public List<Visit> getVisit(int pageStart, int pageSize) {
 		Map<Object,Object> map = new HashMap<>();
-		map.put("offset",(pageStart-1)*pageSize);
+		if (pageStart == 1) {
+			map.put("offset",(pageStart-1)*pageSize);
+		} else {
+			map.put("offset",(pageStart-2)*pageSize + adminVisitPageSize);
+		}
 		map.put("limit",pageSize);
 		return visitMapper.selectByVisit(map);
 	}
@@ -71,4 +79,29 @@ public class VisitService {
     public int getCount() {
 		return visitMapper.selectCount();
     }
+
+
+	/**
+	 * 月总访量
+	 * @return
+	 */
+	public int getMonthCount() {
+		return visitMapper.getMonthCount();
+	}
+
+	/**
+	 * 周总访量
+	 * @return
+	 */
+	public int getWeekCount() {
+		return visitMapper.getWeekCount();
+	}
+
+	/**
+	 * 日总访量
+	 * @return
+	 */
+	public int getDayCount() {
+		return visitMapper.getDayCount();
+	}
 }

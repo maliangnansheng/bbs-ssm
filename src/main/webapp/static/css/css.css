@@ -7,15 +7,15 @@ body {
     height: 40px;
     top: -10px;
 }
-.myself_img{
-    position: relative;
-    left: 20px;
-}
-.myself_text{
-    position: relative;
-    left: -40px;
-    top: 10px
-}
+/*.myself_img{*/
+/*    position: relative;*/
+/*    left: 20px;*/
+/*}*/
+/*.myself_text{*/
+/*    position: relative;*/
+/*    left: -40px;*/
+/*    top: 0px*/
+/*}*/
 .bottom_left{
     position:relative;
     left: 8%;
@@ -47,14 +47,15 @@ body {
 }
 .img_content{
     position:relative;
-    width: 50%;
-    height: 50%;
+    width: 100%;
+    height: 100%;
+    border-radius: 3px;
 }
-.img_right_logo{
-    position:relative;
-    width: 45%;
-    height: 45%;
-}
+/*.img_right_logo{*/
+/*    position:relative;*/
+/*    width: 35%;*/
+/*    height: 35%;*/
+/*}*/
 .img_right_logo_bankuai{
 	position:relative;
     width: 70%;
@@ -95,6 +96,27 @@ body {
 }
 
 
+.enjoy_start{
+    position:relative;
+    top:-2px;
+    color: #c0c0c0;
+    font-size: 20px;
+}
+.enjoy_start:hover{
+    color: #00aef3;
+}
+
+.enjoy_end{
+    position:relative;
+    top:-2px;
+    color: #00aef3;
+    font-size: 20px;
+}
+.enjoy_end:hover{
+    color: #c0c0c0;
+}
+
+
 a{
     color: #737373;
 }
@@ -125,4 +147,11 @@ a:hover {
 }
 a:active {
     text-decoration: none;
+}
+
+#myself_article_titles:hover, #huifu_article_titles:hover, #other_article_titles:hover, #listArticle_titles:hover{
+    color: #006493;
+}
+#myself_article_content:hover, #huifu_article_content:hover, #other_article_content:hover, #listArticle_fcontent:hover{
+    color: #848484;
 }

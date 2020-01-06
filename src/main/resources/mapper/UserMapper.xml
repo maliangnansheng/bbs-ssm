@@ -93,7 +93,7 @@
   <!-- 查询所有用户（分页） -->
   <select id="selectByUserAll" parameterType="com.liang.bean.User" resultMap="BaseResultMap">
     select 
-    u.userid, u.name, u.age, u.sex, u.password, u.email, u.family, u.intro, u.time, v.photo userphoto
+    u.userid, u.name, u.age, u.sex, u.email, u.family, u.intro, u.time, v.photo userphoto
     from user u left join via v on u.userid=v.userid
     order by u.userid desc
     limit #{offset},#{limit}

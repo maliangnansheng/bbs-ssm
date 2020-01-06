@@ -27,7 +27,7 @@
 						<p class="text-muted">板块名：</p>
 						<div class="form-group">
 							<input type="text" class="form-control" placeholder="取一个板块名吧"
-								id="bname_Add" name="bname" required>
+								id="bname_Add" name="bname" onkeyup="onkeyupPlateAdd()" required>
 						</div>
 
 						<div class="modal-footer">
