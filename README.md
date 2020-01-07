@@ -41,7 +41,7 @@
 | 版本号 |                       `github`下载地址                       |                        `码云`下载地址                        |
 | :----: | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | `v2.6` | [南生论坛v2.6](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.6/bbs-ssmv2.6.zip) | [南生论坛v2.6](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322557/download) |
-| `v2.0` |                       [南生论坛v2.0]()                       |                       [南生论坛v2.0]()                       |
+| `v2.0` | [南生论坛v2.0](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.0/bbs-ssmv2.0.zip) | [南生论坛v2.0](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322579/download) |
 | `v1.0` | [南生论坛v1.0](https://github.com/maliangnansheng/bbs-ssm/releases/download/v1.0/bbs-ssmv1.0.zip) | [南生论坛v1.0](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322556/download) |
 
 - 第三次更新`v2.6`：`2019年11月`
