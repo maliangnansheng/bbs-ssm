@@ -44,7 +44,7 @@
 | :----: | :----------------------------------------------------------- | :----------------------------------------------------------- | :-------: |
 | `v2.6` | github：[bbs-ssmv2.6](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.6/bbs-ssmv2.6.zip)<br/>gitee：[bbs-ssmv2.6](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322557/download) | 支持Markdown、新增分享功能                                   | `2019.11` |
 | `v2.0` | github：[bbs-ssmv2.0](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.0/bbs-ssmv2.0.zip)<br/>gitee：[bbs-ssmv2.0](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322579/download) | 整体异步实现、新增统计饼图、优化人机<br/>交互、实现分页、新增相册功能、新增月<br/>周日访问记录 | `2019.05` |
-| `v1.0` | github：[bbs-ssm1.0](https://github.com/maliangnansheng/bbs-ssm/releases/download/v1.0/bbs-ssmv1.0.zip)<br/>gitee：[bbs-ssmv1.0](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322556/download) | 1，登录【用户系统】可以：发帖、修改<br/>帖子、删除帖子、评论、删除评论、修<br/>改个人信息、关注、收藏<br/>2，登录【管理系统】可以：管理用户、<br/>管理帖子、管理板块、访问记录 | `2018.08` |
+| `v1.0` | github：[bbs-ssmv1.0](https://github.com/maliangnansheng/bbs-ssm/releases/download/v1.0/bbs-ssmv1.0.zip)<br/>gitee：[bbs-ssmv1.0](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322556/download) | 登录【用户系统】可以：发帖、修改帖子、<br/>删除帖子、评论、删除评论、修改个人信<br/>息、关注、收藏<br/>登录【管理系统】可以：管理用户、管理<br/>帖子、管理板块、访问记录 | `2018.08` |
 
 ## 项目源码
 
