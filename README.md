@@ -42,9 +42,9 @@
 
 | 版本号 | 下载地址                                                     | 更新说明                                                     |   时间    | 展示                                                         |
 | :----: | :----------------------------------------------------------- | :----------------------------------------------------------- | :-------: | ------------------------------------------------------------ |
-| `v2.6` | github：[bbs-ssmv2.6](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.6/bbs-ssmv2.6.zip)<br/>gitee：[bbs-ssmv2.6](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322557/download) | 支持Markdown、新增分享功能、<br/>新增文章详情页面、首页文章显示<br/>简约化 | `2019.11` | [v2.6](http://blog.nanshengbbs.top:8080/2020/01/06/南生论坛页面静态展示v2-6/) |
-| `v2.0` | github：[bbs-ssmv2.0](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.0/bbs-ssmv2.0.zip)<br/>gitee：[bbs-ssmv2.0](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322579/download) | 整体异步实现、新增统计饼图、<br/>优化人机交互、实现分页、新增<br/>相册功能、新增月周日访问记录 | `2019.05` | [v2.0](http://blog.nanshengbbs.top:8080/2019/12/19/南生论坛页面静态展示/) |
-| `v1.0` | github：[bbs-ssmv1.0](https://github.com/maliangnansheng/bbs-ssm/releases/download/v1.0/bbs-ssmv1.0.zip)<br/>gitee：[bbs-ssmv1.0](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322556/download) | 登录【用户系统】可以：发帖、<br/>修改帖子、删除帖子、评论、删<br/>除评论、修改个人信息、关注、<br/>收藏<br/>登录【管理系统】可以：管<br/>理用户、管理帖子、管理板块、<br/>访问记录 | `2018.08` | [v1.0](http://blog.nanshengbbs.top:8080/2019/12/19/南生论坛页面静态展示/) |
+| `v2.6` | github：[bbs-ssmv2.6](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.6/bbs-ssmv2.6.zip)<br/>gitee：[bbs-ssmv2.6](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322557/download) | 支持Markdown、新增分享功能、<br/>新增文章详情页面、首页文章显示<br/>简约化 | `2019.11` | [v2.6](http://blog.nanshengbbs.top/2020/01/06/南生论坛页面静态展示v2-6/) |
+| `v2.0` | github：[bbs-ssmv2.0](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.0/bbs-ssmv2.0.zip)<br/>gitee：[bbs-ssmv2.0](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322579/download) | 整体异步实现、新增统计饼图、<br/>优化人机交互、实现分页、新增<br/>相册功能、新增月周日访问记录 | `2019.05` | [v2.0](http://blog.nanshengbbs.top/2019/12/19/南生论坛页面静态展示/) |
+| `v1.0` | github：[bbs-ssmv1.0](https://github.com/maliangnansheng/bbs-ssm/releases/download/v1.0/bbs-ssmv1.0.zip)<br/>gitee：[bbs-ssmv1.0](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322556/download) | 登录【用户系统】可以：发帖、<br/>修改帖子、删除帖子、评论、删<br/>除评论、修改个人信息、关注、<br/>收藏<br/>登录【管理系统】可以：管<br/>理用户、管理帖子、管理板块、<br/>访问记录 | `2018.08` | [v1.0](http://blog.nanshengbbs.top/2019/12/19/南生论坛页面静态展示/) |
 
 ## 项目源码
 
@@ -121,7 +121,7 @@
 
 - IntelliJIDEA-tomcat在浏览器js乱码问题解决
 
-  [IntelliJIDEA-tomcat在浏览器js乱码问题解决](http://blog.nanshengbbs.top:8080/2019/04/28/IntelliJIDEA-tomcat%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8js%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/)
+  [IntelliJIDEA-tomcat在浏览器js乱码问题解决](http://blog.nanshengbbs.top/2019/04/28/IntelliJIDEA-tomcat%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8js%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/)
 
 - 确保你安装了 Maven
 
@@ -176,8 +176,8 @@
   
   <img src="picture/手机-文章详情v2.6.jpg" alt="image" width="30%;" />
 
-[查看全部](http://blog.nanshengbbs.top:8080/2020/01/06/南生论坛页面静态展示v2-6/) 
+[查看全部](http://blog.nanshengbbs.top/2020/01/06/南生论坛页面静态展示v2-6/) 
 
 **↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓**
 
- [前往查看南生论坛所有页面的展示效果](http://blog.nanshengbbs.top:8080/2020/01/06/南生论坛页面静态展示v2-6/)
+ [前往查看南生论坛所有页面的展示效果](http://blog.nanshengbbs.top/2020/01/06/南生论坛页面静态展示v2-6/)
