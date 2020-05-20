@@ -31,10 +31,15 @@
 
 > 需要数据库或者有疑问的同学加作者`QQ：924818949`
 
-## 南生论坛APP
+## APP下载
 
-链接：[南生论坛APP 下载](https://pan.baidu.com/s/1-q_fH_gR-RLkM252CtlU-Q) 
-提取码：`qz5e`
+### 南生论坛APP
+
+![](/picture/南生论坛下载（安卓-IOS-APP）.png)
+
+### 南生博客APP
+
+![](/picture/南生博客下载（安卓-IOS-APP）.png)
 
 ## 版本更新
 
