@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>帖子详情</title>
+    <title>文章详情</title>
     <%
         pageContext.setAttribute("APP_PATH", request.getContextPath());
     %>

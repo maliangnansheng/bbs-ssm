@@ -1,34 +1,27 @@
 package com.liang.dao;
 
-
 import com.liang.bean.PhotoPro;
-import com.liang.bean.TbPhoto;
+import com.liang.bean.impl.PhotoProImpl;
 
 import java.util.List;
 
 public interface PhotoProMapper {
 
-    //删除相册
-    int deleteByPrimaryKey(Integer fid);
+    // 创建相册
+    void insert(PhotoPro record);
 
-    //创建相册
-    int insert(PhotoPro record);
+    // 删除相册
+    void deleteByKey(String fid);
 
-    int insertSelective(PhotoPro record);
+    // 编辑相册
+    void updateNameByKey(PhotoPro photoPro);
 
     // 按fid（相册id）查询相册信息
-    PhotoPro selectByPrimaryKey(Integer fid);
+    PhotoPro selectPhotoProByKey(String fid);
 
-    int updateByPrimaryKeySelective(PhotoPro record);
-
-    int updateByPrimaryKey(PhotoPro record);
-
-    //获取相册分类信息(按userid)
-	List<PhotoPro> selectByUserid(int userid);
-
-	// 编辑相册
-    void updateName(PhotoPro photoPro);
+    // 查询某用户的相册分类信息
+	List<PhotoProImpl> selectPhotoProImplByUserid(String userid);
 
     // 按userid和name（相册名）查询相册信息
-    List<PhotoPro> selectByName(PhotoPro photoPro);
+    List<PhotoPro> selectPhotoProByUN(PhotoPro photoPro);
 }

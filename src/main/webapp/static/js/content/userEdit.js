@@ -1,207 +1,151 @@
-//编辑头像-展示
-function userPhotoShow() {
-    var APP_PATH = document.getElementById("APP_PATH").value;
-    var userid = document.getElementById("session_userid").value;
-    $.ajax({
-        //几个参数需要注意一下
-        type: "post",//方法类型
-        dataType: "json",//预期服务器返回的数据类型
-        url: "userController/getMyselfUser",//url
-        success: function (data) {
-            var userPhotoEdit_all = "";
-            var user = data["myListUser"];
-
-            userPhotoEdit_all =
-                '<form method="post" enctype="multipart/form-data">' +
-                    '<p class="text-muted">在本地选择你的头像：</p>' +
-                    '<div class="form-group">' +
-                        '<div id="user_preview">' +
-                            '<a href="javascript:void(0)">' +
-                                '<img class="img-thumbnail" style="position: relative; width: 100%; height: 100%;"' +
-                                'id="user_imghead" src="'+APP_PATH+'/static/img/fatiePhoto.png"' +
-                                'onclick="$(\'#user_previewImg\').click();">' +
-                            '</a>' +
-                        '</div>' +
-                        '<input type="file" onchange="user_previewImage(this)" style="display: none;" id="user_previewImg" name="photo">' +
-                    '</div>' +
-                    '' +
-                    '<div class="modal-footer">' +
-                        '<button type="button" class="btn btn-default" data-dismiss="modal">返回</button>' +
-                        '<button type="button" class="btn btn-primary" onclick="userPhotoUpdate()">保存</button>' +
-                    '</div>' +
-                '</form>';
-
-            $("#userPhotoEdit_all").html(userPhotoEdit_all);
-        },
-        error: function () {
-            layer.msg("异常！",{icon: 5});
-        }
-    });
-}
-
-//编辑头像-修改
+/*---------------------------------------------------------- 编辑用户头像end ----------------------------------------------------------*/
+// 编辑头像-修改
 function userPhotoUpdate() {
-    var APP_PATH = document.getElementById("APP_PATH").value;
-    var userid = document.getElementById("session_userid").value;
     var formData = new FormData();
-    if ($("#user_previewImg")[0].files[0] == null){  //未配图
-        layer.tips('修改头像[必须]重新在本地选择!', '#user_preview', {
+    var picture = $("#user_previewImg")[0].files[0];
+    if (picture == null){  //未配图
+        layer.tips('请选择头像!', '#user_preview', {
             tips: [1, '#ff6620'] //还可配置颜色
         });
         return;
     }
-    formData.append("photo",$("#user_previewImg")[0].files[0]);
+    if (picture.size > sourceFileSize) {    // 超过上传源文件允许的最大值
+        layer.msg("请上传不超过 " + sourceFileSize/(1024*1024) + "M 的图片!",{icon: 5});
+        return;
+    }
+    formData.append("photo", picture);
     $.ajax({
         //几个参数需要注意一下
         type: "post",//方法类型
         dataType: "json",//预期服务器返回的数据类型
-        url: "viaController/setUserPhoto" ,//url
+        url: APP_PATH + "/api/rest/nanshengbbs/v3.0/via/setUserPhoto" ,
         data: formData ,
         // 告诉jQuery不要去处理发送的数据
         processData : false,
         // 告诉jQuery不要去设置Content-Type请求头
         contentType : false,
-        success: function (result) {
-            if (result.resultCode == 200) {
-                $('#userPhoto').modal('hide');     // 关闭模态框无效
-                //获取最新本人帖子信息
-                $.ajax({
-                    type: "post",//方法类型
-                    dataType: "json",//预期服务器返回的数据类型
-                    url: "userController/getMyselfUser" ,//url
-                    success: function (data) {
-                        var user = data["myListUser"];
-                        var myself_userphoto = "";
-                        //判断头像显示
-                        if (user["userphoto"] == null){
-                            myself_userphoto =
-                                '<img class="img-thumbnail" style="position: relative; width: 140px; height: 140px; left: 10px; top: -20px;"' +
-                                'src="'+ APP_PATH +'/static/img/head.png">';
-
-                        }else {
-                            myself_userphoto =
-                                '<img class="img-thumbnail" style="position: relative; width: 140px; height: 140px; left: 10px; top: -20px;"' +
-                                'src="'+ APP_PATH +'/static/upload/user/'+user["userphoto"]+'">';
+        xhr: function(){
+            $(".picture-progress").show();
+            myXhr = $.ajaxSettings.xhr();
+            if(myXhr.upload){
+                myXhr.upload.addEventListener('progress',function(e) {
+                    if (e.lengthComputable) {
+                        var percent = Math.floor(e.loaded/e.total*100);
+                        if (percent <= 100) {
+                            var ratio = dynamicStorageUnit(e.loaded) + '/' + dynamicStorageUnit(e.total) + ' ' + percent + '%';
                         }
-                        $("#myself_userphoto").html(myself_userphoto);
+                        if (percent >= 100) {
+                            var ratio = '<small>压缩上传中...</small>';
+                        }
+                        $(".picture-progress .progress-bar").attr("style", "width:" + percent + '%');
+                        $(".picture-progress .progress-bar").html(ratio);
+                    }
+                }, false);
+            }
+            return myXhr;
+        },
+        success: function (data) {
+            // 隐藏进度条
+            $(".picture-progress").hide();
+            // 状态码
+            var code = data.code;
+            // 提示信息
+            var msg = data.msg;
+            if (code == 200) {
+                // 清空选择的文件
+                $("#user_imghead").attr("src", APP_PATH + '/static/img/fatiePhoto.png');
+                $("#user_previewImg").val("");
+
+                // 更新head上的头像
+                getUserPhotoArg(data.data);
+                $('#userPhoto').modal('hide');  // 关闭模态框无效
+                //获取最新本人文章信息
+                $.ajax({
+                    type: "get",//方法类型
+                    dataType: "json",//预期服务器返回的数据类型
+                    url: APP_PATH + "/api/rest/nanshengbbs/v3.0/user/getMyselfUser" ,
+                    success: function (data) {
+                        // 状态码
+                        var code = data.code;
+                        // 提示信息
+                        var msg = data.msg;
+                        if (code == 200) {
+                            var user = data.data.user;
+                            // 将用户头像显示到个人中心
+                            getMePicture(user);
+                        } else if (code == 500) {
+                            layer.msg(msg, {icon: 5});
+                        }
                     },
                     error : function() {
-                        layer.msg("异常！",{icon: 5});
+                        layer.msg("出错！",{icon: 5});
                     }
                 });
-                layer.msg("成功");
-            }else {
-                layer.msg("失败",{icon: 7});
+                layer.msg(msg);
+            } else if (code == 500) {
+                layer.msg(msg,{icon: 5});
             }
         },
         error : function() {
-            layer.msg("异常！",{icon: 5});
+            layer.msg("出错！",{icon: 5});
         }
     });
 }
+/*---------------------------------------------------------- 编辑用户头像end ----------------------------------------------------------*/
 
-
-//编辑个人资料-展示
+/*---------------------------------------------------------- 编辑个人资料 ----------------------------------------------------------*/
+// 编辑个人资料-展示
 function editUser() {
-    var APP_PATH = document.getElementById("APP_PATH").value;
-    var userid = document.getElementById("session_userid").value;
     $.ajax({
         //几个参数需要注意一下
-        type: "post",//方法类型
+        type: "get",//方法类型
         dataType: "json",//预期服务器返回的数据类型
-        url: "userController/getMyselfUser",//url
+        url: APP_PATH + "/api/rest/nanshengbbs/v3.0/user/getMyselfUser",
         success: function (data) {
-            var user_Edit_all = "";
-            var user = data["myListUser"];
-            var age = user["age"];
-            var family = user["family"];
-            var intro = user["intro"];
+            // 状态码
+            var code = data.code;
+            // 提示信息
+            var msg = data.msg;
+            if (code == 200) {
+                var user = data.data.user;
+                if (user.sex == 0){
+                    // 性别
+                    $("#user_sex span").html("男");  // 当前
+                    $("#user_sex input").attr("value", 0);  // 当前
+                    $("#user_sex input").attr("checked", true);  // 当前
+                    $("#user_sexVersa span").html("女");    // 另选
+                    $("#user_sexVersa input").attr("value", 1);  // 另选
+                } else {
+                    // 性别
+                    $("#user_sex span").html("女");  // 当前
+                    $("#user_sex input").attr("value", 1);  // 当前
+                    $("#user_sex input").attr("checked", true);  // 当前
+                    $("#user_sexVersa span").html("男");    // 另选
+                    $("#user_sexVersa input").attr("value", 0);  // 另选
+                }
 
-            if (user["age"] == null){
-                age = "";
+                // 用户名
+                $("#edit_user_name").html(user.name);
+                // 年龄
+                $("#edit_user_age input").attr("value", user.age);
+                // email
+                $("#edit_user_email").html(user.email);
+                // 家庭住址
+                $("#edit_user_family input").attr("value", user.family);
+                // 个人简介
+                $("#edit_user_intro textarea").html(user.intro);
+            } else if (code == 500) {
+                layer.msg(msg, {icon: 5});
             }
-            if (user["family"] == null){
-                family = "";
-            }
-            if (user["intro"] == null){
-                intro = "";
-            }
-            var user_sex = "";
-            var user_sexVersa = "";
-
-            if (user["sex"] == "男"){
-                user_sex = "男";
-                user_sexVersa = "女";
-            } else {
-                user_sex = "女";
-                user_sexVersa = "男";
-            }
-
-            user_Edit_all =
-                '<form id="form_userUpdate" method="post" class="form-horizontal">' +
-                    '<input type="hidden" class="form-control" id="userid" name="userid" value="'+userid+'">' +
-                    '' +
-                    '<div class="form-group">' +
-                        '<label class="col-sm-2 control-label">用户名</label>' +
-                        '<div class="col-sm-10">' +
-                            '<p class="form-control-static">'+user["name"]+'</p>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="form-group">' +
-                        '<label for="age" class="col-sm-2 control-label">年龄</label>' +
-                        '<div class="col-sm-10">' +
-                            '<input type="number" class="form-control" id="age" name="age" onkeyup="onkeyupUserageUpdate()" value="'+age+'">' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="form-group">' +
-                        '<label class="col-sm-2 control-label">性别</label>' +
-                        '<div class="col-sm-10">' +
-                            '<label class="radio-inline">' +
-                                '<input type="radio" name="sex" id="sex" value="'+user_sex+'" id="user_sex" checked> '+user_sex+'' +
-                            '</label>' +
-                            '<label class="radio-inline">' +
-                                '<input type="radio" name="sex" id="sex" value="'+user_sexVersa+'"> '+user_sexVersa+'' +
-                            '</label>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="form-group">' +
-                        '<label class="col-sm-2 control-label">Email</label>' +
-                        '<div class="col-sm-10">' +
-                            '<p class="form-control-static">'+user["email"]+'</p>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="form-group">' +
-                        '<label for="family" class="col-sm-2 control-label">家庭住址</label>' +
-                        '<div class="col-sm-10">' +
-                            '<input type="text" class="form-control" id="family" name="family" onkeyup="onkeyupUserfamilyUpdate()" value="'+family+'">' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="form-group">' +
-                        '<label for="intro" class="col-sm-2 control-label">个人简介</label>' +
-                        '<div class="col-sm-10">' +
-                            '<textarea class="form-control" id="intro" name="intro" style="position: relative;height: 150px;" onkeyup="onkeyupUserintroUpdate()">'+intro+'</textarea>' +
-                        '</div>' +
-                    '</div>' +
-                    '' +
-                    '<div class="modal-footer">' +
-                        '<button type="reset" class="btn btn-default">还原</button>' +
-                        '<button type="button" class="btn btn-primary" onclick="updateUser()">保存</button>' +
-                    '</div>' +
-                '</form>';
-
-            $("#user_Edit_all").html(user_Edit_all);
         },
         error: function () {
-            layer.msg("异常！",{icon: 5});
+            layer.msg("出错！",{icon: 5});
         }
     });
 }
 
 //编辑个人资料-修改
 function updateUser() {
-    var APP_PATH = document.getElementById("APP_PATH").value;
-    var userid = document.getElementById("session_userid").value;
-
     if (onkeyupUserageUpdate() && onkeyupUserfamilyUpdate() && onkeyupUserintroUpdate()) {
     } else {
         return false;
@@ -209,52 +153,46 @@ function updateUser() {
 
     $.ajax({
         //几个参数需要注意一下
-        type: "post",//方法类型
+        type: "put",//方法类型
         dataType: "json",//预期服务器返回的数据类型
-        url: "userController/updateUser" ,//url
+        url: APP_PATH + "/api/rest/nanshengbbs/v3.0/user/updateUser" ,
         data: $('#form_userUpdate').serialize(),
-        success: function (result) {
-            if (result.resultCode == 200) {
-                $('#edit').modal('hide');     // 关闭模态框无效
-                //获取最新本人帖子信息
+        success: function (data) {
+            // 状态码
+            var code = data.code;
+            // 提示信息
+            var msg = data.msg;
+            if (code == 200) {
+                $('#edit').modal('hide');     // 关闭模态框
+                //获取最新本人文章信息
                 $.ajax({
-                    type: "post",//方法类型
+                    type: "get",//方法类型
                     dataType: "json",//预期服务器返回的数据类型
-                    url: "userController/getMyselfUser" ,//url
+                    url: APP_PATH + "/api/rest/nanshengbbs/v3.0/user/getMyselfUser" ,
                     success: function (data) {
-                        var user = data["myListUser"];
-
-                        //用户名
-                        var myself_name = user["name"];
-                        $("#myself_name").html(myself_name);
-
-                        //居住地
-                        var myself_family = user["family"];
-                        $("#myself_family").html(myself_family);
-
-                        //个人简介
-                        var myself_intro = user["intro"];
-                        $("#myself_intro").html(myself_intro);
-
-                        //电子邮箱
-                        var myself_email = user["email"];
-                        $("#myself_email").html(myself_email);
-
-                        //性别年龄
-                        var myself_sex_age = user["sex"] + "、" +user["age"];
-                        $("#myself_sex_age").html(myself_sex_age);
+                        // 状态码
+                        var code = data.code;
+                        // 提示信息
+                        var msg = data.msg;
+                        if (code == 200) {
+                            var user = data.data.user;
+                            // 将用户信息显示到“个人中心”
+                            getAboutMe(user);
+                        } else if (code == 500) {
+                            layer.msg(msg, {icon: 5});
+                        }
                     },
                     error : function() {
-                        layer.msg("异常！",{icon: 5});
+                        layer.msg("出错！",{icon: 5});
                     }
                 });
-                layer.msg("成功");
-            }else {
-                layer.msg("失败",{icon: 7});
+                layer.msg(msg);
+            } else if (code == 500) {
+                layer.msg(msg, {icon: 5});
             }
         },
         error : function() {
-            layer.msg("异常！",{icon: 5});
+            layer.msg("出错！",{icon: 5});
         }
     });
 }
@@ -262,7 +200,12 @@ function updateUser() {
 /* 年龄修改预览 */
 function onkeyupUserageUpdate() {
     var age = $("#age").val();   //去掉前后空格
-    if (age > userAgeSize){
+    if (age < 1){
+        layer.tips('年龄不能小于【1】岁', '#age', {
+            tips: [1, '#ff6620'] //还可配置颜色
+        });
+        return false;
+    } else if (age > userAgeSize){
         layer.tips('年龄不能大于【'+userAgeSize+'】岁', '#age', {
             tips: [1, '#ff6620'] //还可配置颜色
         });
@@ -306,3 +249,4 @@ function onkeyupUserintroUpdate() {
         return true;
     }
 }
+/*---------------------------------------------------------- 编辑个人资料-end ----------------------------------------------------------*/

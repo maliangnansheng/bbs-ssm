@@ -20,7 +20,27 @@
                             aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title text-center" id="gridSystemModalLabel"><b>重命名该相册</b></h4>
                 </div>
-                <div class="modal-body" id="albumEdit_content"></div>
+                <div class="modal-body" id="albumEdit_content">
+                    <form class="form-horizontal" id="form_albumEdit">
+                        <div class="form-group row">
+                            <div class="col-md-3 col-xs-4">
+                                <label for="album_name" style="position: relative;top: 7px;left: 15px;">相册名：</label>
+                            </div>
+                            <div class="col-md-9 col-xs-8">
+                                <!-- 相册id -->
+                                <input id="album_fid" type="hidden" name="fid">
+                                <!-- 相册名 -->
+                                <input id="album_name" type="text" class="form-control" name="name" onkeyup="onkeyupAlbumNameUpadate()"
+                                    style="position: relative;left: -15px;" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="reset" class="btn btn-default">还原</button>
+                            <!-- 修改按钮 -->
+                            <button id="album_update_submit" type="button" class="btn btn-primary">修改</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

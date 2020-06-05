@@ -1,49 +1,60 @@
 package com.liang.bean;
 
-public class Attention {
-	int gid;
-	
-	int userid;
+import java.util.Date;
 
-	int beuserid;
+public class Attention {
+	// 关注id
+	private String gid;
+	// 关注者id
+	private String userid;
+	// 被关注者id
+	private String beuserid;
+	// 关注时间
+	private Date createTime;
 
 	public Attention() {
 		super();
 	}
 
-	public Attention(int gid, int userid, int beuserid) {
-		super();
-		this.gid = gid;
-		this.userid = userid;
-		this.beuserid = beuserid;
-	}
-
-	public int getGid() {
+	public String getGid() {
 		return gid;
 	}
 
-	public void setGid(int gid) {
+	public void setGid(String gid) {
 		this.gid = gid;
 	}
 
-	public int getUserid() {
+	public String getUserid() {
 		return userid;
 	}
 
-	public void setUserid(int userid) {
+	public void setUserid(String userid) {
 		this.userid = userid;
 	}
 
-	public int getBeuserid() {
+	public String getBeuserid() {
 		return beuserid;
 	}
 
-	public void setBeuserid(int beuserid) {
+	public void setBeuserid(String beuserid) {
 		this.beuserid = beuserid;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
 	@Override
 	public String toString() {
-		return "Attention [gid=" + gid + ", userid=" + userid + ", beuserid=" + beuserid + "]";
+		return "Attention{" +
+				"gid='" + gid + '\'' +
+				", userid='" + userid + '\'' +
+				", beuserid='" + beuserid + '\'' +
+				", createTime=" + createTime +
+				'}';
 	}
 }

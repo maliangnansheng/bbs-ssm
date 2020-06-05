@@ -13,9 +13,9 @@ function f_previewImage(file)
     if (file.files && file.files[0])
     {
         if(ext.endsWith('.mp4')||ext.endsWith('.avi')){	//视频文件
-    		div.innerHTML ='<video style="position: relative;width: 100%;height: 100%;" id=f_imghead onclick=$("#f_previewImg").click()></video>';
+    		div.innerHTML ='<video style="position: relative;width: 100%;height: 100%;" id=f_imghead></video>';
     	}else{	//图片文件
-    		div.innerHTML ='<img style="position: relative;width: 100%;height: 100%;" id=f_imghead onclick=$("#f_previewImg").click()>';
+    		div.innerHTML ='<img style="position: relative;width: 100%;height: 100%;" id=f_imghead>';
     	}
         var img = document.getElementById('f_imghead');
         img.onload = function(){

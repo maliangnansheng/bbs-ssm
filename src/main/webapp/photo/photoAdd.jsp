@@ -26,21 +26,20 @@
                 <div class="modal-body">
                     <form id="form_photoAdd" class="form-horizontal" enctype="multipart/form-data" method="post">
                         <input id="photoAdd_albumFid" type="hidden">
-                        <div class="form-group col-md-12">
-                            <p class="text-muted">在本地选择你的照片：</p>
-                            <div class="form-group">
-                                <div id="user_preview" class="col-md-offset-1">
-                                    <a href="javascript:void(0)">
-                                        <img class="img-thumbnail"
-                                             style="position: relative; width: 100%; height: 100%;"
-                                             id="user_imghead" src="${APP_PATH }/static/img/fatiePhoto.png"
-                                             onclick="$('#user_previewImg').click();">
-                                    </a>
-                                </div>
-                                <input type="file" onchange="user_previewImage(this)" style="display: none;" id="user_previewImg" name="photo">
+                        <%-- 进度条 --%>
+                        <jsp:include page="/content/progress.jsp"></jsp:include>
+                        <p class="text-muted">在本地选择你的照片：</p>
+                        <div class="form-group">
+                            <div id="user_preview">
+                                <a href="javascript:void(0)">
+                                    <img class="img-thumbnail" style="position: relative; width: 100%; height: 100%;"
+                                         id="user_imghead" src="${APP_PATH }/static/img/fatiePhoto.png" onclick="$('#user_previewImg').click();">
+                                </a>
                             </div>
-                            <button type="button" class="btn btn-primary col-md-offset-11 col-xs-offset-10" onclick="photoAdd()">上传</button>
+                            <%-- accept="image/*"：接受所有的图像文件、audio/*、video/*、MIME_type --%>
+                            <input type="file" onchange="user_previewImage(this)" style="display: none;" id="user_previewImg" name="photo" accept="image/*">
                         </div>
+                        <button type="button" class="btn btn-primary col-md-offset-11 col-xs-offset-10" onclick="photoAdd()">上传</button>
                     </form>
                 </div>
             </div>

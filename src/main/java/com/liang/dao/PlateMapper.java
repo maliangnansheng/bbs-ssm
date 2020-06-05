@@ -2,30 +2,27 @@ package com.liang.dao;
 
 import com.liang.bean.Plate;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
 public interface PlateMapper {
 
-    //按bid删除板块信息
-    int deleteByPrimaryKey(Integer bid);
+    // 新增板块
+    void insert(Plate record);
 
-    int insert(Plate record);
+    // 按bid删除板块信息
+    void deleteByKey(String bid);
 
-    int insertSelective(Plate record);
+    // 修改板块
+    void updateByKey(Plate record);
 
-    Plate selectByPrimaryKey(Integer bid);
+    // 查询板块的所有信息
+    List<Plate> selectPlate();
     
-    //查询板块的所有信息
-    List<Plate> selectAll();
-    
-    //按板块名查询
-    List<Plate> selectByAdminName(Plate plate);
+    // 按板块名查询
+    List<Plate> selectPlateByName(Plate plate);
 
-    int updateByPrimaryKeySelective(Plate record);
+    // 按板块ID查询板块信息
+    Plate selectPlateByKey(String bid);
 
-    //修改板块
-    int updateByPrimaryKey(Plate record);
-
-    //总板块数
+    // 总板块数
     int selectCount();
 }

@@ -19,12 +19,12 @@
 	<jsp:include page="/head/setup.jsp"></jsp:include>
 
 	<!-- 我的主页-主体内容 -->
-	<jsp:include page="/content/mycontent.jsp"></jsp:include>
+	<jsp:include page="/content/myHome.jsp"></jsp:include>
 	<!-- 我的主页-编辑个人资料 -->
 	<jsp:include page="/content/edit.jsp"></jsp:include>
 	<!-- 我的主页-上传（修改）头像 -->
 	<jsp:include page="/content/userPhoto.jsp"></jsp:include>
-	<!-- 我的主页-收藏帖子展示 -->
+	<!-- 我的主页-收藏文章展示 -->
 	<jsp:include page="/content/collectArticle.jsp"></jsp:include>
 </body>
 </html>

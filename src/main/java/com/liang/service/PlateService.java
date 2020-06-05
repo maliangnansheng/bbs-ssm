@@ -15,15 +15,6 @@ public class PlateService {
 	PlateMapper plateMapper;
 
 	/**
-	 * 查询板块信息（无条件）
-	 * @return
-	 */
-	public List<Plate> getPlate() {
-		
-		return plateMapper.selectAll();
-	}
-
-	/**
 	 * 新增板块信息
 	 * @param plate
 	 */
@@ -32,18 +23,13 @@ public class PlateService {
 		plateMapper.insert(plate);
 	}
 
-	public List<Plate> getPlateName(Plate plate) {
-			
-		return plateMapper.selectByAdminName(plate);
-	}
-
 	/**
 	 * 按bid删除板块信息
 	 * @param plate_delete
 	 */
 	public void deletePlate(Plate plate_delete) {
 
-		plateMapper.deleteByPrimaryKey(plate_delete.getBid());
+		plateMapper.deleteByKey(plate_delete.getBid());
 	}
 
 	/**
@@ -52,7 +38,36 @@ public class PlateService {
 	 */
 	public void updatePlate(Plate plate) {
 		
-		plateMapper.updateByPrimaryKey(plate);
+		plateMapper.updateByKey(plate);
+	}
+
+	/**
+	 * 查询板块信息（无条件）
+	 * @return
+	 */
+	public List<Plate> getPlate() {
+
+		return plateMapper.selectPlate();
+	}
+
+	/**
+	 * 按板块ID查询板块信息
+	 * @param bid
+	 * @return
+	 */
+	public Plate getPlateId(String bid) {
+
+		return plateMapper.selectPlateByKey(bid);
+	}
+
+	/**
+	 * 板块名查询板块信息
+	 * @param plate
+	 * @return
+	 */
+	public List<Plate> getPlateName(Plate plate) {
+
+		return plateMapper.selectPlateByName(plate);
 	}
 
 	/**

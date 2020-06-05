@@ -1,8 +1,8 @@
 package com.liang.service;
 
 import java.util.List;
-import java.util.Map;
 
+import com.liang.bean.impl.CommentImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,37 +16,6 @@ public class CommentService {
 	CommentMapper commentMapper;
 
 	/**
-	 * 按帖子id（fid）查询评论表信息
-	 * @param fid
-	 * @return
-	 */
-	public List<Comment> getCommentFid(int fid) {
-
-		return commentMapper.selectByCommentFid(fid);
-	}
-
-	/**
-	 * 按帖子id（fid）查询评论表信息
-	 * @param fid
-	 * @return
-	 */
-	public List<Comment> getCommentFidMap(int fid , Map<Object, Object> map) {
-		List<Comment> listComment = commentMapper.selectByCommentFid(fid);
-		map.put("listComment", listComment);
-		return listComment;
-	}
-
-	/**
-	 * 按用户id（userid）查询评论表的fid信息
-	 * @param userid
-	 * @return
-	 */
-	public List<Comment> getCommentUserid(int userid) {
-
-		return commentMapper.selectByCommentUserid(userid);
-	}
-
-	/**
 	 * 添加评论
 	 * @param comment
 	 */
@@ -57,29 +26,56 @@ public class CommentService {
 
 	/**
 	 * 按pid删除评论表
-	 * @param comment
+	 * @param pid
 	 */
-	public void deleteComment(int pid) {
+	public void deleteComment(String pid) {
 
-		commentMapper.deleteByPrimaryKey(pid);
+		commentMapper.deleteByKey(pid);
 	}
 
 	/**
 	 * 删除该用户对应的所有评论信息(按userid)
 	 * @param userid
 	 */
-	public void deleteCommentUserid(int userid) {
-		
+	public void deleteCommentUserid(String userid) {
+
 		commentMapper.deleteByUserid(userid);
 	}
 
-
 	/**
-	 * 按帖子id（fid）查询该条帖子的评论数
+	 * 按文章id（fid）查询评论表信息
 	 * @param fid
 	 * @return
 	 */
-	public int getCountFid(int fid) {
-		return commentMapper.selectByCountFid(fid);
+	public List<Comment> getCommentFid(String fid) {
+
+		return commentMapper.selectCommentByFid(fid);
 	}
+
+	/**
+	 * 按文章id（fid）获取评论表信息（包含用户名、用户头像）
+	 * @param fid
+	 * @return
+	 */
+	public List<CommentImpl> getCommentImplFid(String fid) {
+
+		return commentMapper.selectCommentImplByFid(fid);
+	}
+
+	/**
+	 * 按文章id（fid）查询该条文章的评论数
+	 * @param fid
+	 * @return
+	 */
+	public int getCountFid(String fid) {
+		return commentMapper.selectCountByFid(fid);
+	}
+
+	/**
+	 * 最新评论
+	 * @return
+	 */
+    public List<CommentImpl> getNewComment() {
+    	return commentMapper.selectNewComment();
+    }
 }

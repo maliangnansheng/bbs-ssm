@@ -2,68 +2,51 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.liang.dao.EnjoyMapper">
   <resultMap id="BaseResultMap" type="com.liang.bean.Enjoy">
-    <id column="eid" jdbcType="INTEGER" property="eid" />
-    <result column="userid" jdbcType="INTEGER" property="userid" />
-    <result column="fid" jdbcType="INTEGER" property="fid" />
+    <id column="eid" jdbcType="VARCHAR" property="eid" />
+    <result column="userid" jdbcType="VARCHAR" property="userid" />
+    <result column="fid" jdbcType="VARCHAR" property="fid" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    eid, userid, fid
+    eid, userid, fid, create_time
   </sql>
-  
-  <!-- 查询点赞信息(无条件) -->
-  <select id="selectByEnjoy" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from enjoy
-  </select>
-  
-  <!-- 按userid查询点赞信息（点赞了哪些帖子） -->
-  <select id="selectByEnjoyUserid" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from enjoy
-    where userid = #{userid,jdbcType=INTEGER}
-  </select>
 
-  <!-- 按点赞者id和被点赞帖子id进行查询 -->
-  <select id="getEnjoyFid" resultMap="BaseResultMap">
+  <!-- 新增点赞信息 -->
+  <insert id="insert" parameterType="com.liang.bean.Enjoy">
+    insert into enjoy
+    values (#{eid,jdbcType=VARCHAR},
+            #{userid,jdbcType=VARCHAR},
+            #{fid,jdbcType=VARCHAR},
+            now())
+  </insert>
+
+  <!-- 按eid删除点赞信息 -->
+  <delete id="deleteByKey" parameterType="java.lang.String">
+    delete from enjoy
+    where eid = #{eid,jdbcType=VARCHAR}
+  </delete>
+
+  <!-- 按userid和fid删除点赞 -->
+  <delete id="deleteByUF" parameterType="com.liang.bean.Enjoy">
+    delete from enjoy
+    where userid = #{userid,jdbcType=VARCHAR} and fid = #{fid,jdbcType=VARCHAR}
+  </delete>
+
+  <!-- 查询所有点赞信息 -->
+  <select id="selectEnjoy" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from enjoy
+    order by create_time desc
+  </select>
+  
+  <!-- 按点赞者id和被点赞文章id进行查询 -->
+  <select id="selectEnjoyByUF" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from enjoy
-    where userid = #{userid,jdbcType=INTEGER} and fid = #{fid,jdbcType=INTEGER}
+    where userid = #{userid,jdbcType=VARCHAR} and fid = #{fid,jdbcType=VARCHAR}
   </select>
-  
-  <!-- 添加点赞 -->
-  <insert id="insert" parameterType="com.liang.bean.Enjoy">
-    insert into enjoy
-    values (#{eid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER},
-    	#{fid,jdbcType=INTEGER})
-  </insert>
-  
-  <!-- 删除点赞信息 -->
-  <delete id="deleteByEnjoy" parameterType="com.liang.bean.Enjoy">
-    delete from enjoy
-    where eid = #{eid,jdbcType=INTEGER}
-  </delete>
-  
-  <!-- 删除点赞（按userid和fid） -->
-  <delete id="deleteEnjoyUseridAndFid" parameterType="com.liang.bean.Enjoy">
-    delete from enjoy
-    where userid = #{userid,jdbcType=INTEGER} and fid = #{fid,jdbcType=INTEGER}
-  </delete>
-  
-  <!-- 按fid删除点赞信息 -->
-  <delete id="deleteByEnjoyFid" parameterType="java.lang.Integer">
-    delete from enjoy
-    where fid = #{fid,jdbcType=INTEGER}
-  </delete>
-  
-  <!-- 删除该用户对应的点赞信息(按userid) -->
-   <delete id="deleteEnjoyUserid" parameterType="java.lang.Integer">
-    delete from enjoy
-    where userid = #{userid,jdbcType=INTEGER}
-  </delete>
-  
   
 </mapper>

@@ -1,34 +1,30 @@
 package com.liang.dao;
 
 import com.liang.bean.Comment;
+import com.liang.bean.impl.CommentImpl;
+
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
 public interface CommentMapper {
 
-    //按pid删除评论表
-    int deleteByPrimaryKey(Integer pid);
+    // 新增评论信息
+    void insert(Comment record);
 
-    //删除该用户对应的所有评论信息(按userid)
-    int deleteByUserid(int userid);
+    // 按pid删除评论信息
+    void deleteByKey(String pid);
+
+    // 删除某用户对应的所有评论信息
+    void deleteByUserid(String userid);
     
-    //添加评论
-    int insert(Comment record);
+    // 按文章id（fid）查询评论信息
+    List<Comment> selectCommentByFid(String fid);
 
-    int insertSelective(Comment record);
+    // 按文章id（fid）查询评论表信息（包含用户名、用户头像）
+    List<CommentImpl> selectCommentImplByFid(String fid);
+
+    // 最新评论
+    List<CommentImpl> selectNewComment();
     
-    //按帖子id（fid）查询评论表信息
-    List<Comment> selectByCommentFid(int fid);
-    
-    //按用户id（userid）查询评论表的fid信息
-    List<Comment> selectByCommentUserid(int userid);
-
-    Comment selectByPrimaryKey(Integer pid);
-
-    int updateByPrimaryKeySelective(Comment record);
-
-    int updateByPrimaryKey(Comment record);
-
-    //按帖子id（fid）查询该条帖子的评论数
-    int selectByCountFid(int fid);
+    // 按文章id（fid）查询该条文章的评论数
+    int selectCountByFid(String fid);
 }

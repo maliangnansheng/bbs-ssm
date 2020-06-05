@@ -21,9 +21,9 @@
 <jsp:include page="/admin/content.jsp"></jsp:include>
 <!-- 管理员页面-登录、注册 -->
 <jsp:include page="/admin/login.jsp"></jsp:include>
-<!-- 管理员页面-新增帖子 -->
+<!-- 管理员页面-新增文章 -->
 <jsp:include page="/admin/plate.jsp"></jsp:include>
-<!-- 管理员页面-修改帖子 -->
+<!-- 管理员页面-修改文章 -->
 <jsp:include page="/admin/plateEdit.jsp"></jsp:include>
 </body>
 </html>

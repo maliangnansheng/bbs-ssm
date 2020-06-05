@@ -1,23 +1,23 @@
 package com.liang.controller;
 
 import com.liang.bean.PhotoPro;
+import com.liang.code.ReturnT;
 import com.liang.service.PhotoProService;
 import com.liang.service.TbPhotoService;
+import com.liang.utils.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
-@RequestMapping("/photoProController")
+@RequestMapping("/api/rest/nanshengbbs/v3.0/photoPro")
 @Controller
 public class PhotoProController {
-
 	@Autowired
 	PhotoProService photoProService;
 	@Autowired
@@ -29,93 +29,96 @@ public class PhotoProController {
 	 * @param session
 	 * @return
 	 */
-	@RequestMapping("/setPhotoPro")
+	@PostMapping("/setPhotoPro")
 	@ResponseBody
-	public Map<Object,Object> setPhotoPro(PhotoPro photoPro, HttpSession session) {
-		Map<Object,Object> map = new HashMap<>();
+	public ReturnT<?> setPhotoPro(PhotoPro photoPro, HttpSession session) {
 		try {
-			int userid = (int) session.getAttribute("userid");
-			photoPro.setUserid(userid);
+			photoPro.setUserid((String) session.getAttribute("userid"));
 			if (photoProService.selectByName(photoPro).size() == 0){	// 不存在该相册名
+				photoPro.setFid(UUIDUtil.getRandomUUID());
 				photoProService.setPhotoPro(photoPro);
-
-				map.put("resultCode",200);
+				return ReturnT.success("创建相册成功");
 			} else {
-				map.put("resultCode",201);
+				return ReturnT.fail(HttpStatus.NOT_FOUND, "该相册已存在!");
 			}
-		}catch (Exception e){
-			map.put("resultCode",404);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("创建相册失败");
 		}
-
-		return map;
 	}
-
-
-	/**
-	 * 编辑相册
-	 * @return
-	 */
-	@RequestMapping("/updatePhotoPro")
-	@ResponseBody
-	public Map<Object,Object> updatePhotoPro(PhotoPro photoPro, HttpSession session) {
-		Map<Object,Object> map = new HashMap<>();
-		try {
-			int userid = (int) session.getAttribute("userid");
-			photoPro.setUserid(userid);
-			if (photoProService.selectByName(photoPro).size() == 0) {    // 不存在该相册名
-				photoProService.updateName(photoPro);
-
-				map.put("resultCode",200);
-			} else {
-				map.put("resultCode",201);
-			}
-		}catch (Exception e){
-			map.put("resultCode",404);
-		}
-
-		return map;
-	}
-
 
 	/**
 	 * 删除相册
 	 * @return
 	 */
-	@RequestMapping("/deletePhotoPro")
+	@DeleteMapping("/deletePhotoPro")
 	@ResponseBody
-	public Map<Object,Object> deletePhotoPro(HttpServletRequest request) {
-		Map<Object,Object> map = new HashMap<>();
+	public ReturnT<?> deletePhotoPro(HttpServletRequest request) {
 		try {
-			int fid = Integer.parseInt(request.getParameter("fid"));
-			//删除相册对应的照片
-			tbPhotoService.deleteTbPhotoFid(fid);
-			//删除相册
+			String fid = request.getParameter("fid");
+			// 删除相册
 			photoProService.deletePhotoPro(fid);
-
-			map.put("resultCode",200);
-		}catch (Exception e){
-			map.put("resultCode",404);
+			return ReturnT.success("删除相册成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("删除相册失败");
 		}
-
-		return map;
 	}
 
 	/**
-	 * 按fid（相册id）查询相册信息
+	 * 编辑相册
 	 * @return
 	 */
-	@RequestMapping("/getPhotoProFid/{fid}")
+	@PutMapping("/updatePhotoPro")
 	@ResponseBody
-	public Map<Object,Object> selectByPrimaryKey(@PathVariable int fid) {
-		Map<Object,Object> map = new HashMap<>();
-
-		//查询相册
-		PhotoPro photoPro = photoProService.selectByPrimaryKey(fid);
-		map.put("photoPro",photoPro);
-
-		return map;
+	public ReturnT<?> updatePhotoPro(PhotoPro photoPro, HttpSession session) {
+		try {
+			photoPro.setUserid((String) session.getAttribute("userid"));
+			if (photoProService.selectByName(photoPro).size() == 0) {    // 不存在该相册名
+				photoProService.updateName(photoPro);
+				return ReturnT.success("修改相册成功");
+			} else {
+				return ReturnT.fail(HttpStatus.NOT_FOUND, "该相册已存在!");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("修改相册失败");
+		}
 	}
-	
-	
-	
+
+	/**
+	 * 获取相册信息
+	 * @return
+	 */
+	@GetMapping("/getPhoto")
+	@ResponseBody
+	public ReturnT<?> getPhoto(HttpSession session) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			//获取相册分类信息(按userid)
+			map.put("listPhotoPros", photoProService.getPhotoPro((String) session.getAttribute("userid")));
+			return new ReturnT<>(HttpStatus.OK, "获取相册数据成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取相册数据失败");
+		}
+	}
+
+	/**
+	 * 按fid（相册id）获取相册信息
+	 * @return
+	 */
+	@GetMapping("/getPhotoProFid/{fid}")
+	@ResponseBody
+	public ReturnT<?> selectByPrimaryKey(@PathVariable String fid) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			//查询相册
+			map.put("photoPro", photoProService.selectByPrimaryKey(fid));
+			return new ReturnT<>(HttpStatus.OK, "获取相册数据成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取相册数据失败");
+		}
+	}
 }

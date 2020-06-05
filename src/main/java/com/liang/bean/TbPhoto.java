@@ -1,49 +1,50 @@
 package com.liang.bean;
 
+import java.util.Date;
+
 public class TbPhoto {
-    private Integer xid;
-
-    private Integer fid;
-
-    private Integer userid;
-
+    // 照片id
+    private String xid;
+    // 相册id
+    private String fid;
+    // 照片上传者
+    private String userid;
+    // 照片名
     private String photo;
-
-    private String time;
-    
-    private String name;
+    // 照片上传时间
+    private Date createTime;
 
     public TbPhoto() {
-		super();
-	}
+        super();
+    }
 
-	public TbPhoto(Integer fid, Integer userid) {
-		super();
-		this.fid = fid;
-		this.userid = userid;
-	}
+    public TbPhoto(String fid, String userid) {
+        super();
+        this.fid = fid;
+        this.userid = userid;
+    }
 
-	public Integer getXid() {
+    public String getXid() {
         return xid;
     }
 
-    public void setXid(Integer xid) {
+    public void setXid(String xid) {
         this.xid = xid;
     }
 
-    public Integer getFid() {
+    public String getFid() {
         return fid;
     }
 
-    public void setFid(Integer fid) {
+    public void setFid(String fid) {
         this.fid = fid;
     }
 
-    public Integer getUserid() {
+    public String getUserid() {
         return userid;
     }
 
-    public void setUserid(Integer userid) {
+    public void setUserid(String userid) {
         this.userid = userid;
     }
 
@@ -52,28 +53,25 @@ public class TbPhoto {
     }
 
     public void setPhoto(String photo) {
-        this.photo = photo == null ? null : photo.trim();
+        this.photo = photo;
     }
 
-    public String getTime() {
-        return time;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setTime(String time) {
-        this.time = time.substring(0, time.length()-2);
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@Override
-	public String toString() {
-		return "TbPhoto [xid=" + xid + ", fid=" + fid + ", userid=" + userid + ", photo=" + photo + ", time=" + time
-				+ ", name=" + name + "]";
-	}
+    @Override
+    public String toString() {
+        return "TbPhoto{" +
+                "xid='" + xid + '\'' +
+                ", fid='" + fid + '\'' +
+                ", userid='" + userid + '\'' +
+                ", photo='" + photo + '\'' +
+                ", createTime=" + createTime +
+                '}';
+    }
 }

@@ -4,91 +4,116 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.liang.bean.impl.CommentImpl;
+import com.liang.code.ReturnT;
+import com.liang.service.UserService;
+import com.liang.service.ViaService;
+import com.liang.utils.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.*;
 
 import com.liang.bean.Comment;
 import com.liang.service.CommentService;
 
-@RequestMapping("/commentController")
+@RequestMapping("/api/rest/nanshengbbs/v3.0/comment")
 @Controller
 public class CommentController {
-
 	@Autowired
 	CommentService commentService;
-	
-	/**
-	 * 按帖子id（fid）查询评论表信息
-	 * @param fid
-	 */
-	@RequestMapping("/getCommentFid/{fid}")
-	@ResponseBody
-	public Map getCommentFid(@PathVariable int fid) {
-		Map<Object, Object> map = new HashMap<>();
-		List<Comment> listComment = commentService.getCommentFid(fid);
-		map.put("listComment", listComment);
-		return map;
-	}
+	@Autowired
+	UserService userService;
+	@Autowired
+	ViaService viaService;
 
-	/**
-	 * 按帖子id（fid）查询该条帖子的评论数
-	 * @param fid
-	 */
-	@RequestMapping("/getCountFid/{fid}")
-	@ResponseBody
-	public Map getCountFid(@PathVariable int fid) {
-		Map<Object, Object> map = new HashMap<>();
-		int count = commentService.getCountFid(fid);
-		map.put("commentCount", count);
-		return map;
-	}
-	
 	/**
 	 * 添加评论
 	 * @param comment
 	 */
-	@RequestMapping("/setComment")
+	@PostMapping("/setComment")
 	@ResponseBody
-	public Map setComment(Comment comment) {
-		Map<Object, Object> map = new HashMap<>();
-		if (comment.getPcontent().trim().isEmpty()){	//无评论内容
-			map.put("resultCode",201);
-			return map;
-		}
+	public ReturnT<?> setComment(Comment comment) {
 		try {
+			if (comment.getPcontent().trim().isEmpty()){	//无评论内容
+				return ReturnT.fail(HttpStatus.NOT_FOUND, "请输入评论内容!");
+			}
 			//新增评论
+			comment.setPid(UUIDUtil.getRandomUUID());
 			commentService.setComment(comment);
-			map.put("resultCode",200);
-		}catch (Exception e){
-			map.put("resultCode",404);
+			return ReturnT.success("评论成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("评论失败");
 		}
-
-		return map;
 	}
-	
+
 	/**
 	 * 按pid删除评论表
 	 * @return
 	 */
-	@RequestMapping("/deleteComment/{pid}")
+	@DeleteMapping("/deleteComment/{pid}")
 	@ResponseBody
-	public Map deleteComment(@PathVariable int pid) {
-		Map<Object, Object> map = new HashMap<>();
+	public ReturnT<?> deleteComment(@PathVariable String pid) {
 		try {
 			commentService.deleteComment(pid);
-			map.put("resultCode",200);
-		}catch (Exception e){
-			map.put("resultCode",404);
+			return ReturnT.success("删除评论成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("删除评论失败");
 		}
-
-		return map;
 	}
 	
-	
-	
+	/**
+	 * 按文章id（fid）获取评论表信息
+	 * @param fid
+	 */
+	@GetMapping("/getCommentFid/{fid}")
+	@ResponseBody
+	public ReturnT<?> getCommentFid(@PathVariable String fid) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			// 通过fid查找出对应的评论信息
+			map.put("listComment", commentService.getCommentImplFid(fid));
+			return new ReturnT<>(HttpStatus.OK, "获取评论数据成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取评论数据失败");
+		}
+	}
+
+	/**
+	 * 按文章id（fid）获取文章的评论数
+	 * @param fid
+	 */
+	@GetMapping("/getCountFid/{fid}")
+	@ResponseBody
+	public ReturnT<?> getCountFid(@PathVariable String fid) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			map.put("commentCount", commentService.getCountFid(fid));
+			return new ReturnT<>(HttpStatus.OK, "获取文章评论数成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取文章评论数失败");
+		}
+	}
+
+	/**
+	 * 最新评论
+	 * @return
+	 */
+	@GetMapping("/getNewComment")
+	@ResponseBody
+	public ReturnT<?> getNewComment() {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			List<CommentImpl> listNewComment = commentService.getNewComment();
+			map.put("listNewComment", listNewComment);
+			return new ReturnT<>(HttpStatus.OK, "获取最新评论数据成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取最新评论数据失败");
+		}
+	}
 }

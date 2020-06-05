@@ -1,25 +1,21 @@
 package com.liang.controller;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 
+import com.liang.bean.impl.UserImpl;
+import com.liang.code.ReturnT;
+import com.liang.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.liang.bean.Article;
-import com.liang.bean.Attention;
-import com.liang.bean.Collect;
-import com.liang.bean.Comment;
 import com.liang.bean.User;
 import com.liang.service.ArticleService;
 import com.liang.service.AttentionService;
@@ -27,21 +23,16 @@ import com.liang.service.CollectService;
 import com.liang.service.CommentService;
 import com.liang.service.UserService;
 import com.liang.service.ViaService;
-import com.liang.utils.PathUtil;
+import org.springframework.web.bind.support.SessionStatus;
 
-@RequestMapping("/userController")
-@SessionAttributes(value = { "username", "userid","password","email" })
+@RequestMapping("/api/rest/nanshengbbs/v3.0/user")
+@SessionAttributes(value = {"userid", "username", "email", "userPhoto"})
 @Controller
 public class UserController {
-
 	@Autowired
 	UserService userService;
 	@Autowired
-	ArticleController articleController;
-	@Autowired
 	ArticleService articleService;
-	@Autowired
-	CommentController commentController;
 	@Autowired
 	CommentService commentService;
 	@Autowired
@@ -50,291 +41,298 @@ public class UserController {
 	AttentionService attentionService;
 	@Autowired
 	CollectService collectService;
+	@Autowired
+	PageUtil pageUtil;
 
 	// 管理系统-用户追加条数（出第一页外）
-	private static final String adminUserDefaultPageSize = "10";
+	private  int adminUserDefaultPageSize;
+
+	@PostConstruct
+	private void init(){
+		adminUserDefaultPageSize = pageUtil.getAdminUserDefaultPageSize();
+	}
 
 	/**
-	 * 用户登录判断-ajax
-	 * 
+	 * 用户注册
 	 * @param user
-	 * @param map
+	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value="/getLoginAjax")
+	@PostMapping("/setSignUp")
 	@ResponseBody
-	public String getLoginAjax(User user, Map<Object, Object> map,HttpServletRequest request) {
-
-		user.setName(request.getParameter("name"));
-		user.setPassword(request.getParameter("password"));
-		
-//		//按用户名密码查询
-		List<User> listUser = userService.getUser(user);
-
-		if (!listUser.toString().equals("[]")) {
-
-			int userid = listUser.get(0).getUserid();
-			String name = listUser.get(0).getName();
-			String password = listUser.get(0).getPassword();
-			String email = listUser.get(0).getEmail();
-
-			map.put("userid", userid);
-			map.put("username", name);
-			map.put("password", password);
-			map.put("email", email);
-
-			return "OK";
-		} else {
-
-			return "NO";
+	public ReturnT<?> setSignUp(User user, Model model) {
+		try {
+			if (userService.getUserName(user.getName()) == null) {	// 该用户不存在
+				if (userService.getEmail(user.getEmail()) == null) {	// 该Email不存在
+					user.setUserid(UUIDUtil.getRandomUUID());
+					userService.setUser(user);
+					model.addAttribute("userid", userService.getUserName(user.getName()).getUserid());
+					model.addAttribute("username", user.getName());
+					model.addAttribute("email", user.getEmail());
+					return ReturnT.success("注册成功");
+				} else {
+					return ReturnT.fail(HttpStatus.NOT_FOUND, "该Email已被其他用户使用");
+				}
+			} else {
+				return ReturnT.fail(HttpStatus.METHOD_NOT_ALLOWED, "该用户名已被使用");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("注册失败");
 		}
 	}
-	
-//	/**
-//	 * 用户登录判断
-//	 * 
-//	 * @param user
-//	 * @param map
-//	 * @return
-//	 */
-//	@RequestMapping("/getLogin")
-//	public String getLogin(User user, Map<Object, Object> map) {
-//
-//		//按用户名密码查询
-//		List<User> listUser = userService.getUser(user);
-//
-//		if (!listUser.toString().equals("[]")) {
-//
-//			int userid = listUser.get(0).getUserid();
-//			String name = listUser.get(0).getName();
-//			String password = listUser.get(0).getPassword();
-//			String email = listUser.get(0).getEmail();
-//
-//			map.put("userid", userid);
-//			map.put("username", name);
-//			map.put("password", password);
-//			map.put("email", email);
-//
-//			return "redirect:/index.jsp";// 重定向
-//		} else {
-//
-//			return "redirect:/index.jsp";// 重定向
-//		}
-//	}
 
 	/**
-	 * 注册
-	 * 
+	 * 删除用户
+	 * @param userid
+	 * @param session
+	 * @return
+	 * @throws IOException
+	 */
+	@DeleteMapping("/deleteUser/{userid}")
+	@ResponseBody
+	public ReturnT<?> deleteUser(@PathVariable String userid, HttpSession session, Model model) {
+		try {
+			// 删除用户信息
+			userService.deleteUser(userid);
+
+			// 如果删除的是当前登录用户，则清空对应的session
+			if(session.getAttribute("userid") != null && session.getAttribute("userid").equals(userid)) {
+				model.addAttribute("userid", "");
+				model.addAttribute("username", "");
+			}
+			return ReturnT.success("删除用户数据成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("删除用户数据失败");
+		}
+	}
+
+	/**
+	 * 编辑个人资料（修改user表）
 	 * @param user
-	 * @param map
+	 * @return
 	 * @return
 	 */
-	@RequestMapping("/setSignUp")
+	@PutMapping("/updateUser")
 	@ResponseBody
-	public String setSignUp(User user, Map<Object, Object> map,HttpServletRequest request) {
-
-		user.setName(request.getParameter("name"));
-		user.setPassword(request.getParameter("pass"));
-		user.setEmail(request.getParameter("email"));
-		//判断该用户是否已经存在
-		if (userService.getUserName(user).toString().equals("[]")&&request.getParameter("name")!="") {
-			//判断两次输入密码是否相同
-			if(request.getParameter("pass").equals(request.getParameter("repass"))) {
-				userService.setUser(user);
-				System.out.println("用户注册成功");
-					
-				//按用户名查询
-				List<User> listUser = userService.getUserName(user);
-				int userid = listUser.get(0).getUserid();
-				String name = user.getName();
-				String password = user.getPassword();
-				String email = user.getEmail();
-				
-				map.put("userid", userid);
-				map.put("username", name);
-				map.put("password", password);
-				map.put("email", email);
-				return "OK";
-			}
-			return "PASS";
-		} else {
-
-			System.err.println("用户注册失败");
-			return "NO";
+	public ReturnT<?> UpdateUser(User user, HttpSession session) {
+		try {
+			user.setUserid((String) session.getAttribute("userid"));
+			userService.updateUser(user);
+			return ReturnT.success("修改用户信息成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("修改用户信息失败");
 		}
+	}
 
+	/**
+	 * 修改用户名
+	 * @param username
+	 * @param session
+	 * @return
+	 */
+	@PutMapping("/updateUsername")
+	@ResponseBody
+	public ReturnT<?> updateUsername(String username, HttpSession session, Model model) {
+		try {
+			if (userService.getUserName(username) == null) {	// 用户名不存在-可以修改
+				User user = new User();
+				user.setUserid((String) session.getAttribute("userid"));
+				user.setName(username);
+				userService.updateUsername(user);
+				model.addAttribute("username", username);
+				return ReturnT.success("用户名修改成功");
+			} else {
+				return ReturnT.fail(HttpStatus.NOT_FOUND, "用户名已被使用");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("用户名修改失败");
+		}
+	}
+
+	/**
+	 * 修改密码
+	 * @param passOld	// 旧密码
+	 * @param passNew	// 新密码
+	 * @param session
+	 * @return
+	 */
+	@PostMapping("/updatePassword")
+	@ResponseBody
+	public ReturnT<?> updatePassword(String passOld, String passNew, HttpSession session) {
+		String userid = (String) session.getAttribute("userid");
+		try {
+			User user = new User();
+			user.setUserid(userid);
+			user.setPassword(passOld);
+			if (userService.getIdPass(user) != null) {	// 旧密码正确
+				user.setPassword(passNew);
+				userService.updatePassword(user);
+				return ReturnT.success("密码修改成功");
+			} else {	// 旧密码不正确
+				return ReturnT.fail(HttpStatus.NOT_FOUND, "原密码不正确");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("修改密码失败");
+		}
+	}
+
+	/**
+	 * 修改Email
+	 * @param email
+	 * @param session
+	 * @return
+	 */
+	@PutMapping("/updateEmail")
+	@ResponseBody
+	public ReturnT<?> updateEmail(String email, HttpSession session, Model model) {
+		try {
+			if (userService.getEmail(email) == null) {	// Email不存在-可以修改
+				User user = new User();
+				user.setUserid((String) session.getAttribute("userid"));
+				user.setEmail(email);
+				userService.updateEmail(user);
+				model.addAttribute("email", email);
+				return ReturnT.success("Email修改成功");
+			} else {
+				return ReturnT.fail(HttpStatus.NOT_FOUND, "该Email已被其他用户绑定");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("Email修改失败");
+		}
+	}
+
+	/**
+	 * 用户登录
+	 * @param user
+	 * @param model
+	 * @return
+	 */
+	@PostMapping(value="/getLogin")
+	@ResponseBody
+	public ReturnT<?> getLogin(User user, Model model) {
+		try {
+			UserImpl userImpl = userService.getNameEmailPass(user);
+			if (user !=  null) {
+				model.addAttribute("userid", userImpl.getUserid());
+				model.addAttribute("username", userImpl.getName());
+				model.addAttribute("email", userImpl.getEmail());
+				if (userImpl.getPhoto() != null){	// null放入model有bug
+					model.addAttribute("userPhoto", userImpl.getPhoto());
+				}
+				return ReturnT.success("登录成功");
+			} else {
+				return ReturnT.fail(HttpStatus.NOT_FOUND, "用户名/邮箱或密码错误");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail(HttpStatus.NOT_FOUND, "登录失败");
+		}
 	}
 
 	/**
 	 * 退出登录
-	 * 
-	 * @param map
+	 * @param session
+	 * @param sessionStatus
 	 * @return
 	 */
-	@RequestMapping("/userExit")
-	public String userExit(Map<Object, Object> map) {
-
-		map.put("userid", "");
-		map.put("username", "");
-		return "redirect:/index.jsp";// 重定向
+	@GetMapping("/userExit")
+	@ResponseBody
+	public ReturnT<?> userExit(HttpSession session, SessionStatus sessionStatus) {
+		try {
+			session.removeAttribute("userid");
+			session.removeAttribute("username");
+			session.removeAttribute("email");
+			session.removeAttribute("userPhoto");
+			// 只清除@SessionAttributes的session，不会清除HttpSession的数据
+			sessionStatus.setComplete();
+			return ReturnT.success("退出登录成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("退出登录失败");
+		}
 	}
 
 	/**
-	 * 个人主页
-	 *
+	 * 按userid获取用户信息
+	 * @param userid
 	 * @return
 	 */
-	@RequestMapping("/getMyself")
+	@GetMapping("/getUserId/{userid}")
 	@ResponseBody
-	public Map getMyself(HttpSession session) {
-
-		Map<Object, Object> map = new HashMap<>();
-
-		int userid=(int) session.getAttribute("userid");
-
-		/**
-		 * 按userid查询用户信息
-		 */
-		List<User> myListUser = userService.getUserId(userid);
-		if (myListUser.get(0).getSex() == null) {
-			myListUser.get(0).setSex("保密");
+	public ReturnT<?> getUserId(@PathVariable String userid) {
+		try {
+			// 按userid查询处理用户信息
+			User user = userService.getUserKey(userid);
+			// 实体类转Map
+			Map<String, Object> map = EntityMapUtils.entityToMap(user);
+			// 通过文章创建者ID查询用户头像信息
+			map.put("via", viaService.getVia(user.getUserid()));
+			return new ReturnT<>(HttpStatus.OK, "获取用户信息成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取用户信息失败");
 		}
-		if (myListUser.get(0).getIntro() == null) {
-			myListUser.get(0).setIntro("无");
-		}
-		map.put("myListUser", myListUser.get(0));
-
-		/**
-		 * 按userid查询帖子信息（动态）
-		 */
-		List<Article> myListArticles = articleService.getArticleId(userid);
-		map.put("myListArticles", myListArticles);
-
-//		/**
-//		 * 按fid查询每个帖子下对应的评论信息（动态）
-//		 */
-//		for (int i = 0; i < myListArticles.size(); i++) {
-//
-//			// 将每一条帖子对应的id单独抽出来
-//			int fid = myListArticles.get(i).getFid();
-//
-//			// 再通过每一个帖子的id查找出对应的评论信息
-//			commentService.getCommentFidMap(fid, map);
-//			// 将上一步查出的对应的评论信息存放到listComment里
-//			List<Comment> myListComment = (List<Comment>) map.get("listComment");
-//
-//			// 为map预设一个随帖子id变化而变化的key
-//			String myListCommentFid = "myListComment_" + fid;
-//			// 将每一个帖子下对应的所有评论存入map中（其key是随帖子id变化而变化的）
-//			map.put(myListCommentFid, myListComment);
-//		}
-//		//去除多余信息
-//		map.remove("listComment");
-
-		/**
-		 * 按userid查询评论信息（回复）
-		 */
-		List<Comment> myComments=commentService.getCommentUserid(userid);
-		map.put("myComments_huifu", myComments);
-		for (int i = 0; i < myComments.size(); i++) {
-
-			// 将每一条评论对应的fid单独抽出来
-			int fid = myComments.get(i).getFid();
-
-			Article myArticle = articleService.getArticleKey(fid);
-
-			map.put("myArticle_"+fid, myArticle);
-
-			// 再通过每一个帖子的id查找出对应的评论信息
-			commentService.getCommentFidMap(fid, map);
-			// 将上一步查出的对应的评论信息存放到listComment里
-			List<Comment> myListComment_huifu = (List<Comment>) map.get("listComment");
-
-			// 为map预设一个随帖子id变化而变化的key
-			String myListCommentFid_huifu_fid = "myListComment_huifu_" + fid;
-			// 将每一个帖子下对应的所有评论存入map中（其key是随帖子id变化而变化的）
-			map.put(myListCommentFid_huifu_fid, myListComment_huifu);
-		}
-
-		/**
-		 * 按userid查询关注信息（你关注了谁）
-		 */
-		List<Attention> attentions = attentionService.getAttention(userid);
-		List<User> myListUserAttention = new ArrayList<User>();
-		for(Attention attention : attentions) {
-			//通过beuserid查询用户信息
-			int beuserid=attention.getBeuserid();
-			myListUserAttention.add(userService.getUserKey(beuserid));
-		}
-		map.put("myListAttentions", myListUserAttention);
-
-		/**
-		 * 按beuserid查询关注信息（谁关注了你）
-		 */
-		List<Attention> attentions_be = attentionService.getAttentionBe(userid);
-		List<User> myListUserAttention_be = new ArrayList<User>();
-		for(Attention attention_be : attentions_be) {
-			//通过userid查询用户信息
-			myListUserAttention_be.add(userService.getUserKey(attention_be.getUserid()));
-		}
-		map.put("myListAttentions_be", myListUserAttention_be);
-
-		/**
-		 * 按userid查询收藏信息（收藏了哪些帖子）
-		 */
-		List<Collect> collects = collectService.getCollect(userid);
-		List<Article> myListArticleCollect = new ArrayList<Article>();
-		for(Collect collect : collects) {
-			//通过fid查询帖子信息
-			int fid=collect.getFid();
-			myListArticleCollect.add(articleService.getArticleKey(fid));
-		}
-		map.put("myListCollects", myListArticleCollect);
-
-		return map;
 	}
 
 	/**
-	 * 个人主页-查询本人贴子信息以及对应的帖子信息
-	 *
+	 * 按userid获取关注和被关注的用户信息
+	 * @param userid
 	 * @return
 	 */
-	@RequestMapping("/getMyselfArticle")
+	@GetMapping("/getAttentionUserId/{userid}")
 	@ResponseBody
-	public Map getMyselfArticle(HttpSession session) {
-
-		Map<Object, Object> map = new HashMap<>();
-
-		int userid=(int) session.getAttribute("userid");
-
-		/**
-		 * 按userid查询帖子信息（动态）
-		 */
-		List<Article> myListArticles = articleService.getArticleId(userid);
-		map.put("myListArticles", myListArticles);
-
-		/**
-		 * 按fid查询每个帖子下对应的评论信息（动态）
-		 */
-		for (int i = 0; i < myListArticles.size(); i++) {
-
-			// 将每一条帖子对应的id单独抽出来
-			int fid = myListArticles.get(i).getFid();
-
-			// 再通过每一个帖子的id查找出对应的评论信息
-			commentService.getCommentFidMap(fid, map);
-			// 将上一步查出的对应的评论信息存放到listComment里
-			List<Comment> myListComment = (List<Comment>) map.get("listComment");
-
-			// 为map预设一个随帖子id变化而变化的key
-			String myListCommentFid = "myListComment_" + fid;
-			// 将每一个帖子下对应的所有评论存入map中（其key是随帖子id变化而变化的）
-			map.put(myListCommentFid, myListComment);
+	public ReturnT<?> getAttentionUserId(@PathVariable String userid) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			// 按userid查询关注信息（你关注了谁）
+			map.put("listUser", userService.getUserImpl(userid, true));
+			// 按userid查询关注信息（谁关注了你）
+			map.put("listUser_be", userService.getUserImpl(userid, false));
+			return new ReturnT<>(HttpStatus.OK, "获取用户数据成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取用户数据失败");
 		}
-		//去除多余信息
-		map.remove("listComment");
+	}
 
-		return map;
+	/**
+	 * 按userid获取动态、回答、关注、收藏总数
+	 * @param userid
+	 * @return
+	 */
+	@GetMapping("/getDynamicAnswerAttentionCollectSum/{userid}")
+	@ResponseBody
+	public ReturnT<?> getDynamicAnswerAttentionCollectSum(@PathVariable String userid, HttpSession session) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			if (userid.equals(session.getAttribute("userid"))) {
+				map.put("userid", userid);
+			} else {
+				map.put("userid", userid);
+				map.put("status", true);
+			}
+			// 动态数
+			map.put("dynamicCount", articleService.getArticleCountByUserid(map));
+			map.put("status", true);
+			// 回答数
+			map.put("answerCount", articleService.getAnswerArticleCountByUserid(map));
+			// 关注数
+			map.put("attentionCount", attentionService.getCountByUserid(userid) + attentionService.getCountByBeuserid(userid));
+			// 收藏数
+			map.put("collectCount", articleService.getCollectCountByUserid(map));
+			map.remove("userid");
+			map.remove("status");
+			return new ReturnT<>(HttpStatus.OK, "获取动态、回答、关注、收藏总数成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取动态、回答、关注、收藏总数失败");
+		}
 	}
 
 	/**
@@ -342,280 +340,107 @@ public class UserController {
 	 *
 	 * @return
 	 */
-	@RequestMapping("/getMyselfUser")
+	@GetMapping("/getMyselfUser")
 	@ResponseBody
-	public Map getMyselfUser(HttpSession session) {
-
-		Map<Object, Object> map = new HashMap<>();
-
-		int userid=(int) session.getAttribute("userid");
-
-		/**
-		 * 按userid查询用户信息
-		 */
-		List<User> myListUser = userService.getUserId(userid);
-		if (myListUser.get(0).getSex() == null) {
-			myListUser.get(0).setSex("保密");
+	public ReturnT<?> getMyselfUser(HttpSession session) {
+		Map<String, Object> resMap = new HashMap<>();
+		try {
+			// 按userid查询用户信息
+			User user = userService.getUserKey((String) session.getAttribute("userid"));
+			// 实体类转Map
+			Map<String, Object> map = EntityMapUtils.entityToMap(user);
+			// 通过文章创建者ID查询用户头像信息
+			map.put("via", viaService.getVia(user.getUserid()));
+			resMap.put("user", map);
+			return new ReturnT<>(HttpStatus.OK, "获取用户数据成功", resMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取用户数据失败");
 		}
-		if (myListUser.get(0).getIntro() == null) {
-			myListUser.get(0).setIntro("无");
-		}
-		map.put("myListUser", myListUser.get(0));
-
-		return map;
 	}
 
 	/**
-	 * 他人主页
-	 * 
+	 * 他（本）人主页
+	 * @param userid
+	 * @param session
 	 * @return
 	 */
-	@RequestMapping("/getOthers")
-	public String getOthers(@RequestParam(value = "userid") int userid, Map<Object, Object> map,Map<Object, Object> map2,HttpSession session) {
-
-		//如果该用户是登录用户，则回到“个人主页”
-		if(session.getAttribute("userid")!=null && session.getAttribute("userid").equals(userid)) {
-			
-			return "redirect:/myself.jsp";
-		}else {
-			
-			/**
-			 * 按userid查询用户信息
-			 */
-			List<User> othersListUser = userService.getUserId(userid);
-			if (othersListUser.get(0).getSex() == null) {
-				othersListUser.get(0).setSex("保密");
+	@GetMapping("/getOther/{userid}")
+	@ResponseBody
+	public ReturnT<?> getOther(@PathVariable String userid, HttpSession session) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			//如果该用户是登录用户，则回到“个人主页”
+			if(session.getAttribute("userid") != null && session.getAttribute("userid").equals(userid)) {
+				map.put("url", "/myself.jsp");
+			} else {
+				map.put("url", "/other.jsp");
 			}
-			if (othersListUser.get(0).getIntro() == null) {
-				othersListUser.get(0).setIntro("无");
-			}
-			map.put("othersListUser", othersListUser.get(0));
-
-			/**
-			 * 按userid查询帖子信息
-			 */
-			List<Article> othersListArticles = articleService.getArticleId(userid);
-			map.put("othersListArticles", othersListArticles);
-
-			/**
-			 * 按fid查询每个帖子下对应的评论信息
-			 */
-			for (int i = 0; i < othersListArticles.size(); i++) {
-
-				// 将每一条帖子对应的id单独抽出来
-				int fid = othersListArticles.get(i).getFid();
-
-				// 再通过每一个帖子的id查找出对应的评论信息
-				commentService.getCommentFidMap(fid, map);
-				// 将上一步查出的对应的评论信息存放到listComment里
-				List<Comment> othersListComment = (List<Comment>) map.get("listComment");
-
-				// 为map预设一个随帖子id变化而变化的key
-				String othersListCommentFid = "othersListComment_" + fid;
-				// 将每一个帖子下对应的所有评论存入map中（其key是随帖子id变化而变化的）
-				map.put(othersListCommentFid, othersListComment);
-
-				// 再将map存入map2
-				map2.put("map", map);
-			}
-
-			return "others";
+			return new ReturnT<>(HttpStatus.OK, "处理跳转成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("处理跳转失败");
 		}
-		
 	}
 	
-	/**
-	 * 编辑个人资料（修改user表）
-	 * @param user
-	 * @return 
-	 * @return
-	 */
-	@RequestMapping("/updateUser")
-	@ResponseBody
-	public Map UpdateUser(User user) {
-		Map<Object,Object> map = new HashMap<>();
-		try {
-			userService.updateUser(user);
-			map.put("resultCode",200);
-		}catch (Exception e){
-			map.put("resultCode",404);
-		}
-
-		return map;
-	}
-
 	/**
 	 * 查询用户信息（分页）
-	 * @param map
 	 * @param pageStart
-	 * @param pageSize
 	 */
-	@RequestMapping("/getUser")
+	@GetMapping("/getUser")
 	@ResponseBody
-	public Map getUser(Map<Object, Object> map, @RequestParam(required=true,defaultValue="1") int pageStart, @RequestParam(required=true,defaultValue=adminUserDefaultPageSize)int pageSize) {
-		Map<Object, Object> map2 = new HashMap<>();
-		int tail = 1;
-		List<User> listUser = userService.getUser(pageStart, pageSize);
-		for (User user : listUser){
-			if (user.getAge() == null){
-				user.setAge(0);
-			}
-			if (user.getSex() == null){
-				user.setSex("");
-			}
-			if (user.getFamily() == null){
-				user.setFamily("");
-			}
-			if (user.getIntro() == null){
-				user.setIntro("");
-			}
-		}
-
-		// 用户总数
-		int total = userService.getCount();
-		map.put("total",total);
-		map2.put("total",total);
-		map.put("pageStart", pageStart);
-		map2.put("pageStart", pageStart);
-		map.put("pageSize", pageSize);
-		map2.put("pageSize", pageSize);
-		map.put("listUser", listUser);
-		map2.put("listUser", listUser);
-		if (total % pageSize == 0){
-			tail = total / pageSize;
-			map.put("tail",tail);
-			map2.put("tail",tail);
-		} else {
-			tail = (total / pageSize) +1;
-			map.put("tail",tail);
-			map2.put("tail",tail);
-		}
-		return map2;
-	}
-
-	public void getUserId(int userid, Map<Object, Object> map) {
-
-		List<User> listUserId = userService.getUserId(userid);
-		map.put("listUserId", listUserId);
-	}
-
-	/**
-	 * 删除用户(及其对应的头像信息、评论信息、发帖信息、关注信息)
-	 * @param userid
-	 * @param map
-	 * @param session
-	 * @param request
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping("/deleteUser/{userid}")
-	@ResponseBody
-	public Map deleteUser(@PathVariable int userid, Map<Object, Object> map, HttpSession session, HttpServletRequest request) throws IOException {
-		Map<Object, Object> map2 = new HashMap<>();
+	public ReturnT<?> getUser(@RequestParam(required=true,defaultValue="1") int pageStart) {
+		Map<String, Object> map = new HashMap<>();
 		try {
-			String projectname;	//项目名称
-			projectname = request.getSession().getServletContext().getRealPath("/");
-			projectname=projectname.substring(0,projectname.length()-1);
-			if (projectname.indexOf("/")==-1) {//在非linux系统下
-				projectname = projectname.substring(projectname.lastIndexOf("\\"),projectname.length());
-			} else {//在linux系统下
-				projectname = projectname.substring(projectname.lastIndexOf("/"),projectname.length());
+			// 尾页
+			int tail = 1;
+			// 用户总数
+			int total = userService.getCount();
+			map.put("listUser", userService.getUserImplPaging(pageStart, adminUserDefaultPageSize));
+			map.put("total",total);
+			map.put("pageStart", pageStart);
+			map.put("pageSize", adminUserDefaultPageSize);
+			if (total % adminUserDefaultPageSize == 0){
+				tail = total / adminUserDefaultPageSize;
+				map.put("tail",tail);
+			} else {
+				tail = (total / adminUserDefaultPageSize) +1;
+				map.put("tail",tail);
 			}
-
-			//文件（图片）路径
-			String filePath = PathUtil.getCommonPath()+projectname+PathUtil.getUserPath();
-
-			//构造user
-			User user = new User();
-			user.setUserid(userid);
-
-			//删除用户信息（不包含头像）
-			userService.deleteUser(user);
-
-			//对应的有头像的用户才进行以下操作
-			if(viaService.getVia(userid)!=null) {
-
-				// 获取取要删除用户对应的头像的文件名（通过userid获取头像信息）
-				String fileName = viaService.getVia(userid).getPhoto();
-				System.out.println("文件名："+fileName);
-				// 封装上传文件位置的全路径
-				File targetFile = new File(filePath, fileName);
-				System.out.println("拼接全文件名："+targetFile);
-
-				//删除用户对应的头像（实际删除）
-				targetFile.delete();
-
-				//删除用户对应的头像信息(数据库)
-				viaService.deleteVia(userid);
-			}
-
-			//删除该用户对应的所有评论信息(按userid)
-			commentService.deleteCommentUserid(userid);
-
-			List<Article> listArticle=articleService.getArticleId(userid);
-			//对应的有发过帖子的用户才进行以下操作
-			if(listArticle.toString()!="[]") {
-
-				for(int i=0; i<listArticle.size();i++) {
-
-					int fid=listArticle.get(i).getFid();
-					articleController.articlePhotoDelete(fid,request);
-				}
-
-				//删除用户对应的帖子信息(数据库)
-				articleService.deleteArticleUserid(userid);
-			}
-
-			//删除该用户对应的关注和被关注信息
-			attentionService.deleteAttentionUseridOrBeuserid(userid);
-
-			//删除该用户对应的收藏信息(按userid)
-			collectService.deleteCollectUserid(userid);
-
-			//如果删除的是当前登录用户，则清空对应的session
-			if(session.getAttribute("userid")!=null && session.getAttribute("userid").equals(userid)) {
-				map.put("userid", "");
-				map.put("username", "");
-			}
-			map2.put("resultCode",200);
-		}catch (Exception e){
-			map2.put("resultCode",404);
+			return new ReturnT<>(HttpStatus.OK, "获取用户数据成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取用户数据失败");
 		}
-
-		return map2;
 	}
-	
-	
+
 	/**
-	 * 修改基本设置处的用户信息（即：用户名、密码、邮箱）
-	 * @param user
-	 * @param session
-	 * @param map
+	 * 获取用户排名（按文章数）
 	 * @return
 	 */
-	@RequestMapping("/updateUserSetup")
-	public String updateUserSetup(User user,HttpSession session,Map<Object, Object> map) {
-		
-		boolean name=user.getName().equals(session.getAttribute("username"));
-		boolean password=user.getPassword().equals(session.getAttribute("password"));
-		boolean email=user.getEmail().equals(session.getAttribute("email"));
-		Article article = new Article();
-		article.setUserid(user.getUserid());
-		article.setUsername(user.getName());
-
-		if(name && password && email) {
-			System.out.println("没改动任何信息，不做数据库修改工作。");
-		}else{
-			//1，修改user表
-			userService.updateUserSetup(user);
-			map.put("username", user.getName());
-			map.put("password", user.getPassword());
-			map.put("email", user.getEmail());
+	@GetMapping("/getUserRankByArticleSum")
+	@ResponseBody
+	public ReturnT<?> getUserRankByArticleSum() {
+		try {
+			return new ReturnT<>(HttpStatus.OK, "获取排行榜数据成功", userService.getUserRankByArticleSum());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取排行榜数据失败");
 		}
-		
-		//重定向
-		return "redirect:/myself.jsp";
 	}
 
-	
+	/**
+	 * 获取新注册用户
+	 * @return
+	 */
+	@GetMapping("/getNewUser")
+	@ResponseBody
+	public ReturnT<?> getNewUser() {
+		try {
+			return new ReturnT<>(HttpStatus.OK, "获取新注册用户数据成功", userService.getNewUser());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取新注册用户数据失败");
+		}
+	}
 }

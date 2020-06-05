@@ -20,7 +20,7 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 					<h3 class="modal-title text-center" id="exampleModalLabel">新增板块</h3>
-					<p class="text-center">有意思的板块名可以吸引更多的帖子</p>
+					<p class="text-center">有意思的板块名可以吸引更多的文章</p>
 				</div>
 				<div class="modal-body">
 					<form id="form_addPlate">

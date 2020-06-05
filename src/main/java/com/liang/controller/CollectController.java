@@ -1,115 +1,103 @@
 package com.liang.controller;
 
-import com.liang.bean.Article;
+import com.liang.code.ReturnT;
 import com.liang.service.ArticleService;
+import com.liang.utils.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.liang.bean.Collect;
 import com.liang.service.CollectService;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-@RequestMapping("/collectController")
+@RequestMapping("/api/rest/nanshengbbs/v3.0/collect")
 @Controller
 public class CollectController {
-
 	@Autowired
 	CollectService collectService;
 	@Autowired
 	ArticleService articleService;
-	
-	
-	/**
-	 * 删除收藏（按sid）
-	 * @param collect
-	 * @return
-	 */
-	@RequestMapping("/deleteCollect")
-	@ResponseBody
-	public Map deleteCollect(Collect collect) {
-		Map<Object, Object> map = new HashMap<>();
-		try {
-			collectService.deleteCollect(collect);
-			map.put("resultCode",200);
-		}catch (Exception e){
-			map.put("resultCode",404);
-		}
 
-		return map;
-	}
-	
-	/**
-	 * 删除收藏（按userid和fid）
-	 * @param collect
-	 * @return
-	 */
-	@RequestMapping("/deleteCollectUseridAndFid")
-	@ResponseBody
-	public Map deleteCollectUseridAndFid(Collect collect, HttpSession session) {
-		int userid=(int) session.getAttribute("userid");
-		Map<Object,Object> map = new HashMap<>();
-		try {
-			//取消收藏
-			collectService.deleteCollectUseridAndFid(collect);
-
-			//按userid查询收藏信息（收藏了哪些帖子）
-			List<Collect> collects = collectService.getCollect(userid);
-			List<Article> myListArticleCollect = new ArrayList<Article>();
-			for(Collect collect2 : collects) {
-				//通过fid查询帖子信息
-				int fid=collect2.getFid();
-				myListArticleCollect.add(articleService.getArticleKey(fid));
-			}
-			map.put("myListCollects", myListArticleCollect);
-			map.put("resultCode",200);
-		} catch (Exception e){
-			map.put("resultCode",404);
-		}
-
-		return map;
-	}
-	
 	/**
 	 * 添加收藏
 	 * @param collect
 	 * @return
 	 */
-	@RequestMapping("/setCollect")
+	@PostMapping("/setCollect")
 	@ResponseBody
-	public Map setCollect(Collect collect) {
-		Map<Object, Object> map = new HashMap<>();
+	public ReturnT<?> setCollect(Collect collect) {
 		try {
+			collect.setSid(UUIDUtil.getRandomUUID());
 			collectService.setCollect(collect);
-			map.put("resultCode",200);
-		}catch (Exception e){
-			map.put("resultCode",404);
+			return ReturnT.success("收藏成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("收藏失败");
 		}
-
-		return map;
 	}
 
 	/**
-	 * 按收藏者id和被收藏帖子id进行查询
+	 * 删除收藏（按sid）
+	 * @param sid
+	 * @return
+	 */
+	@DeleteMapping("/deleteCollect/{sid}")
+	@ResponseBody
+	public ReturnT<?> deleteCollect(@PathVariable String sid) {
+		try {
+			collectService.deleteCollect(sid);
+			return ReturnT.success("取消收藏成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("取消收藏失败");
+		}
+	}
+	
+	/**
+	 * 删除收藏（按userid和fid）
+	 * @param fid
+	 * @return
+	 */
+	@DeleteMapping("/deleteCollectUseridAndFid/{fid}")
+	@ResponseBody
+	public ReturnT<?> deleteCollectUseridAndFid(@PathVariable String fid, HttpSession session) {
+		try {
+			Collect collect = new Collect();
+			collect.setFid(fid);
+			collect.setUserid((String) session.getAttribute("userid"));
+			//取消收藏
+			collectService.deleteCollectUseridAndFid(collect);
+			return ReturnT.success("取消收藏成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("取消收藏失败");
+		}
+	}
+	
+	/**
+	 * 按userid和fid获取收藏信息
 	 * @param fid
 	 * @param session
 	 * @return
 	 */
-	@RequestMapping("/getCollectFid/{fid}")
+	@GetMapping("/getCollectFid/{fid}")
 	@ResponseBody
-	public Map getCollectFid(@PathVariable int fid, HttpSession session){
-		Map<Object, Object> map = new HashMap<>();
-		Collect collect = new Collect();
-		collect.setFid(fid);
-		collect.setUserid((int) session.getAttribute("userid"));
-		map.put("collect",collectService.getCollectFid(collect));
-		return map;
+	public ReturnT<?> getCollectFid(@PathVariable String fid, HttpSession session){
+		Map<String, Object> map = new HashMap<>();
+		try {
+			Collect collect = new Collect();
+			collect.setFid(fid);
+			collect.setUserid((String) session.getAttribute("userid"));
+			map.put("collect",collectService.getCollectFid(collect));
+			return new ReturnT<>(HttpStatus.OK, "获取收藏数据成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取收藏数据失败");
+		}
 	}
 }

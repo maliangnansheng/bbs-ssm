@@ -3,37 +3,28 @@ package com.liang.bean;
 import java.util.Date;
 
 public class Comment {
-    private Integer pid;
-
+    // 评论id
+    private String pid;
+    // 评论内容
     private String pcontent;
-
-    private Integer userid;
-
-    private Integer fid;
-
-    private String time;
-    
-    //用户名
-    private String name;
+    // 评论者id
+    private String userid;
+    // 被评论文章id
+    private String fid;
+    // 评论创建时间
+    private Date createTime;
+    // 评论更新时间
+    private Date updateTime;
 
     public Comment() {
 		super();
 	}
 
-	public Comment(Integer pid, String pcontent, Integer userid, Integer fid, String time) {
-		super();
-		this.pid = pid;
-		this.pcontent = pcontent;
-		this.userid = userid;
-		this.fid = fid;
-		this.time = time;
-	}
-
-	public Integer getPid() {
+    public String getPid() {
         return pid;
     }
 
-    public void setPid(Integer pid) {
+    public void setPid(String pid) {
         this.pid = pid;
     }
 
@@ -42,45 +33,50 @@ public class Comment {
     }
 
     public void setPcontent(String pcontent) {
-        this.pcontent = pcontent == null ? null : pcontent.trim();
+        this.pcontent = pcontent;
     }
 
-    public Integer getUserid() {
+    public String getUserid() {
         return userid;
     }
 
-    public void setUserid(Integer userid) {
+    public void setUserid(String userid) {
         this.userid = userid;
     }
 
-    public Integer getFid() {
+    public String getFid() {
         return fid;
     }
 
-    public void setFid(Integer fid) {
+    public void setFid(String fid) {
         this.fid = fid;
     }
 
-    public String getTime() {
-        return time;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setTime(String time) {
-        this.time = time.substring(0,time.length()-2);
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-	public String getName() {
-		return name;
-	}
+    public Date getUpdateTime() {
+        return updateTime;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 
-	@Override
-	public String toString() {
-		return "Comment [pid=" + pid + ", pcontent=" + pcontent + ", userid=" + userid + ", fid=" + fid + ", time="
-				+ time + ", name=" + name + "]";
-	}
-    
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "pid='" + pid + '\'' +
+                ", pcontent='" + pcontent + '\'' +
+                ", userid='" + userid + '\'' +
+                ", fid='" + fid + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

@@ -1,31 +1,32 @@
 package com.liang.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.liang.bean.*;
+import com.liang.bean.impl.ArticleImpl;
+import com.liang.code.ReturnT;
 import com.liang.service.*;
-import com.liang.utils.PageUtil;
+import com.liang.utils.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.liang.utils.PathUtil;
-
-@RequestMapping("/articleController")
-@SessionAttributes(value= {"article_Edit"})
+@RequestMapping("/api/rest/nanshengbbs/v3.0/article")
 @Controller
 public class ArticleController {
-
+	private static Logger logger = LoggerFactory.getLogger(ArticleController.class);
 	@Autowired
 	ArticleService articleService;
 	@Autowired
@@ -33,458 +34,437 @@ public class ArticleController {
 	@Autowired
 	CollectService collectService;
 	@Autowired
-	EnjoyService enjoyService;
-	@Autowired
 	PlateService plateService;
 	@Autowired
 	AttentionService attentionService;
 	@Autowired
+	EnjoyService enjoyService;
+	@Autowired
+	UserService userService;
+	@Autowired
+	ViaService viaService;
+	@Autowired
 	VisitService visitService;
+	@Autowired
+	FileUploadUtil fileUploadUtil;
+	@Autowired
+	PathUtil pathUtil;
+	@Autowired
+	PageUtil pageUtil;
+	@Autowired
+	ThumbnailatorUtil thumbnailatorUtil;
 
-	// 用户系统-帖子追加条数（出第一页外）
-	private static final String articleDefaultPageSize = "10";
+	// 用户系统-文章初始条数（第一页）
+	private int articlePageSize;
+	// 用户系统-文章追加条数（出第一页外）
+	private int articleDefaultPageSize;
+	// 管理系统-文章追加条数（出第一页外）
+	private int adminArticleDefaultPageSize;
 
-	// 管理系统-帖子追加条数（出第一页外）
-	private static final String adminArticleDefaultPageSize = "10";
-	
-	/**
-	 * 向数据库插入发帖信息（包括图片）
-	 * 
-	 * @param file
-	 * @param article2
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping("/setArticle")
-	//有MultipartFile file的时候不能有 Article article，因为Article中包含了文件（file）????!!!
-	public String setArticle(@RequestParam("photo") MultipartFile file, Article2 article2, HttpSession session,HttpServletRequest request)
-			throws IOException {
-		String projectname;	//项目名称
-		projectname = request.getSession().getServletContext().getRealPath("/");
-		projectname=projectname.substring(0,projectname.length()-1);
-		if (projectname.indexOf("/")==-1) {//在非linux系统下
-			projectname = projectname.substring(projectname.lastIndexOf("\\"),projectname.length());
-		} else {//在linux系统下
-			projectname = projectname.substring(projectname.lastIndexOf("/"),projectname.length());
-		}
-		System.out.println("项目名称:"+projectname);
-
-		//文件（图片）路径
-		String filePath = PathUtil.getCommonPath()+projectname+PathUtil.getArticlePath();
-		//用于存放新生成的文件名字(不重复)
-		String newFileName = "photo";
-		
-		String username=(String) session.getAttribute("username");
-		//用户登录情况下才可发帖
-		if(username!=null) {
-			
-			//当其中没有值时"int userid=null"报错(肯定报错啊，int=null???)
-			int userid=(int) session.getAttribute("userid");
-			
-			// 获取上传图片的文件名及其后缀(获取原始图片的拓展名)
-			String fileName = file.getOriginalFilename();
-			
-			if(!fileName.equals("")) {
-				//生成新的文件名字(不重复)
-				newFileName = UUID.randomUUID() + fileName;
-				// 封装上传文件位置的全路径
-				File targetFile = new File(filePath, newFileName);
-				System.out.println("封装上传文件位置的全路径:"+targetFile);
-				// 把本地文件上传到封装上传文件位置
-				file.transferTo(targetFile);
-			}
-			
-			// 将article2和photo整合到article中
-			Article article = new Article(article2, newFileName);
-
-			article.setUserid(userid);
-			article.setUsername(username);
-			article.setStatus(0);
-
-			// 将article保存到数据库
-			articleService.setArticle(article);
-		}
-		
-		return "redirect:/myself.jsp";//重定向
+	@PostConstruct
+	private void init(){
+		articlePageSize = pageUtil.getArticlePageSize();
+		articleDefaultPageSize = pageUtil.getArticleDefaultPageSize();
+		adminArticleDefaultPageSize = pageUtil.getAdminArticleDefaultPageSize();
 	}
 
 	/**
-	 * 上传图片
+	 * 发布文章
 	 * @param file
+	 * @param article
 	 * @param session
+	 * @param request
+	 * @return
+	 */
+	@PostMapping("/setArticle")
+	@ResponseBody
+	public ReturnT<?> setArticle(@RequestParam(value = "picture", required = false) MultipartFile file, Article article, HttpSession session, HttpServletRequest request) {
+		try {
+			// 当前文件大小
+			long currentFileSize = file.getSize();
+			// 上传源文件允许的最大值
+			long fileLength = thumbnailatorUtil.getFileLength();
+			if (currentFileSize <= fileLength) {
+				article.setPhoto(fileUploadUtil.fileUpload(file, pathUtil.getArticlePath()));
+				article.setUserid((String) session.getAttribute("userid"));
+				article.setStatus(0);
+				// 将article保存到数据库
+				article.setFid(UUIDUtil.getRandomUUID());
+				articleService.setArticle(article);
+
+				return ReturnT.success("发布文章成功");
+			} else {
+				return ReturnT.fail("请上传不超过 " + fileLength/(1024*1024) + "M 的题图!");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("发布文章失败");
+			return ReturnT.fail("发布文章失败");
+		}
+	}
+
+	/**
+	 * 上传图片-editor.md（由于editor.md的特性，使用我们构造好的“ReturnT<?>”不能达到预期效果）
+	 * @param file
 	 * @param request
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value="/uploadPicture",method=RequestMethod.POST)
+	@PostMapping("/uploadPicture")
 	@ResponseBody
-	public Map uploadPicture(@RequestParam(value = "editormd-image-file", required = false)MultipartFile file, HttpSession session, HttpServletRequest request){
-		Map<Object, Object> map = new HashMap<>();
+	public ResponseEntity<Map<String, Object>> uploadPicture(@RequestParam(value = "editormd-image-file", required = false)MultipartFile file, HttpServletRequest request){
+		Map<String, Object> map = new HashMap<>();
 		try {
-			String projectname;	//项目名称
-			projectname = request.getSession().getServletContext().getRealPath("/");
-			projectname=projectname.substring(0,projectname.length()-1);
-			if (projectname.indexOf("/")==-1) {//在非linux系统下
-				projectname = projectname.substring(projectname.lastIndexOf("\\"),projectname.length());
-			} else {//在linux系统下
-				projectname = projectname.substring(projectname.lastIndexOf("/"),projectname.length());
+			// 当前文件大小
+			long currentFileSize = file.getSize();
+			// 上传源文件允许的最大值
+			long fileLength = thumbnailatorUtil.getFileLength();
+			if (currentFileSize <= fileLength) {
+				// 注意：1一定要是数字不能是字符
+				map.put("success", 1);
+				map.put("message", "上传成功");
+				map.put("url", fileUploadUtil.fileUpload(file, pathUtil.getIllustrationPath()));
+			} else {
+				// 注意：0一定要是数字不能是字符
+				map.put("success", 0);
+				map.put("message", "请上传不超过 " + fileLength/(1024*1024) + "M 的图片!");
 			}
-			System.out.println("项目名称:"+projectname);
-
-			//文件（图片）路径
-			String filePath = PathUtil.getCommonPath()+projectname+PathUtil.getIllustrationPath();
-			//用于存放新生成的文件名字(不重复)
-			String newFileName = "";
-
-			String username=(String) session.getAttribute("username");
-			//用户登录情况下才可发帖
-			if(username!=null) {
-				// 获取上传图片的文件名及其后缀(获取原始图片的拓展名)
-				String fileName = file.getOriginalFilename();
-
-				if(!fileName.equals("")) {
-					//生成新的文件名字(不重复)
-					newFileName = UUID.randomUUID() + fileName;
-					// 封装上传文件位置的全路径
-					File targetFile = new File(filePath, newFileName);
-					System.out.println("封装上传文件位置的全路径:"+targetFile);
-					// 把本地文件上传到封装上传文件位置
-					file.transferTo(targetFile);
-				}
-			}
-
-			// 注意：1一定要是数字不能是字符
-			map.put("success", 1);
-			map.put("message", "上传成功");
-			map.put("url", projectname+PathUtil.getIllustrationPath()+File.separator+newFileName);
-		}catch (Exception e){
+		} catch (Exception e) {
+			e.printStackTrace();
 			// 注意：0一定要是数字不能是字符
 			map.put("success", 0);
 			map.put("message", "上传失败！");
 		}
 
-		return map;
+		return new ResponseEntity(map, HttpStatus.OK);
 	}
 
 	/**
-	 * 查询发帖表信息（首页-分页）
-	 * @param map
-	 * @return
-	 */
-	@RequestMapping("/getArticle")
-	@ResponseBody
-	public Map getArticle(Map<Object, Object> map, @RequestParam(required=true,defaultValue="1") int pageStart, @RequestParam(required=true,defaultValue=articleDefaultPageSize)int pageSize) {
-		Map<Object, Object> map2 = new HashMap<>();
-		List<Article> listArticle = articleService.getArticle(pageStart, pageSize);
-		map.put("listArticle", listArticle);
-		map.put("pageStart", pageStart);
-		map2.put("pageStart", pageStart);
-		return map2;
-	}
-
-	/**
-	 * 查询发帖表信息（管理-分页）
-	 * @param map
-	 * @param pageStart
-	 * @param pageSize
-	 * @return
-	 */
-	@RequestMapping("/getArticleManagement")
-	@ResponseBody
-	public Map getArticleAdmin(Map<Object, Object> map, @RequestParam(required=true,defaultValue="1") int pageStart, @RequestParam(required=true,defaultValue=adminArticleDefaultPageSize)int pageSize) {
-		Map<Object, Object> map2 = new HashMap<>();
-		int tail = 1;
-		List<Article> listArticle = articleService.getArticleAdmin(pageStart, pageSize);
-		// 总贴数
-		int total = articleService.getCount();
-		map.put("article_total",total);
-		map2.put("article_total",total);
-		map.put("article_pageStart", pageStart);
-		map2.put("article_pageStart", pageStart);
-		map.put("article_pageSize", pageSize);
-		map2.put("article_pageSize", pageSize);
-		map.put("listArticle", listArticle);
-		map2.put("listArticle", listArticle);
-		if (total % pageSize == 0){
-			tail = total / pageSize;
-			map.put("article_tail",tail);
-			map2.put("article_tail",tail);
-		} else {
-			tail = (total / pageSize) +1;
-			map.put("article_tail",tail);
-			map2.put("article_tail",tail);
-		}
-		return map2;
-	}
-	
-	/**
-	 * 按帖子标题模糊查询（搜索框搜索）
-	 * @param articleTitle
-	 * @param map
-	 */
-	public void getArticleTitle(String articleTitle,Map<Object, Object> map) {
-		
-		List<Article> listArticle = articleService.getArticleTitle(articleTitle);
-		map.put("listArticle", listArticle);
-	}
-	
-	/**
-	 * 按帖子板块查询出帖子（通过审核的）
-	 * @param bid
-	 * @param map
-	 */
-	public void getArticleBid(int bid, Map<Object, Object> map) {
-		
-		List<Article> listArticle = articleService.getArticleBid(bid);
-		map.put("listArticle", listArticle);
-	}
-	
-
-	/**
-	 * 按fid删除帖子
+	 * 按fid删除文章
 	 * @param fid
+	 * @param request
 	 * @return
-	 * @throws IOException 
 	 */
-	@RequestMapping("/deleteArticle/{fid}")
+	@DeleteMapping("/deleteArticle/{fid}")
 	@ResponseBody
-	public Map deleteArticle(@PathVariable int fid,HttpServletRequest request) throws IOException {
-		Map map = new HashMap();
+	public ReturnT<?> deleteArticle(@PathVariable String fid,HttpServletRequest request) {
 		try {
-			int count=commentService.getCommentFid(fid).size();
-
-			//不能将commentService.getCommentFid(fid).size();放在for()里面，因为：
-			//因为每一次commentService.deleteComment(pid)都会删除一条记录，总记录就会少一条，
-			//自然commentService.getCommentFid(fid).size()就会减一。
-			for(int i=0;i<count;i++) {
-
-				//为啥用get(0)，而不用get(i)？
-				//因为每一次commentService.deleteComment(pid)都会删除一条记录，总记录就会少一条，自然之前的get(1)就变成了现在的get(0)
-				//以此递推，故为get(0)，而不是get(i);
-				int pid=commentService.getCommentFid(fid).get(0).getPid();
-
-				//删除帖子下对应的评论（注意：先删评论再删帖子！！）
-				commentService.deleteComment(pid);
-			}
-
-			//调用删除帖子对应图片的方法
-			articlePhotoDelete(fid,request);
-			//删除帖子(数据库)
+			// 删除文章
 			articleService.deleteArticle(fid);
-
-			//删除有该帖子id的收藏信息
-			collectService.deleteCollectFid(fid);
-
-			//删除该用户对应的收藏信息(按userid)
-			collectService.deleteCollectFid(fid);
-
-			map.put("resultCode",200);
-		}catch (Exception e){
-			map.put("resultCode",404);
+			return ReturnT.success("删除文章成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("删除文章失败");
 		}
-
-		return map;
 	}
 
 	/**
-	 * 获取帖子和板块信息
-	 * @param fid
+	 * 修改文章（更改题图）
+	 * @param file
+	 * @param article
 	 * @return
 	 */
-	@RequestMapping("/getUpdateArticle/{fid}")
+	@PutMapping("/updateArticle")
 	@ResponseBody
-	public Map getUpdateArticle(@PathVariable int fid) {
-		Map<Object, Object> map = new HashMap<>();
-		Article article = articleService.getArticleKey(fid);
-		map.put("article_Edit", article);
-		//无条件获取板块信息
-		List<Plate> plate=plateService.getPlate();
-		map.put("plate", plate);
-		
-		return map;
-	}
-	
-	/**
-	 * 修改帖子表（更改题图）
-	 * @return
-	 * @throws IOException 
-	 */
-	@RequestMapping("/updateArticle")
-	@ResponseBody
-	public Map updateArticle(@RequestParam("photo") MultipartFile file, Article2 article2,HttpServletRequest request) {
-		Map<Object, Object> map = new HashMap();
+	public ReturnT<?> updateArticle(@RequestParam("picture") MultipartFile file, Article article) {
 		try {
-			String projectname;	//项目名称
-			projectname = request.getSession().getServletContext().getRealPath("/");
-			projectname=projectname.substring(0,projectname.length()-1);
-			if (projectname.indexOf("/")==-1) {//在非linux系统下
-				projectname = projectname.substring(projectname.lastIndexOf("\\"),projectname.length());
-			} else {//在linux系统下
-				projectname = projectname.substring(projectname.lastIndexOf("/"),projectname.length());
+			// 当前文件大小
+			long currentFileSize = file.getSize();
+			// 上传源文件允许的最大值
+			long fileLength = thumbnailatorUtil.getFileLength();
+			if (currentFileSize <= fileLength) {
+				article.setPhoto(fileUploadUtil.fileUpload(file, pathUtil.getArticlePath()));
+				// 修改文章表（数据库）
+				articleService.updateArticle(article);
+				return ReturnT.success("修改文章成功");
+			} else {
+				return ReturnT.fail("请上传不超过 " + fileLength/(1024*1024) + "M 的题图!");
 			}
-
-			//文件（图片）路径
-			String filePath = PathUtil.getCommonPath()+projectname+PathUtil.getArticlePath();
-
-			int fid=article2.getFid();
-
-			// 获取上传图片的文件名及其后缀(获取原始图片的拓展名)
-			String fileName = file.getOriginalFilename();
-			// 生成新的文件名字(不重复)
-			String newFileName = UUID.randomUUID() + fileName;
-			// 封装上传文件位置的全路径
-			File targetFile = new File(filePath, newFileName);
-			System.out.println("封装上传文件位置的全路径:"+targetFile);
-			// 把本地文件上传到封装上传文件位置的全路径
-			file.transferTo(targetFile);
-
-			// 将article2和photo整合到article中
-			Article article = new Article(article2, newFileName);
-
-			//调用删除帖子对应图片的方法
-			articlePhotoDelete(fid,request);
-
-			System.out.println("图："+article);
-			//修改帖子表（数据库）
-			articleService.updateArticle(article);
-
-			map.put("resultCode",200);
-		}catch (Exception e){
-			map.put("resultCode",404);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("修改文章失败");
 		}
-
-		return map;
 	}
 
 	/**
-	 * 修改帖子表（题图未更改）
+	 * 修改文章表（题图未更改）
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping("/updateArticleNotPhoto")
+	@PutMapping("/updateArticleNotPhoto")
 	@ResponseBody
-	public Map updateArticleNotPhoto(Article article) {
-		Map<Object, Object> map = new HashMap();
+	public ReturnT<?> updateArticleNotPhoto(Article article) {
 		try {
 			System.out.println("无图："+article);
-			//修改帖子表（数据库）
+			//修改文章表（数据库）
 			articleService.updateArticle(article);
-
-			map.put("resultCode",200);
-		}catch (Exception e){
-			map.put("resultCode",404);
+			return ReturnT.success("修改文章成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("修改文章失败");
 		}
-
-		return map;
 	}
-	
-	
-	/**
-	 * 删除帖子对应的图片
-	 * @throws IOException 
-	 */
-	public void articlePhotoDelete(int fid,HttpServletRequest request) throws IOException {
-		
-		String projectname;	//项目名称
-		projectname = request.getSession().getServletContext().getRealPath("/");
-		projectname=projectname.substring(0,projectname.length()-1);
-		if (projectname.indexOf("/")==-1) {//在非linux系统下
-			projectname = projectname.substring(projectname.lastIndexOf("\\"),projectname.length());
-		} else {//在linux系统下
-			projectname = projectname.substring(projectname.lastIndexOf("/"),projectname.length());
-		}
 
-		//文件（图片）路径
-		String filePath = PathUtil.getCommonPath()+projectname+PathUtil.getArticlePath();
-		
-		// 获取取要删除帖子对应的图片的文件名（通过fid获取帖子信息）
-		String fileName = articleService.getArticleKey(fid).getPhoto();
-		// 封装上传文件位置的全路径
-		File targetFile = new File(filePath, fileName);
-		
-		//删除帖子对应的图片（实际删除）
-		targetFile.delete();
-	}
-	
 	/**
-	 * 修改article表的status属性（修改审核状态）
+	 * 更改文章审核状态
 	 * @return
 	 */
-	@RequestMapping("/articleStatus")
+	@PutMapping("/updateArticleStatus")
 	@ResponseBody
-	public Map articleStatus(Article article) {
-		Map<Object,Object> map = new HashMap();
+	public ReturnT<?> updateArticleStatus(Article article) {
 		try {
 			articleService.updateArticleStatus(article);
-			map.put("resultCode",200);
-		} catch (Exception e){
-			map.put("resultCode",404);
+			return ReturnT.success("更改审核状态成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("更改审核状态失败");
 		}
-		return map;
+	}
+
+	/**
+	 * 获取文章信息（审核通过）
+	 * @param session
+	 * @return
+	 */
+	@GetMapping("/getArticle")
+	@ResponseBody
+	public ReturnT<?> getArticle(HttpSession session) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			// 获取文章数据
+			map.put("listArticle", articleService.getArticle(1, articlePageSize, (String) session.getAttribute("userid")));
+			map.put("pageStart", 1);
+
+			return new ReturnT<>(HttpStatus.OK, "获取文章数据成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取文章数据失败");
+		}
+	}
+
+	/**
+	 * 追加更多的文章信息
+	 * @param bid 板块id
+	 * @param pageStart 第几页
+	 * @return
+	 */
+	@GetMapping("/appendMore")
+	@ResponseBody
+	public ReturnT<?> appendMore(@RequestParam(defaultValue="") String bid,
+								 @RequestParam(required=true,defaultValue="1") int pageStart,
+								 HttpSession session) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			List<ArticleImpl> listArticle;
+			if (bid.isEmpty()) {
+				listArticle = articleService.getArticle(pageStart, articleDefaultPageSize, (String) session.getAttribute("userid"));
+			} else {
+				listArticle = articleService.getArticleBid(bid, pageStart, articleDefaultPageSize, (String) session.getAttribute("userid"));
+			}
+			// 获取文章数据
+			map.put("listArticle", listArticle);
+			map.put("pageStart", pageStart);
+			return new ReturnT<>(HttpStatus.OK, "文章加载成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("文章加载失败");
+		}
+	}
+
+	/**
+	 * 获取文章信息（分页-无条件）
+	 * @param pageStart
+	 * @return
+	 */
+	@GetMapping("/getArticleManagement")
+	@ResponseBody
+	public ReturnT<?> getArticleAdmin(@RequestParam(required=true,defaultValue="1") int pageStart) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			// 尾页
+			int tail = 1;
+			// 总贴数
+			int total = articleService.getCount();
+			map.put("listArticle", articleService.getArticleAdmin(pageStart, adminArticleDefaultPageSize));
+			map.put("total",total);
+			map.put("pageStart", pageStart);
+			map.put("pageSize", adminArticleDefaultPageSize);
+			if (total % adminArticleDefaultPageSize == 0){
+				tail = total / adminArticleDefaultPageSize;
+				map.put("tail", tail);
+			} else {
+				tail = (total / adminArticleDefaultPageSize) +1;
+				map.put("tail", tail);
+			}
+			return new ReturnT<>(HttpStatus.OK, "获取文章数据成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取文章数据失败");
+		}
+	}
+
+	/**
+	 * 按userid获取文章信息
+	 * @param userid
+	 * @return
+	 */
+	@GetMapping("/getArticleUserid/{userid}")
+	@ResponseBody
+	public ReturnT<?> getArticleUserid(@PathVariable String userid, HttpSession session) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			List<Article> listArticle;
+			if (userid.equals(session.getAttribute("userid"))) {
+				listArticle = articleService.getArticleUserid(userid);
+			} else {
+				listArticle = articleService.getPassArticleUserid(userid);
+			}
+			map.put("listArticle", listArticle);
+			return new ReturnT<>(HttpStatus.OK, "获取文章数据成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取文章数据失败");
+		}
+	}
+
+	/**
+	 * 获取userid用户评论过的文章信息
+	 * @param userid
+	 * @return
+	 */
+	@GetMapping("/getAnswerArticleUserid/{userid}")
+	@ResponseBody
+	public ReturnT<?> getAnswerArticleUserid(@PathVariable String userid, HttpSession session) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			map.put("userid", userid);
+			map.put("status", true);
+			map.put("listArticle_answer", articleService.getAnswerArticleUserid(map));
+			map.remove("userid");
+			map.remove("status");
+			return new ReturnT<>(HttpStatus.OK, "获取评论文章数据成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取评论文章数据失败");
+		}
+	}
+
+	/**
+	 * 按userid获取收藏的文章信息
+	 * @param userid
+	 * @return
+	 */
+	@GetMapping("/getCollectArticleUserid/{userid}")
+	@ResponseBody
+	public ReturnT<?> getCollectArticleUserid(@PathVariable String userid, HttpSession session) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			map.put("userid", userid);
+			map.put("status", true);
+			map.put("listArticle_collect", articleService.getCollectArticleUserid(map));
+			map.remove("userid");
+			map.remove("status");
+			return new ReturnT<>(HttpStatus.OK, "获取收藏文章数据成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取收藏文章数据失败");
+		}
+	}
+
+	/**
+	 * 按文章板块查询文章（通过审核的）
+	 *
+	 * @return
+	 */
+	@GetMapping("/getArticleBid/{bid}")
+	@ResponseBody
+	public ReturnT<?> getArticleBid(@PathVariable String bid, HttpSession session) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			// 获取文章数据
+			map.put("listArticle", articleService.getArticleBid(bid, 1, articlePageSize, (String) session.getAttribute("userid")));
+			// 该板块下文章总数
+			map.put("plateArticleCount", articleService.getPassArticleCountByBid(bid));
+			map.put("pageStart", 1);
+			return new ReturnT<>(HttpStatus.OK, "获取该板块下的文章信息成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取该板块下的文章信息失败");
+		}
+	}
+
+	/**
+	 * 获取文章和板块信息
+	 * @param fid
+	 * @return
+	 */
+	@GetMapping("/getUpdateArticle/{fid}")
+	@ResponseBody
+	public ReturnT<?> getUpdateArticle(@PathVariable String fid) {
+		Map<String, Object> resMap = new HashMap<>();
+		try {
+			Article article = articleService.getArticleKey(fid);
+			// 实体类转Map
+			Map<String, Object> map = EntityMapUtils.entityToMap(article);
+			// 当前板块
+			map.put("currentPlate", plateService.getPlateId(article.getBid()));
+			resMap.put("article", map);
+			//无条件获取板块信息
+			List<Plate> plate=plateService.getPlate();
+			resMap.put("plate", plate);
+			return new ReturnT<>(HttpStatus.OK, "获取文章和板块信息成功", resMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取文章和板块信息失败");
+		}
 	}
 	
 	/**
-	 * 按fid查询帖子信息（帖子展示）
+	 * 按fid获取文章信息
 	 * @return
 	 */
-	@RequestMapping("/getArticleFid/{fid}")
+	@GetMapping("/getArticleFid/{fid}")
 	@ResponseBody
-	public Map getArticleFid(@PathVariable int fid) {
-		Map<Object, Object> map = new HashMap<>();
-		Article article = articleService.getArticleKey(fid);
-		map.put("listArticle",article);
-		// 再通过帖子的id查找出对应的评论信息
-		commentService.getCommentFidMap(fid, map);
-		// 将上一步查出的对应的评论信息存放到listComment里
-		List<Comment> listComment = (List<Comment>) map.get("listComment");
+	public ReturnT<?> getArticleFid(@PathVariable String fid, HttpSession session) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			// 文章数据-包含评论
+			map.put("article", articleService.getArticleFidUserid(fid, (String) session.getAttribute("userid")));
+			// 通过fid查找出对应的评论信息
+			map.put("listComment", commentService.getCommentImplFid(fid));
+			// 热门文章
+			map.put("listHotArticle", articleService.getHotArticle());
+			// 最新评论
+			map.put("listNewComment", commentService.getNewComment());
+			// 查询板块信息（无条件）
+			map.put("plate", plateService.getPlate());
+			// 统计访问信息-国家
+			map.put("visitCountryCount",visitService.visitCountryStatistic());
+			// 统计访问信息-中国省份
+			map.put("visitProvinceCount",visitService.visitProvinceStatistic());
 
-		// 为map预设一个随帖子id变化而变化的key
-		String listCommentFid = "listComment_" + fid;
-		// 将帖子下对应的所有评论存入map中（其key是随帖子id变化而变化的）
-		map.put(listCommentFid, listComment);
-		//去除多余信息
-		map.remove("listComment");
-
-		// 查询板块信息（无条件）
-		List<Plate> plate = plateService.getPlate();
-		map.put("plate", plate);
-
-		// 查询关注信息(无条件)
-		List<Attention> attention = attentionService.getAttention();
-		map.put("attention", attention);
-
-		// 查询收藏信息（无条件）
-		List<Collect> collect = collectService.getCollect();
-		map.put("collect", collect);
-
-		// 查询收藏信息（无条件）
-		List<Enjoy> enjoy = enjoyService.getEnjoy();
-		map.put("enjoy", enjoy);
-
-		// 热门帖子
-		List<Article> listHotArticle = articleService.getHotArticle();
-		map.put("listHotArticle", listHotArticle);
-
-		// 统计访问信息-国家
-		visitService.visitCountryStatistic(map);
-
-		// 统计访问信息-中国省份
-		visitService.visitProvinceStatistic(map);
-
-		return map;
+			return new ReturnT<>(HttpStatus.OK, "获取文章信息成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取文章信息失败");
+		}
 	}
 
 	/**
-	 * 热门帖子
+	 * 热门文章
 	 * @return
 	 */
-	@RequestMapping("/getHotArticle")
+	@GetMapping("/getHotArticle")
 	@ResponseBody
-    public Map getHotArticle() {
-		Map<Object, Object> map = new HashMap<>();
-		List<Article> listHotArticle = articleService.getHotArticle();
-		map.put("listHotArticle", listHotArticle);
-
-		return map;
+    public ReturnT<?> getHotArticle() {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			List<Article> listHotArticle = articleService.getHotArticle();
+			map.put("listHotArticle", listHotArticle);
+			return new ReturnT<>(HttpStatus.OK, "获取热门文章数据成功", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("获取热门文章数据失败");
+		}
     }
 }

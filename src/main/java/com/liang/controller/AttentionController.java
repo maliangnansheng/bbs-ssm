@@ -1,27 +1,20 @@
 package com.liang.controller;
 
-import com.liang.bean.User;
+import com.liang.code.ReturnT;
 import com.liang.service.UserService;
+import com.liang.utils.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.*;
 
 import com.liang.bean.Attention;
 import com.liang.service.AttentionService;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-@RequestMapping("/attentionController")
+@RequestMapping("/api/rest/nanshengbbs/v3.0/attention")
 @Controller
 public class AttentionController {
-
 	@Autowired
 	AttentionService attentionService;
 	@Autowired
@@ -31,88 +24,55 @@ public class AttentionController {
 	 * 添加关注
 	 * @return
 	 */
-	@RequestMapping("/setAttention")
+	@PostMapping("/setAttention")
 	@ResponseBody
-	public Map setAttention(Attention attention) {
-		Map<Object, Object> map = new HashMap<>();
+	public ReturnT<?> setAttention(Attention attention) {
 		try {
 			//新增关注
+			attention.setGid(UUIDUtil.getRandomUUID());
 			attentionService.setAttention(attention);
-			map.put("resultCode",200);
-		}catch (Exception e){
-			map.put("resultCode",404);
+			return ReturnT.success("关注成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("关注失败");
 		}
-
-		return map;
 	}
-	
-	
+
 	/**
-	 * 取消关注（首页）
-	 * @param attention
+	 * 取消关注（按gid）
+	 * @param gid
 	 * @return
 	 */
-	@RequestMapping("/deleteAttention")
+	@DeleteMapping("/deleteAttention/{gid}")
 	@ResponseBody
-	public Map deleteAttention(Attention attention) {
-
-		Map<Object, Object> map = new HashMap<>();
+	public ReturnT<?> deleteAttention(@PathVariable String gid) {
 		try {
-			attentionService.deleteAttention(attention);
-			map.put("resultCode",200);
-		}catch (Exception e){
-			map.put("resultCode",404);
+			attentionService.deleteAttention(gid);
+			return ReturnT.success("取关成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("取关失败");
 		}
-
-		return map;
 	}
-	
+
 	/**
-	 * 取消关注（个人主页）
-	 * @param attention
+	 * 取消关注（按beuserid和userid）
+	 * @param beuserid
 	 * @return
 	 */
-	@RequestMapping("/deleteAttentionMyself")
+	@DeleteMapping("/deleteByUserid/{beuserid}")
 	@ResponseBody
-	public Map deleteAttentionMyself(Attention attention, HttpSession session) {
-		int userid=(int) session.getAttribute("userid");
-		Map<Object,Object> map = new HashMap<>();
+	public ReturnT<?> deleteByUserid(@PathVariable String beuserid, HttpSession session) {
 		try {
+			Attention attention = new Attention();
+			attention.setBeuserid(beuserid);
+			attention.setUserid((String) session.getAttribute("userid"));
 			//取消关注
-			attentionService.deleteAttentionMyself(attention);
-
-			//按userid查询关注信息（你关注了谁）
-			List<Attention> attentions = attentionService.getAttention(userid);
-			List<User> myListUserAttention = new ArrayList<User>();
-			for(Attention attention2 : attentions) {
-				//通过beuserid查询用户信息
-				int beuserid=attention2.getBeuserid();
-				myListUserAttention.add(userService.getUserKey(beuserid));
-			}
-			map.put("myListAttentions", myListUserAttention);
-			map.put("resultCode",200);
-		}catch (Exception e){
-			map.put("resultCode",404);
+			attentionService.deleteByUserid(attention);
+			return ReturnT.success("取关成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReturnT.fail("取关失败");
 		}
-
-		return map;
 	}
-
-	/**
-	 * 按关注者id和被关注者id进行查询
-	 * @param beuserid 被关注者id
-	 * @param session
-	 * @return
-	 */
-	@RequestMapping("/getAttentionBeuserid/{beuserid}")
-	@ResponseBody
-	public Map getAttentionBeuserid(@PathVariable int beuserid, HttpSession session){
-		Map<Object, Object> map = new HashMap<>();
-		Attention attention = new Attention();
-		attention.setBeuserid(beuserid);
-		attention.setUserid((int) session.getAttribute("userid"));
-		map.put("attention",attentionService.getAttentionBeuserid(attention));
-		return map;
-	}
-	
 }

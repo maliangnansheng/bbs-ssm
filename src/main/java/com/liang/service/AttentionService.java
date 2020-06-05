@@ -24,67 +24,58 @@ public class AttentionService {
 	}
 
 	/**
+	 * 取消关注（按gid）
+	 * @param gid
+	 */
+	public void deleteAttention(String gid) {
+
+		attentionMapper.deleteByKey(gid);
+	}
+
+	/**
+	 * 取消关注（按beuserid和userid）
+	 * @param attention
+	 */
+	public void deleteByUserid(Attention attention) {
+
+		attentionMapper.deleteByUB(attention);
+	}
+
+	/**
 	 * 查询关注信息(无条件)
 	 * @return
 	 */
 	public List<Attention> getAttention() {
 
-		return attentionMapper.selectByAttention();
+		return attentionMapper.selectAttention();
 	}
 
 	/**
-	 * 取消关注(首页)
-	 * @param attention
-	 */
-	public void deleteAttention(Attention attention) {
-
-		attentionMapper.deleteByAttention(attention);
-	}
-
-	/**
-	 * 按userid查询关注信息
+	 * 获取userid的关注总数
 	 * @param userid
 	 * @return
 	 */
-	public List<Attention> getAttention(int userid) {
-		
-		return attentionMapper.selectByUserid(userid);
+	public int getCountByUserid(String userid) {
+
+		return attentionMapper.selectCountByUserid(userid);
 	}
 	
 	/**
-	 * 按beuserid查询关注信息
-	 * @param userid
+	 * 获取userid的粉丝总数
+	 * @param beuserid
 	 * @return
 	 */
-	public List<Attention> getAttentionBe(int beuserid) {
-		
-		return attentionMapper.selectByBeuserid(beuserid);
-	}
+	public int getCountByBeuserid(String beuserid) {
 
-	/**
-	 * 取消关注（个人主页）
-	 * @param attention
-	 */
-	public void deleteAttentionMyself(Attention attention) {
-		
-		attentionMapper.deleteByAttentionMyself(attention);
+		return attentionMapper.selectCountByBeuserid(beuserid);
 	}
 
 	/**
 	 * 删除该用户对应的关注和被关注信息
 	 * @param userid
 	 */
-	public void deleteAttentionUseridOrBeuserid(int userid) {
+	public void deleteAttentionUseridOrBeuserid(String userid) {
 		
-		attentionMapper.deleteAttentionUseridOrBeuserid(userid);
+		attentionMapper.deleteByUorB(userid);
 	}
-
-	/**
-	 * 按关注者id和被关注者id进行查询
-	 * @param attention
-	 * @return
-	 */
-    public Attention getAttentionBeuserid(Attention attention) {
-    	return attentionMapper.getAttentionBeuserid(attention);
-    }
 }

@@ -1,67 +1,36 @@
 package com.liang.bean;
 
+import java.util.Date;
+
 public class Article {
-    private Integer fid;
-
+    // 文章id
+    private String fid;
+    // 文章标题
     private String titles;
-
+    // 文章内容
     private String fcontent;
-
+    // 文章配图（题图）
     private String photo;
-
-    private Integer bid;
-
-    private String time;
-
-    private Integer userid;
-
+    // 文章所属板块id
+    private String bid;
+    // 文章发布者id
+    private String userid;
+    // 文章审核状态
     private Integer status;
-
-    /* 附加 */
-    private String sum;
-
-    private String userphoto;
-
-    private String username;
-
-    private String bname;
+    // 文章发布时间
+    private Date createTime;
+    // 文章更新时间
+    private Date updateTime;
 
     public Article() {
         super();
     }
 
-    public Article(Article2 article2,String photo) {
-        super();
-        this.fid = article2.getFid();
-        this.titles = article2.getTitles();
-        this.fcontent = article2.getFcontent();
-        this.bid = article2.getBid();
-        this.time = article2.getTime();
-        this.userid = article2.getUserid();
-        this.status = article2.getStatus();
-        this.photo = photo;
-    }
-
-    public Article(Integer fid, String titles, String fcontent, String photo, Integer bid, String time, Integer userid, Integer status, String sum, String userphoto, String username, String bname) {
-        this.fid = fid;
-        this.titles = titles;
-        this.fcontent = fcontent;
-        this.photo = photo;
-        this.bid = bid;
-        this.time = time;
-        this.userid = userid;
-        this.status = status;
-        this.sum = sum;
-        this.userphoto = userphoto;
-        this.username = username;
-        this.bname = bname;
-    }
-
-    public Integer getFid() {
+    public String getFid() {
         return fid;
     }
 
-    public void setFid(Integer fid) {
+    public void setFid(String fid) {
         this.fid = fid;
     }
 
@@ -70,7 +39,7 @@ public class Article {
     }
 
     public void setTitles(String titles) {
-        this.titles = titles == null ? null : titles.trim();
+        this.titles = titles;
     }
 
     public String getFcontent() {
@@ -78,7 +47,7 @@ public class Article {
     }
 
     public void setFcontent(String fcontent) {
-        this.fcontent = fcontent == null ? null : fcontent.trim();
+        this.fcontent = fcontent;
     }
 
     public String getPhoto() {
@@ -86,47 +55,23 @@ public class Article {
     }
 
     public void setPhoto(String photo) {
-        this.photo = photo == null ? null : photo.trim();
+        this.photo = photo;
     }
 
-    public Integer getBid() {
+    public String getBid() {
         return bid;
     }
 
-    public void setBid(Integer bid) {
+    public void setBid(String bid) {
         this.bid = bid;
     }
 
-    public String getBname() {
-        return bname;
-    }
-
-    public void setBname(String bname) {
-        this.bname = bname == null ? null : bname.trim();
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time.substring(0,time.length()-2);
-    }
-
-    public Integer getUserid() {
+    public String getUserid() {
         return userid;
     }
 
-    public void setUserid(Integer userid) {
+    public void setUserid(String userid) {
         this.userid = userid;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
     }
 
     public Integer getStatus() {
@@ -137,37 +82,34 @@ public class Article {
         this.status = status;
     }
 
-    public String getSum() {
-        return sum;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setSum(String sum) {
-        this.sum = sum;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public String getUserphoto() {
-        return userphoto;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUserphoto(String userphoto) {
-        this.userphoto = userphoto;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     @Override
     public String toString() {
         return "Article{" +
-                "fid=" + fid +
+                "fid='" + fid + '\'' +
                 ", titles='" + titles + '\'' +
                 ", fcontent='" + fcontent + '\'' +
                 ", photo='" + photo + '\'' +
-                ", bid=" + bid +
-                ", time='" + time + '\'' +
-                ", userid=" + userid +
+                ", bid='" + bid + '\'' +
+                ", userid='" + userid + '\'' +
                 ", status=" + status +
-                ", sum='" + sum + '\'' +
-                ", userphoto='" + userphoto + '\'' +
-                ", username='" + username + '\'' +
-                ", bname='" + bname + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
                 '}';
     }
 }

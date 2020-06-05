@@ -3,29 +3,34 @@ package com.liang.bean;
 import java.util.Date;
 
 public class PhotoPro {
-    private Integer fid;
-
-    private Integer userid;
-
+    // 相册id
+    private String fid;
+    // 用户id
+    private String userid;
+    // 相册名
     private String name;
+    // 相册创建时间
+    private Date createTime;
+    // 相册更新时间
+    private Date updateTime;
 
-    private Date time;
-    
-    private String photo;
+    public PhotoPro() {
+        super();
+    }
 
-    public Integer getFid() {
+    public String getFid() {
         return fid;
     }
 
-    public void setFid(Integer fid) {
+    public void setFid(String fid) {
         this.fid = fid;
     }
 
-    public Integer getUserid() {
+    public String getUserid() {
         return userid;
     }
 
-    public void setUserid(Integer userid) {
+    public void setUserid(String userid) {
         this.userid = userid;
     }
 
@@ -34,28 +39,33 @@ public class PhotoPro {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
-    public Date getTime() {
-        return time;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setTime(Date time) {
-        this.time = time;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-	public String getPhoto() {
-		return photo;
-	}
+    public Date getUpdateTime() {
+        return updateTime;
+    }
 
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 
-	@Override
-	public String toString() {
-		return "PhotoPro [fid=" + fid + ", userid=" + userid + ", name=" + name + ", time=" + time + ", photo=" + photo
-				+ "]";
-	}
+    @Override
+    public String toString() {
+        return "PhotoPro{" +
+                "fid='" + fid + '\'' +
+                ", userid='" + userid + '\'' +
+                ", name='" + name + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

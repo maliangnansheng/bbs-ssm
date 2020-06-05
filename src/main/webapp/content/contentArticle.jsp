@@ -16,76 +16,43 @@
     <link href="${APP_PATH}/static/css/css.css" rel="stylesheet">
 </head>
 <body>
-<%-- 方便ajax获取APP_PATH --%>
-<input id="APP_PATH" type="hidden" value="${APP_PATH}" >
-<%-- 方便ajax获取session中的userid --%>
-<input id="session_userid" type="hidden" value="${userid}" >
 <!--主体（下）-->
 <div class="container">
     <!--加载中...-->
-    <div id="content_loading"></div>
+    <div id="content_loading">
+        <div class="text-center">
+            <br><br><br><br><br><br><br><br><br><br>
+            <img src="${APP_PATH}/static/img/loading.gif" alt="加载中...">
+        </div>
+    </div>
 
     <div class="row">
-        <!--加载中...-->
-        <div id="content_left_loading"></div>
         <!--左边板块-->
         <div id="content_left">
             <!--代码部分begin-->
             <div class="jq22">
-                <!-- 帖子展示 -->
-                <div id="articles_all"></div>
+                <div class="articleDetails">
+                    <!-- 文章展示-详情 -->
+                    <jsp:include page="articleDetails.jsp"></jsp:include>
+                </div>
+                <div class="plateQuery">
+                    <!-- 文章展示-模板（主要用于板块查询） -->
+                    <jsp:include page="articlesHide.jsp"></jsp:include>
+                    <!-- 文章展示-实际数据 -->
+                    <div id="articles_all"></div>
+                </div>
+                <!-- 加载更多 -->
+                <div class="text-center more">
+                    <a id="appendMore" class="text-info" style="display: none;" href="javascript:void(0)">点击--->加载更多</a>
+                </div>
             </div>
-            <div class="row">
-                <div class="col-md-12"
-                     style="position: relative; background-color: #f6f6f6; height: 30px;"></div>
-            </div>
+            <div class="row" style="position: relative; background-color: #f6f6f6; height: 30px;"></div>
         </div>
 
-
-        <!--右边板块-隐藏-->
-        <div id="content_right" style="display: none;">
-            <div class="row">
-                <div class="col-md-12" style="position: relative; padding-top: 10px;">
-                    <b>所有板块</b>
-                    <hr>
-                </div>
-            </div>
-            <!-- 板块展示-循环 -->
-            <div class="row" id="plates_all"></div>
-            <div class="row">
-                <div class="col-md-12" style="position: relative; background-color: #f6f6f6; height: 10px;"></div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12"
-                     style="position: relative; padding-top: 10px;">
-                    <b>热门文章</b>
-                    <hr>
-                </div>
-            </div>
-            <!-- 热门帖子展示-循环 -->
-            <div id="hotArticle_all"></div>
-
-            <div class="row" style="position: relative; background-color: #f6f6f6; height: 10px;"></div>
-            <div class="row">
-                <div class="col-md-12" style="position: relative; padding-top: 10px;">
-                    <b>访问统计</b>
-                    <hr>
-                </div>
-            </div>
-            <div style="height:400px; margin: 0px auto;" id="visit_country"></div>
-            <hr>
-            <div style="height:300px; margin: 0px auto;" id="visit_province"></div>
-
-            <div class="row" style="position: relative; background-color: #f6f6f6; height: 10px;"></div>
-            <!-- 论坛简介、更新日志、友情链接、友情捐赠 -->
-            <jsp:include page="/content/util.jsp"></jsp:include>
-            </div>
-        </div>
+        <!--右边板块-->
+        <jsp:include page="contentRight.jsp"></jsp:include>
     </div>
 </div>
-
-<jsp:include page="/content/top.jsp"></jsp:include>
 
 <script src="${APP_PATH }/static/js/delete.js"></script>
 <script src="${APP_PATH }/static/js/content/contentArticle.js"></script>
@@ -94,7 +61,11 @@
 <script src="${APP_PATH }/static/js/content/collect.js"></script>
 <script src="${APP_PATH }/static/js/content/enjoy.js"></script>
 <script src="${APP_PATH }/static/js/content/plate.js"></script>
-<script src="${APP_PATH }/static/js/content/articleEdit.js"></script>
+<%--<script src="${APP_PATH }/static/js/content/articleEdit.js"></script>--%>
+<script src="${APP_PATH }/static/js/content/visit.js"></script>
+<script src="${APP_PATH }/static/js/share.js"></script>
+<script src="${APP_PATH }/static/js/content/common.js"></script>
+<script src="${APP_PATH }/static/js/content/article.js"></script>
 
 
 <script src="${APP_PATH }/static/js/phones_pc.js"></script>

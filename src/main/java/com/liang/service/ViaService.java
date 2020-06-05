@@ -3,7 +3,6 @@ package com.liang.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.liang.bean.User;
 import com.liang.bean.Via;
 import com.liang.dao.ViaMapper;
 
@@ -14,23 +13,22 @@ public class ViaService {
 	ViaMapper viaMapper;
 
 	/**
-	 * 按userid查询用户头像信息（via）
-	 * @param userid
-	 * @return
+	 * 上传用户头像（插入）（via）
+	 *
+	 * @param via
 	 */
-	public Via getVia(int userid) {
+	public void setVia(Via via) {
 
-		return viaMapper.selectByPrimaryKey(userid);
+		viaMapper.insert(via);
 	}
 
 	/**
-	 * 上传用户头像（插入）（via）
-	 * 
-	 * @param via
+	 * 删除用户对应的头像信息
+	 * @param userid
 	 */
-	public void setUserPhoto(Via via) {
+	public void deleteVia(String userid) {
 
-		viaMapper.insert(via);
+		viaMapper.deleteByKey(userid);
 	}
 
 	/**
@@ -38,17 +36,17 @@ public class ViaService {
 	 * @param via
 	 */
 	public void updateVia(Via via) {
-		
-		viaMapper.updateByPrimaryKey(via);
+
+		viaMapper.updateByKey(via);
 	}
 
 	/**
-	 * 删除用户对应的头像信息
+	 * 按userid查询用户头像信息（via）
 	 * @param userid
+	 * @return
 	 */
-	public void deleteVia(Integer userid) {
-		
-		viaMapper.deleteByPrimaryKey(userid);
-	}
+	public Via getVia(String userid) {
 
+		return viaMapper.selectViaByKey(userid);
+	}
 }

@@ -19,6 +19,15 @@
     <link rel="stylesheet" href="${APP_PATH}/static/editor.md-master/css/editormd.preview.min.css"/>
 </head>
 <body>
+<%-- 方便ajax获取APP_PATH --%>
+<input id="APP_PATH" type="hidden" value="${APP_PATH}" >
+<input id="session_userid" type="hidden" value="${userid}" >
+<input id="session_username" type="hidden" value="${username}" >
+<input id="session_email" type="hidden" value="${email}" >
+<input id="session_userPhoto" type="hidden" value="${userPhoto}" >
+<input id="session_aname" type="hidden" value="${sessionAname}" >
+<input id="session_acreateTime" type="hidden" value="${sessionAcreateTime}" >
+
 <!--导航条（头）-->
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -38,84 +47,109 @@
                     </a>
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse"
-                     id="bs-example-navbar-collapse-1">
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="${APP_PATH}/index.jsp">首页 <span class="sr-only">(current)</span></a>
+                        <li>
+                            <a href="${APP_PATH}/index.jsp">首页 <span class="sr-only">(current)</span></a>
                         </li>
                     </ul>
-                    <form class="navbar-form navbar-left" action="${APP_PATH }/common/getArticleTitle" method="post">
-                        <div class="row">
+                    <ul class="nav navbar-nav">
+                        <form class="navbar-form navbar-left" method="post">
                             <div class="col-xs-9 col-md-8">
-                                <input type="text" name="articleTitle" class="form-control" placeholder="输入收索内容..."
-                                       required>
+                                <input type="text" name="articleTitle" class="form-control" placeholder="输入搜索内容..." required>
                             </div>
                             <div class="col-xs-3 col-md-4">
                                 <button type="button" class="btn btn-primary">搜索</button>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <c:if test="${empty username}">
-                            <li>
-                                <a data-toggle="modal" data-target="#loginModal" href="#" id="loginButton">登录</a>
-                            </li>
-                        </c:if>
-                        <c:if test="${!empty username}">
-                            <li>
-                                <a href="${APP_PATH}/posted.jsp">写文章</a>
-                            </li>
-                            <!-- pc -->
-                            <li class="dropdown"><a href="#" class="dropdown-toggle"
-                                                    data-toggle="dropdown" role="button" aria-haspopup="true"
-                                                    aria-expanded="false">${username}<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="#" onclick="skipMycontent()">
-                                            <div class="row">
-                                                <div class="col-xs-1 col-md-2 col-md-offset-1">
-                                                    <img src="${APP_PATH}/static/img/wodezhuye.png">
-                                                </div>
-                                                <div class="col-xs-3 col-md-6">我的主页</div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="${APP_PATH}/album.jsp">
-                                            <div class="row">
-                                                <div class="col-xs-1 col-md-2 col-md-offset-1">
-                                                    <img src="${APP_PATH}/static/img/xinagce.png">
-                                                </div>
-                                                <div class="col-xs-3 col-md-6">我的相册</div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" data-toggle="modal" data-target="#setup">
-                                            <div class="row">
-                                                <div class="col-xs-1 col-md-2 col-md-offset-1">
-                                                    <img src="${APP_PATH}/static/img/shezhi.png">
-                                                </div>
-                                                <div class="col-xs-6 col-md-6">设置</div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="${APP_PATH}/userController/userExit">
-                                            <div class="row">
-                                                <div class="col-xs-1 col-md-2 col-md-offset-1">
-                                                    <img src="${APP_PATH}/static/img/tuichu.png">
-                                                </div>
-                                                <div class="col-xs-6 col-md-6">退出</div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </c:if>
+                        <li class="chat" style="cursor: pointer;">
+                            <a href="http://chat.nanshengbbs.top/" target="_blank">闲聊</a>
+                        </li>
                         <li>
-                            <a href="javascript:void(0)">
-                                <small style="color: rgba(0,0,0,0.4);">版本号v2.6</small>
+                            <a href="${APP_PATH}/admin/index.jsp" target="_blank">管理端</a>
+                        </li>
+
+                        <!----------------------------------- 未登录时显示 ----------------------------------->
+                        <li class="head_logout" style="display:none;">
+                            <a data-toggle="modal" data-target="#loginModal" href="#" id="loginButton">登录</a>
+                        </li>
+                        <!----------------------------------- 未登录时显示-end ----------------------------------->
+
+                        <!----------------------------------- 已登录时显示 ----------------------------------->
+                        <li class="head_login" style="display:none;">
+                            <a href="${APP_PATH}/posted.jsp">写文章</a>
+                        </li>
+                        <!-- 已登录 -->
+                        <li class="dropdown head_login col-md-2" style="display:none;">
+                            <img data-toggle="dropdown" class="head_userPhoto" src="${APP_PATH}/static/img/head.png" alt="头像">
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="#" onclick="goMyHome()">
+                                        <div class="row">
+                                            <div class="col-xs-1 col-md-2 col-md-offset-1">
+                                                <img src="${APP_PATH}/static/img/wodezhuye.png">
+                                            </div>
+                                            <div class="col-xs-3 col-md-6">我的主页</div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="${APP_PATH}/album.jsp">
+                                        <div class="row">
+                                            <div class="col-xs-1 col-md-2 col-md-offset-1">
+                                                <img src="${APP_PATH}/static/img/xinagce.png">
+                                            </div>
+                                            <div class="col-xs-3 col-md-6">我的相册</div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" data-toggle="modal" data-target="#setup">
+                                        <div class="row">
+                                            <div class="col-xs-1 col-md-2 col-md-offset-1">
+                                                <img src="${APP_PATH}/static/img/shezhi.png">
+                                            </div>
+                                            <div class="col-xs-6 col-md-6">设置</div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" id="userExit">
+                                        <div class="row">
+                                            <div class="col-xs-1 col-md-2 col-md-offset-1">
+                                                <img src="${APP_PATH}/static/img/tuichu.png">
+                                            </div>
+                                            <div class="col-xs-6 col-md-6">退出</div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!----------------------------------- 已登录时显示-end ----------------------------------->
+                        <li>
+                            <a href="javascript:void(0)" class="version-popover-options" data-container="body"
+                               data-toggle="popover" data-placement="right" data-trigger="hover" data-delay='{"show": "0", "hide": "1500" }'
+                               title="<b>版本说明</b>"
+                               data-content='<div style="line-height:30px;">
+                                                <b class="text-primary">南生论坛v2.8.2</b>
+                                                <p><small class="text-warning">图片/视频文件压缩并上七牛云，优化系统，提升访问效率 - <a href="http://www.nanshengbbs.top/article.jsp?fid=20200604232448-f3a5d3d45d054d12ab3adb34103fb420" target="_blank">查看详情</a></small></p>
+                                                <b class="text-primary">南生论坛v2.8.1</b>
+                                                <p><small class="text-warning">主要对前后端代码和数据库表进行了全面重构，新增了闲聊 - <a href="http://www.nanshengbbs.top/article.jsp?fid=20200501225212-02c54864c9864f85a583630c6e687fde" target="_blank">查看详情</a></small></p>
+                                                <b class="text-primary">南生论坛v2.6</b>
+                                                <p><small class="text-warning">支持Markdown、新增分享功能、新增文章详情页面、首页文章显示简约化 - <a href="http://www.nanshengbbs.top/article.jsp?fid=200" target="_blank">查看详情</a></small></p>
+                                                <b class="text-primary">南生论坛v2.0</b>
+                                                <p><small class="text-warning">整体异步实现、新增统计饼图、优化人机交互、实现分页、新增相册功能、新增月周日访问记录 - <a href="http://www.nanshengbbs.top/article.jsp?fid=137" target="_blank">查看详情</a></small></p>
+                                                <b class="text-primary">南生论坛v1.0</b>
+                                                <p><small class="text-warning">登录【<a href="http://www.nanshengbbs.top" target="_brank">用户系统</a>】可以：发帖、修改帖子、删除帖子、评论、删除评论、修改个人信息、关注、收藏
+                                                    <br>
+                                                    登录【<a href="http://www.nanshengbbs.top/admin" target="_brank">管理系统</a>】可以：管理用户、管理帖子、管理板块、访问记录</small></p>
+                                            </div>'>
+                                <small style="color: rgba(0,0,0,0.4);">v2.8.2</small>
+                            </a>
+                            <a href="javascript:void(0)" class="version-popover-options-photo" style="display: none;">
+                                <small style="color: rgba(0,0,0,0.4);">v2.8.2</small>
                             </a>
                         </li>
                     </ul>
@@ -125,65 +159,16 @@
     </div>
 </nav>
 
-<script src="${APP_PATH }/static/js/phones_pc.js"></script>
 <script src="${APP_PATH}/static/js/jquery-3.3.1.min.js"></script>
 <script src="${APP_PATH}/static/bootstrap/js/bootstrap.js"></script>
 <script src="${APP_PATH }/static/js/layer/layer.js"></script>
-
 <script src="${APP_PATH}/static/editor.md-master/lib/marked.min.js"></script>
 <script src="${APP_PATH}/static/editor.md-master/lib/prettify.min.js"></script>
 <script src="${APP_PATH}/static/editor.md-master/editormd.min.js"></script>
 
+<script src="${APP_PATH }/static/js/phones_pc.js"></script>
 <script src="${APP_PATH}/static/js/share.js"></script>
-
-<script>
-    // 用户名字数限制
-    const userNameLength = 20;
-    // 用户密码数限制
-    const userPasswordLength = 6;
-    // 文章标题数限制
-    const articleTitleLength = 120;
-    // 家庭住址数限制
-    const userFamilyLength = 100;
-    // 个人简介数限制
-    const userIntroLength = 1000;
-    // 年龄数限制
-    const userAgeSize = 120;
-    // 相册名数限制
-    const albumNameLength = 20;
-
-    /*跳转到我的主页*/
-    function skipMycontent() {
-        window.location.href = "${APP_PATH }/myself.jsp";
-    }
-
-    /**
-     * 中英文统计(一个中文算两个字符)
-     */
-    function chEnWordCount(str){
-        var count = str.replace(/[^\x00-\xff]/g,"**").length;
-        return count;
-    }
-
-    /**
-     * ajax默认设置 包括默认提交方式为POST， 判断后台是否是重定向
-     */
-    $.ajaxSetup({
-        // 设置ajax请求结束后的执行动作
-        complete : function(XMLHttpRequest, textStatus) {
-            // 通过XMLHttpRequest取得响应头，redirect
-            var redirect = XMLHttpRequest.getResponseHeader("redirect");
-            if (redirect == "redirect") { // 若HEADER中含有redirect说明后端想重定向
-                var win = window;
-                while (win != win.top) {
-                    win = win.top;
-                }
-                // 将后端重定向的地址取出来,使用win.location.href去实现重定向的要求
-                win.location.href = "${APP_PATH }" + XMLHttpRequest.getResponseHeader("url");
-            }
-        },
-        type : 'POST'
-    });
-</script>
+<script src="${APP_PATH}/static/js/common.js"></script>
+<script src="${APP_PATH}/static/js/head/head.js"></script>
 </body>
 </html>

@@ -13,8 +13,8 @@
 <body>
 <!-- 首页-头部 -->
 <jsp:include page="/head/head.jsp"></jsp:include>
-<!-- 首页-修改帖子 -->
-<jsp:include page="/content/donate.jsp"></jsp:include>
+<!-- 首页-修改文章 -->
+<jsp:include page="/donate/donate.jsp"></jsp:include>
 <!-- 首页-基本信息设置 -->
 <jsp:include page="/head/setup.jsp"></jsp:include>
 <!-- 首页-登录、注册 -->

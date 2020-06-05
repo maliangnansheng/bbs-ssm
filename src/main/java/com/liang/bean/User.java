@@ -1,51 +1,41 @@
 package com.liang.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.Date;
+
 public class User {
-    private Integer userid;
-
+    // 用户id
+    private String userid;
+    // 用户名
     private String name;
-
+    // 用户年龄
     private Integer age;
-
-    private String sex;
-
+    // 用户性别
+    private Integer sex;
+    // 用户密码
+    @JsonIgnore
     private String password;
-
+    // 用户邮箱地址
     private String email;
-
+    // 用户住址
     private String family;
-
+    // 用户简介
     private String intro;
-
-    private String time;
-    
-    private String userphoto;
-    
-    private int attcount;
+    // 用户创建时间
+    private Date createTime;
+    // 用户更新时间
+    private Date updateTime;
     
     public User() {
 		super();
 	}
 
-	public User(Integer userid, String name, Integer age, String sex, String password, String email, String family,
-			String intro, String time) {
-		super();
-		this.userid = userid;
-		this.name = name;
-		this.age = age;
-		this.sex = sex;
-		this.password = password;
-		this.email = email;
-		this.family = family;
-		this.intro = intro;
-		this.time = time;
-	}
-
-	public Integer getUserid() {
+    public String getUserid() {
         return userid;
     }
 
-    public void setUserid(Integer userid) {
+    public void setUserid(String userid) {
         this.userid = userid;
     }
 
@@ -54,7 +44,7 @@ public class User {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
     public Integer getAge() {
@@ -65,12 +55,12 @@ public class User {
         this.age = age;
     }
 
-    public String getSex() {
+    public Integer getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex == null ? null : sex.trim();
+    public void setSex(Integer sex) {
+        this.sex = sex;
     }
 
     public String getPassword() {
@@ -78,7 +68,7 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+        this.password = password;
     }
 
     public String getEmail() {
@@ -86,7 +76,7 @@ public class User {
     }
 
     public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
+        this.email = email;
     }
 
     public String getFamily() {
@@ -94,7 +84,7 @@ public class User {
     }
 
     public void setFamily(String family) {
-        this.family = family == null ? null : family.trim();
+        this.family = family;
     }
 
     public String getIntro() {
@@ -102,38 +92,38 @@ public class User {
     }
 
     public void setIntro(String intro) {
-        this.intro = intro == null ? null : intro.trim();
+        this.intro = intro;
     }
 
-    public String getTime() {
-        return time;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setTime(String time) {
-        this.time = time.substring(0,time.length()-2);
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-	public String getUserphoto() {
-		return userphoto;
-	}
+    public Date getUpdateTime() {
+        return updateTime;
+    }
 
-	public void setUserphoto(String userphoto) {
-		this.userphoto = userphoto;
-	}
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 
-	public int getAttcount() {
-		return attcount;
-	}
-
-	public void setAttcount(int attcount) {
-		this.attcount = attcount;
-	}
-
-	@Override
-	public String toString() {
-		return "User [userid=" + userid + ", name=" + name + ", age=" + age + ", sex=" + sex + ", password=" + password
-				+ ", email=" + email + ", family=" + family + ", intro=" + intro + ", time=" + time + ", userphoto="
-				+ userphoto + ", attcount=" + attcount + "]";
-	}
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "userid='" + userid + '\'' +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", sex='" + sex + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", family='" + family + '\'' +
+                ", intro='" + intro + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

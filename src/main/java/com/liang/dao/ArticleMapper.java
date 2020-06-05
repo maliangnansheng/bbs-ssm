@@ -1,53 +1,67 @@
 package com.liang.dao;
 
 import com.liang.bean.Article;
+import com.liang.bean.impl.ArticleImpl;
+
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
-
 public interface ArticleMapper {
 
-	//按fid删除帖子
-	int deleteByPrimaryKey(Integer fid);
+	// 向数据库插入文章信息
+	void insert(Article record);
 
-	//向数据库插入发帖信息
-	int insert(Article record);
+	// 按fid删除文章信息
+	void deleteByKey(String fid);
 
-	int insertSelective(Article record);
+	// 删除userid对应的文章信息
+	void deleteByUserid(String userid);
 
-	// 查询发帖表信息（分页）
-	List<Article> selectByArticle(Map map);
+	// 修改文章信息
+	void updateByKey(Article record);
 
-	// 查询发帖表信息（分页）-管理员
-	List<Article> selectByArticleAdmin(Map map);
+	// 更改文章审核状态
+	void updateStatusByKey(Article record);
+
+	// 查询“通过审核”的文章信息（分页）
+	List<ArticleImpl> selectPassArticleImplPaging(Map<String, Object> map);
+
+	// 查询文章信息（分页）
+	List<ArticleImpl> selectArticleImplPaging(Map<String, Object> map);
 	
-	//按帖子标题模糊查询（搜索框搜索）
-	List<Article> selectByArticleTitle(String articleTitle);
-	
-	//按帖子板块查询出帖子（通过审核的）
-	List<Article> selectByArticleBid(int bid);
+	// 按userid查询“通过审核”文章信息
+	List<Article> selectPassArticleByUserid(String userid);
 
-	// 按userid查询发帖表信息
-	List<Article> selectByArticleId(int userid);
+	// 按userid查询文章信息
+	List<Article> selectArticleByUserid(String userid);
 
-	//按fid查询发帖表信息
-	Article selectByPrimaryKey(Integer fid);
+	// 按fid查询文章信息
+	Article selectArticleByKey(String fid);
 
-	int updateByPrimaryKeySelective(Article record);
+	// 按fid和userid查询文章信息
+	ArticleImpl selectArticleImplByKeyU(Map<String, Object> map);
 
-	//修改帖子表
-	int updateByPrimaryKey(Article record);
-	
-	//修改article表的status属性（修改审核状态）
-	int updateArticleStatus(Article record);
+    // 查询热门文章
+    List<Article> selectHotArticle();
 
-	//删除用户对应的帖子信息(按userid)
-	void deleteByUserid(int userid);
+    // 查询userid评论过的文章信息
+    List<ArticleImpl> selectArticleImplByUserid(Map<String, Object> map);
 
-	//总帖数
-    int selectCount();
+	// 查询userid收藏的文章信息
+    List<ArticleImpl> selectCollectArticleImplByUserid(Map<String, Object> map);
 
-    //热门帖子
-    List<Article> getHotArticle();
+	// 总文章数
+	int selectCount();
+
+	// 某板块下文章总数
+	int selectPassArticleCountByBid(String bid);
+
+	// 查询userid的总文章数
+	int selectArticleCountByUserid(Map<String, Object> map);
+
+	// 查询userid评论过的文章总数
+	int selectArticleImplCountByUserid(Map<String, Object> map);
+
+	// 获取某用户的收藏总数
+	int selectCollectCountByUserid(Map<String, Object> map);
 }

@@ -11,17 +11,24 @@ import org.springframework.stereotype.Service;
 import com.liang.bean.Visit;
 import com.liang.dao.VisitMapper;
 
+import javax.annotation.PostConstruct;
+
 @Service
 public class VisitService {
-	
 	@Autowired
 	VisitMapper visitMapper;
+	@Autowired
+	PageUtil pageUtil;
 
 	// 管理系统-访问记录初始条数（第一页）
-	private static final int adminVisitPageSize = PageUtil.getAdminVisitPageSize();
+	private int adminVisitPageSize;
+
+	@PostConstruct
+	private void init(){
+		adminVisitPageSize = pageUtil.getAdminVisitPageSize();
+	}
 	
 	public void setVisit(Visit visit) {
-
 		visitMapper.insert(visit);
 	}
 
@@ -32,44 +39,40 @@ public class VisitService {
 	 * @return
 	 */
 	public List<Visit> getVisit(int pageStart, int pageSize) {
-		Map<Object,Object> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		if (pageStart == 1) {
 			map.put("offset",(pageStart-1)*pageSize);
 		} else {
 			map.put("offset",(pageStart-2)*pageSize + adminVisitPageSize);
 		}
 		map.put("limit",pageSize);
-		return visitMapper.selectByVisit(map);
+		return visitMapper.selectVisitPaging(map);
 	}
 
 	/**
 	 * 统计-国家
-	 * @param map
 	 * @return
 	 */
-	public Map visitCountryStatistic(Map map) {
-		List<Visit> listVisits = visitMapper.visitCountryStatistic();
-		map.put("visitCountryCount",listVisits);
-		return map;
+	public List<Visit> visitCountryStatistic() {
+
+		return visitMapper.selectVisitCountryStatistic();
 	}
 
 	/**
 	 * 统计-中国省份
-	 * @param map
 	 * @return
 	 */
-	public Map visitProvinceStatistic(Map map) {
-		List<Visit> listVisits = visitMapper.visitProvinceStatistic();
-		for (int i=0;i<listVisits.size();i++){
-			String province = listVisits.get(i).getVisitprovince();
+	public List<Visit> visitProvinceStatistic() {
+		List<Visit> visitList = visitMapper.selectVisitProvinceStatistic();
+		for (int i=0;i<visitList.size();i++){
+			String province = visitList.get(i).getVisitprovince();
 			if (province.endsWith("移动") || province.endsWith("联通") || province.endsWith("电信")){
-				listVisits.remove(i);
+				visitList.remove(i);
 			} else if (province.endsWith("省") || province.endsWith("自治区") || province.endsWith("市")) {
-				listVisits.remove(i);
+				visitList.remove(i);
 			}
 		}
-		map.put("visitProvinceCount",listVisits);
-		return map;
+		return visitList;
 	}
 
 	/**
@@ -86,7 +89,7 @@ public class VisitService {
 	 * @return
 	 */
 	public int getMonthCount() {
-		return visitMapper.getMonthCount();
+		return visitMapper.selectMonthCount();
 	}
 
 	/**
@@ -94,7 +97,7 @@ public class VisitService {
 	 * @return
 	 */
 	public int getWeekCount() {
-		return visitMapper.getWeekCount();
+		return visitMapper.selectWeekCount();
 	}
 
 	/**
@@ -102,6 +105,15 @@ public class VisitService {
 	 * @return
 	 */
 	public int getDayCount() {
-		return visitMapper.getDayCount();
+		return visitMapper.selectDayCount();
 	}
+
+	/**
+	 * 获取最近n天的访问数据
+	 * @param n 天数
+	 * @return
+	 */
+    public List<Visit> getVisitRecordDay(Integer n) {
+		return visitMapper.selectVisitRecordDay(n);
+    }
 }

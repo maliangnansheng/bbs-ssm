@@ -18,54 +18,67 @@ public class LoginInterceptor implements HandlerInterceptor {
         String uri = request.getRequestURI();
         //获取session
         HttpSession session = request.getSession();
-        Object adminList = session.getAttribute("adminList");
+        Object sessionAname = session.getAttribute("sessionAname");
         // 管理员登录情况下拥有所有权限
-        if (adminList != null && adminList != "") {
+        if (sessionAname != null && sessionAname != "") {
             return true;
         }
 
-        //UTL:除了login.jsp是可以公开访问的，其他的URL都进行拦截控制
-        boolean interfaceBoolean = uri.contains("/userController/getLoginAjax")         // 用户系统-登录验证
-                || uri.contains("/userController/setSignUp")                            // 用户系统-注册
-                || uri.contains("/common/getAll")                                       // 用户系统-首页
-                || uri.contains("/common/appendMore")                                   // 用户系统-加载更多
-                || uri.contains("/articleController/getArticleFid")                     // 用户系统-文章详情
-                || uri.contains("/common/getArticleBid")                              // 用户系统-通过板块检索文章
-                || uri.contains("/common/getArticleTitle")                              // 用户系统-搜索
-                || uri.contains("/userController/getOthers")                            // 用户系统-他人主页
-                || uri.endsWith("/admin")                                               // 管理系统
-                || uri.contains("/adminController/getLogin")                            // 管理系统-登录
-                || uri.contains("/common/getAll_Admin")                                 // 管理系统-首页
-                || uri.contains("/userController/getUser")                              // 管理系统-分页获取用户
-                || uri.contains("/articleController/getArticleManagement")              // 管理系统-分页获取文章
-                || uri.contains("/visitController/getVisit");                           // 管理系统-分页获取访问信息
+        boolean interfaceBoolean = uri.contains("/user/getLogin")             // 用户系统-登录
+                || uri.contains("/article/getArticle")                        // 获取文章信息-------------
+                || uri.contains("/article/getAnswerArticleUserid")            // 回答
+                || uri.contains("/user/getAttentionUserId")                   // 关注
+                || uri.contains("/article/getCollectArticleUserid")           // 收藏
+                || uri.contains("/plate/getPlate")                            // 获取所有版块信息-------------
+                || uri.contains("/article/getHotArticle")                     // 获取热门文章信息-------------
+                || uri.contains("/comment/getNewComment")                     // 获取最新评论信息-------------
+                || uri.contains("/visit/getStatVisit")                        // 获取方无统计信息-------------
+                || uri.contains("/visit/setVisit")                            // 记录访问信息-------------
+                || uri.contains("/user/getUserRankByArticleSum")              // 排行榜信息-------------
+                || uri.contains("/user/getNewUser")                           // 新注册用户信息-------------
+                || uri.contains("/user/setSignUp")                            // 用户系统-注册
+                || uri.contains("/user/userExit")                             // 用户系统-退出登录
+                || uri.contains("/article/appendMore")                        // 用户系统-加载更多
+                || uri.contains("/article/getArticleFid")                     // 用户系统-文章详情
+                || uri.contains("/article/getArticleBid/")                    // 用户系统-通过板块检索文章
+                || uri.contains("/user/getOther/")                            // 用户系统-他人主页
+                || uri.contains("/user/getDynamicAnswerAttentionCollectSum")  // 用户系统-获取动态、回答、关注、收藏总数
+                || uri.contains("/donateController/getDonateAll")             // 捐赠图表
+                || uri.endsWith("/admin")                                     // 管理系统
+                || uri.contains("/admin/getLogin")                            // 管理系统-登录
+                || uri.contains("/admin/adminExit")                           // 管理系统-登出
+                || uri.contains("/admin/getUserArticlePlateVisitSum")         // 管理系统-获取用户、文章、板块、访问总数
+                || uri.contains("/user/getUser")                              // 管理系统-分页获取用户
+                || uri.contains("/article/getArticleManagement")              // 管理系统-分页获取文章
+                || uri.contains("/visit/getVisit")                            // 管理系统-分页获取访问信息
+                || uri.contains("/visit/getVisitRecordDay/");                 // 管理系统-获取最近那天的访问信息访问信息
         if (interfaceBoolean) {
             return true;
         }
 
         String username = (String) session.getAttribute("username");
-        //普通用户登录情况下拥有大部分权限（管理员的某些权限没有）
+        // 普通用户登录情况下拥有大部分权限（管理员的某些权限没有）
         if (username != null && !username.equals("")) {
-            boolean interfaceBoolean2 = uri.contains("/userController/deleteUser")      // 管理系统-删除用户
-                    || uri.contains("/articleController/articleStatus")                 // 管理系统-文章审核
-                    || uri.contains("/plateController/setPlate")                        // 管理系统-板块新增
-                    || uri.contains("/plateController/updatePlate")                     // 管理系统-板块修改
-                    || uri.contains("/plateController/deletePlate");                    // 管理系统-板块删除
+            boolean interfaceBoolean2 = uri.contains("/user/deleteUser")      // 管理系统-删除用户
+                    || uri.contains("/article/updateArticleStatus")           // 管理系统-文章审核
+                    || uri.contains("/plate/setPlate")                        // 管理系统-板块新增
+                    || uri.contains("/plate/updatePlate")                     // 管理系统-板块修改
+                    || uri.contains("/plate/deletePlate");                    // 管理系统-板块删除
             if (!interfaceBoolean2) {    // 以上是管理员才有的权限，普通用户无权操作
                 return true;
             }
         }
 
         //不符合条件的给出提示信息，并转发到登录页面
-        request.setAttribute("msg", "您还没有登录，请先登录！");
+        request.setAttribute("msg", "请先登录！");
         //说明就是ajax请求，需要特殊处理
-        if("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))){
+        if("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
             //告诉ajax我是重定向
             response.setHeader("redirect", "redirect");
             //告诉ajax我重定向的路径
-            response.setHeader("url", "/notLogin.jsp");
+//            response.setHeader("url", "/notLogin.jsp");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        }else{  // 非ajax请求直接转发
+        } else {  // 非ajax请求直接转发
             request.getRequestDispatcher("/notLogin.jsp").forward(request, response);
         }
 

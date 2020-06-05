@@ -1,66 +1,35 @@
 /*分页操作*/
 function visitPage(pageStart) {
-    var APP_PATH = document.getElementById("APP_PATH").value;
-    var adminList = document.getElementById("adminList").value;
     $.ajax({
-        url: APP_PATH + "/visitController/getVisit?pageStart="+pageStart,
-        type: "post",
+        url: APP_PATH + "/api/rest/nanshengbbs/v3.0/visit/getVisit?pageStart=" + pageStart,
+        type: "get",
         dataType: "json",
         success: function (data) {
-            /*########################################### 访问管理 ############################################################*/
-            var listVisit_all = "";
-            var listVisits = data["listVisits"];   //计数
-            var visit_num = (data["visit_pageStart"] - 1)*data["visit_pageSize"];   //计数
-            for (var i=0;i<listVisits.length;i++){
-                visit_num++;
-                var listVisit = listVisits[i];
-                listVisit_all = listVisit_all +
-                    '<tr>' +
-                    '<td>'+visit_num+'</td>' +
-                    '<td>***.***.***.***</td>' +
-                    '<td>'+listVisit["visitcountry"]+'</td>' +
-                    '<td>'+listVisit["visitprovince"]+'</td>' +
-                    '<td>'+listVisit["visitcity"]+'</td>' +
-                    '<td>'+listVisit["visittime"]+'</td>' +
-                    '</tr>';
-            }
-            $("#listVisit_all").html(listVisit_all);
-            //访问总数
-            $("#visit_total").html('（'+data["visit_total"]+'条）');
+            // 状态码
+            var code = data.code;
+            // 提示信息
+            var msg = data.msg;
+            if (code == 200) {
+                /*########################################### 访问管理 ############################################################*/
+                $("#listVisit_all").html(getVisitList(data.data));
+                //访问总数
+                $("#visit_total").html(data.data.total + '条');
+                //月访问量
+                $("#visit_month").html(data.data.month + '条');
+                //周访问量
+                $("#visit_week").html(data.data.week + '条');
+                //日访问量
+                $("#visit_day").html(data.data.day + '条');
 
-            var visit_previous = "";
-            var visit_next = "";
-            //上一页
-            if (data["visit_pageStart"] == 1){
-                visit_previous =
-                    '<span aria-hidden="true" class="btn" disabled="disabled">&larr;</span>';
-            } else {
-                var pageStart = data["visit_pageStart"]-1;
-                visit_previous =
-                    '<a href="javascript:void(0)" onclick="visitPage('+pageStart+')"><span aria-hidden="true">&larr;</span></a>';
+                /*----------------------------------------- 分页（用户管理） ----------------------------------------*/
+                getPaging(data.data, "visit");
+                /*########################################### 访问管理-end ############################################################*/
+            } else if (code == 500) {
+                layer.msg(msg,{icon: 5});
             }
-            //下一页
-            if ((data["visit_pageStart"])*data["visit_pageSize"] >= data["visit_total"]){
-                visit_next =
-                    '<span aria-hidden="true" class="btn" disabled="disabled">&rarr;</span>';
-            } else {
-                var pageStart = data["visit_pageStart"]+1;
-                visit_next =
-                    '<a href="javascript:void(0)" onclick="visitPage('+pageStart+')"><span aria-hidden="true">&rarr;</span></a>';
-            }
-            var listVisit_page =
-                '<ul class="pagination">' +
-                '    <li><a href="javascript:void(0)" onclick="visitPage(1)">首页</a></li>' +
-                '    <li id="visit_previous">'+visit_previous+'</li>' +
-                '    <li class="active"><a href="javascript:void(0)">'+data["visit_pageStart"]+'</a></li>' +
-                '    <li id="visit_next">'+visit_next+'</li>' +
-                '    <li><a href="javascript:void(0)" onclick="visitPage('+data["visit_tail"]+')">尾页</a></li>' +
-                '  </ul>';
-            $("#listVisit_page").html(listVisit_page);
-            /*########################################### 访问管理-end ############################################################*/
         },
         error : function() {
-            layer.msg("异常！",{icon: 5});
+            layer.msg("出错！",{icon: 5});
         }
     });
 }

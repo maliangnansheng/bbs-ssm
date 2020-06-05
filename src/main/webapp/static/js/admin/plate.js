@@ -14,29 +14,8 @@ function onkeyupPlateAdd() {
         return true;
     }
 }
-
-/* 板块修改预览 */
-function onkeyupPlateUpdate() {
-    var bname = $.trim($("#bname_Update").val());   //去掉前后空格
-    var count_num = chEnWordCount(bname);
-    if (count_num > plateNameLength){
-        layer.tips('不能超过【'+plateNameLength+'】个字符，当前数 - '+count_num, '#bname_Update', {
-            tips: [1, '#ff6620'] //还可配置颜色
-        });
-        return false;
-    } else {
-        var index = layer.tips("满足");
-        // 立即关闭
-        layer.close(index);
-        return true;
-    }
-}
-
 /*新增板块信息*/
 function plateAdd(){
-    var APP_PATH = document.getElementById("APP_PATH").value;
-    var adminList = document.getElementById("adminList").value;
-
     var bname = $.trim($("#bname_Add").val());   //去掉前后空格
     if (bname == ""){
         layer.tips('请输入板块名', '#bname_Add', {
@@ -49,82 +28,152 @@ function plateAdd(){
     }
     //调ajax
     $.ajax({
-        url:APP_PATH+"/plateController/setPlate",
-        data:$('#form_addPlate').serialize(),
-        type:"POST",
-        dataType:"json",
-        success: function(result){
-            if (result.resultCode == 200){
+        url: APP_PATH + "/api/rest/nanshengbbs/v3.0/plate/setPlate",
+        data: $('#form_addPlate').serialize(),
+        type: "POST",
+        dataType: "json",
+        success: function(data){
+            // 状态码
+            var code = data.code;
+            // 提示信息
+            var msg = data.msg;
+            if (code == 200) {
                 $('#plate_Add').modal('hide');     // 关闭模态框
                 $.ajax({
-                    url:APP_PATH+"/plateController/getPlate",
-                    type:"POST",
-                    dataType:"json",
+                    url: APP_PATH + "/api/rest/nanshengbbs/v3.0/plate/getPlate",
+                    type: "get",
+                    dataType: "json",
                     success: function(data){
-                        /*########################################### 板块管理 ############################################################*/
-                        var plate_all = "";
-                        if (adminList != "" && adminList != null){  //已登录
-                            var plates_add =
-                                '<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#plate_Add">新增</button>';
-                            $("#plates_add").html(plates_add);
+                        // 状态码
+                        var code = data.code;
+                        // 提示信息
+                        var msg = data.msg;
+                        if (code == 200) {
+                            /*########################################### 板块管理 ############################################################*/
+                            $("#plate_all").html(getPlateList(data.data));
+                            //板块总数
+                            $("#plate_total").html('（' + data.data.total + '类）');
+                            /*########################################### 板块管理-end ############################################################*/
+                        } else if (code == 500) {
+                            layer.msg(msg,{icon: 5});
                         }
-                        var plates = data["plate"];
-                        var plate_num = 0;   //计数
-                        for (var i=0;i<plates.length;i++){
-                            plate_num++;
-                            var plate = plates[i];
-                            var plate_caozuo = "";
-                            if (adminList == "" || adminList == null){  //已登录
-                                plate_caozuo =
-                                    '<span class="glyphicon glyphicon-ban-circle"></span>';
-                            } else {
-                                plate_caozuo =
-                                    '<form method="post">' +
-                                    '<input type="hidden" id="form_bname'+plate["bid"]+'" value="'+plate["bname"]+'">' +
-                                    '<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#plate_Update" ' +
-                                    'onclick="plateShow('+plate["bid"]+')">修改</button>' +
-                                    '</form>' +
-                                    '<form id="form_delPlate'+plate["bid"]+'" method="post">' +
-                                    '<input type="hidden" name="bid" value="'+plate["bid"]+'">' +
-                                    '<button type="button" class="btn btn-danger btn-xs" onclick="b_del('+plate["bid"]+')">删除</button>' +
-                                    '</form>';
-                            }
-                            plate_all = plate_all +
-                                '<tr>' +
-                                '<td>'+plate_num+'</td>' +
-                                '<td>'+plate["bname"]+'</td>' +
-                                '<td>'+plate["btime"]+'</td>' +
-                                '<!-- 操作 -->' +
-                                '<td class=" text-center" id="plate_caozuo">'+plate_caozuo+'</td>' +
-                                '</tr>';
-                        }
-                        $("#plate_all").html(plate_all);
-                        //板块总数
-                        $("#plate_total").html('（'+data["plate_total"]+'条）');
-                        /*########################################### 板块管理-end ############################################################*/
                     },
                     error : function() {
-                        layer.msg("异常！",{icon: 5});
+                        layer.msg("出错！",{icon: 5});
                     }
                 });
-                layer.msg("成功");
-            } else if (result.resultCode == 201){
-                layer.tips('该板块名已存在！', '#bname_Add', {
+                layer.msg(msg);
+            } else if (code == 404) {
+                layer.tips(msg, '#bname_Add', {
                     tips: [1, '#ff6620'] //还可配置颜色
                 });
-            } else {
-                layer.msg("失败",{icon: 7});
+            } else if (code == 500) {
+                layer.msg(msg,{icon: 5});
             }
         },
         error : function() {
-            layer.msg("异常！",{icon: 5});
+            layer.msg("出错！",{icon: 5});
         }
     });
 }
 
+
+/* 板块修改预览 */
+function onkeyupPlateUpdate() {
+    var bname = $.trim($("#plateEdit_new_name").val());   //去掉前后空格
+    var count_num = chEnWordCount(bname);
+    if (count_num > plateNameLength){
+        layer.tips('不能超过【'+plateNameLength+'】个字符，当前数 - '+count_num, '#plateEdit_new_name', {
+            tips: [1, '#ff6620'] //还可配置颜色
+        });
+        return false;
+    } else {
+        var index = layer.tips("满足");
+        // 立即关闭
+        layer.close(index);
+        return true;
+    }
+}
+/*板块显示-修改*/
+function plateShow(bid, bname){
+    // 原板块名
+    $("#plateEdit_name").html(bname);
+    // 新板块输入框
+    $("#plateEdit_new_name").attr("onkeyup", "onkeyupPlateUpdate()");
+    // 确定修改
+    $("#plateEdit_submit").attr("onclick", "plateUpdate('" + bid + "')");
+}
+/*修改板块信息*/
+function plateUpdate(bid){
+    var bname = $.trim($("#plateEdit_new_name").val());   //去掉前后空格
+    if (bname == ""){
+        layer.tips('请输入板块名', '#plateEdit_new_name', {
+            tips: [1, '#ff6620'] //还可配置颜色
+        });
+        return false;
+    }
+    if (!onkeyupPlateUpdate()){
+        return false;
+    }
+    var data = {
+        "bid": bid,
+        "bname": bname
+    }
+    //调ajax
+    $.ajax({
+        url: APP_PATH + "/api/rest/nanshengbbs/v3.0/plate/updatePlate",
+        data: data,
+        type: "put",
+        dataType: "json",
+        success: function(data){
+            // 状态码
+            var code = data.code;
+            // 提示信息
+            var msg = data.msg;
+            if (code == 200) {
+                $('#plate_Update').modal('hide');     // 关闭模态框
+                $.ajax({
+                    url: APP_PATH + "/api/rest/nanshengbbs/v3.0/plate/getPlate",
+                    type: "get",
+                    dataType: "json",
+                    success: function(data){
+                        // 状态码
+                        var code = data.code;
+                        // 提示信息
+                        var msg = data.msg;
+                        if (code == 200) {
+                            /*########################################### 板块管理 ############################################################*/
+                            $("#plate_all").html(getPlateList(data.data));
+                            //板块总数
+                            $("#plate_total").html('（' + data.data.total + '类）');
+                            /*########################################### 板块管理-end ############################################################*/
+                        } else if (code == 500) {
+                            layer.msg(msg,{icon: 5});
+                        }
+                    },
+                    error : function() {
+                        layer.msg("出错！",{icon: 5});
+                    }
+                });
+                layer.msg(msg);
+            } else if (code == 404) {
+                layer.tips(msg, '#plateEdit_new_name', {
+                    tips: [1, '#ff6620'] //还可配置颜色
+                });
+            } else if (code == 500) {
+                layer.msg(msg,{icon: 5});
+            }
+        },
+        error : function() {
+            layer.msg("出错！",{icon: 5});
+        }
+    });
+}
+
+
 /*删除确认框*/
 function b_del(bid) {
-    layer.confirm('您真的确定要删除该板块吗？删除后不能复原！', {
+    layer.confirm('确定删除该板块吗？<br>这将同时删除与该板块相关的所有信息<br>删除后无法恢复！', {
         btn:["确定","取消"],
         icon:2,
         title: "删除提示"
@@ -136,195 +185,49 @@ function b_del(bid) {
 }
 /*删除板块信息*/
 function plateDel(bid) {
-    var APP_PATH = document.getElementById("APP_PATH").value;
-    var adminList = document.getElementById("adminList").value;
-
     //调ajax
     $.ajax({
-        url:APP_PATH+"/plateController/deletePlate/"+bid,
-        data:$('#form_delPlate').serialize(),
-        type:"POST",
-        dataType:"json",
-        success: function(result){
-            if (result.resultCode == 200){
+        url: APP_PATH + "/api/rest/nanshengbbs/v3.0/plate/deletePlate/"+bid,
+        data: $('#form_delPlate').serialize(),
+        type: "delete",
+        dataType: "json",
+        success: function(data){
+            // 状态码
+            var code = data.code;
+            // 提示信息
+            var msg = data.msg;
+            if (code == 200) {
                 $('#plate_Add').modal('hide');     // 关闭模态框
                 $.ajax({
-                    url:APP_PATH+"/plateController/getPlate",
-                    type:"POST",
-                    dataType:"json",
+                    url: APP_PATH + "/api/rest/nanshengbbs/v3.0/plate/getPlate",
+                    type: "get",
+                    dataType: "json",
                     success: function(data){
-                        /*########################################### 板块管理 ############################################################*/
-                        var plate_all = "";
-                        if (adminList != "" && adminList != null){  //已登录
-                            var plates_add =
-                                '<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#plate_Add">新增</button>';
-                            $("#plates_add").html(plates_add);
+                        // 状态码
+                        var code = data.code;
+                        // 提示信息
+                        var msg = data.msg;
+                        if (code == 200) {
+                            /*########################################### 板块管理 ############################################################*/
+                            $("#plate_all").html(getPlateList(data.data));
+                            //板块总数
+                            $("#plate_total").html('（' + data.data.total + '类）');
+                            /*########################################### 板块管理-end ############################################################*/
+                        } else if (code == 500) {
+                            layer.msg(msg,{icon: 5});
                         }
-                        var plates = data["plate"];
-                        var plate_num = 0;   //计数
-                        for (var i=0;i<plates.length;i++){
-                            plate_num++;
-                            var plate = plates[i];
-                            var plate_caozuo = "";
-                            if (adminList == "" || adminList == null){  //已登录
-                                plate_caozuo =
-                                    '<span class="glyphicon glyphicon-ban-circle"></span>';
-                            } else {
-                                plate_caozuo =
-                                    '<form method="post">' +
-                                    '<input type="hidden" id="form_bname'+plate["bid"]+'" value="'+plate["bname"]+'">' +
-                                    '<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#plate_Update" ' +
-                                    'onclick="plateShow('+plate["bid"]+')">修改</button>' +
-                                    '</form>' +
-                                    '<form id="form_delPlate'+plate["bid"]+'" method="post">' +
-                                    '<input type="hidden" name="bid" value="'+plate["bid"]+'">' +
-                                    '<button type="button" class="btn btn-danger btn-xs" onclick="b_del('+plate["bid"]+')">删除</button>' +
-                                    '</form>';
-                            }
-                            plate_all = plate_all +
-                                '<tr>' +
-                                '<td>'+plate_num+'</td>' +
-                                '<td>'+plate["bname"]+'</td>' +
-                                '<td>'+plate["btime"]+'</td>' +
-                                '<!-- 操作 -->' +
-                                '<td class=" text-center" id="plate_caozuo">'+plate_caozuo+'</td>' +
-                                '</tr>';
-                        }
-                        $("#plate_all").html(plate_all);
-                        //板块总数
-                        $("#plate_total").html('（'+data["plate_total"]+'条）');
-                        /*########################################### 板块管理-end ############################################################*/
                     },
                     error : function() {
-                        layer.msg("异常！",{icon: 5});
+                        layer.msg("出错！",{icon: 5});
                     }
                 });
-                layer.msg("成功");
-            } else if (result.resultCode == 201){
-                layer.tips('该板块名已存在！', '#bname_Add', {
-                    tips: [1, '#ff6620'] //还可配置颜色
-                });
-            } else {
-                layer.msg("失败",{icon: 7});
+                layer.msg(msg);
+            } else if (code == 500) {
+                layer.msg(msg,{icon: 5});
             }
         },
         error : function() {
-            layer.msg("异常！",{icon: 5});
-        }
-    });
-}
-
-
-/*板块显示-修改*/
-function plateShow(bid){
-    var APP_PATH = document.getElementById("APP_PATH").value;
-    var adminList = document.getElementById("adminList").value;
-
-    var bname = $("#form_bname"+bid).val();
-    var plateEdit_Update =
-        '<form id="form_updatePlate">' +
-            '<p class="text-muted text-center">原板块名：<small class="text-primary">'+bname+'</small></p>' +
-            '<p class="text-muted text-warning">准备修改为：</p>' +
-            '<div class="form-group">' +
-                '<input type="hidden" name="bid" value="'+bid+'">' +
-                '<input type="text" class="form-control" value="'+bname+'" placeholder="取一个板块名吧" ' +
-                '   id="bname_Update" name="bname" onkeyup="onkeyupPlateUpdate()" required>' +
-            '</div>' +
-            '' +
-            '<div class="modal-footer">' +
-                '<button type="reset" class="btn btn-default">还原</button>' +
-                '<button type="button" class="btn btn-primary" onclick="plateUpdate()">确定</button>' +
-            '</div>' +
-        '</form>';
-    $("#plateEdit_Update").html(plateEdit_Update);
-}
-
-/*修改板块信息*/
-function plateUpdate(){
-    var APP_PATH = document.getElementById("APP_PATH").value;
-    var adminList = document.getElementById("adminList").value;
-
-    var bname = $.trim($("#bname_Update").val());   //去掉前后空格
-    if (bname == ""){
-        layer.tips('请输入板块名', '#bname_Update', {
-            tips: [1, '#ff6620'] //还可配置颜色
-        });
-        return false;
-    }
-    if (!onkeyupPlateUpdate()){
-        return false;
-    }
-    //调ajax
-    $.ajax({
-        url:APP_PATH+"/plateController/updatePlate",
-        data:$('#form_updatePlate').serialize(),
-        type:"POST",
-        dataType:"json",
-        success: function(result){
-            if (result.resultCode == 200){
-                $('#plate_Update').modal('hide');     // 关闭模态框
-                $.ajax({
-                    url:APP_PATH+"/plateController/getPlate",
-                    type:"POST",
-                    dataType:"json",
-                    success: function(data){
-                        /*########################################### 板块管理 ############################################################*/
-                        var plate_all = "";
-                        if (adminList != "" && adminList != null){  //已登录
-                            var plates_add =
-                                '<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#plate_Add">新增</button>';
-                            $("#plates_add").html(plates_add);
-                        }
-                        var plates = data["plate"];
-                        var plate_num = 0;   //计数
-                        for (var i=0;i<plates.length;i++){
-                            plate_num++;
-                            var plate = plates[i];
-                            var plate_caozuo = "";
-                            if (adminList == "" || adminList == null){  //已登录
-                                plate_caozuo =
-                                    '<span class="glyphicon glyphicon-ban-circle"></span>';
-                            } else {
-                                plate_caozuo =
-                                    '<form method="post">' +
-                                    '<input type="hidden" id="form_bname'+plate["bid"]+'" value="'+plate["bname"]+'">' +
-                                    '<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#plate_Update" ' +
-                                    'onclick="plateShow('+plate["bid"]+')">修改</button>' +
-                                    '</form>' +
-                                    '<form id="form_delPlate'+plate["bid"]+'" method="post">' +
-                                    '<input type="hidden" name="bid" value="'+plate["bid"]+'">' +
-                                    '<button type="button" class="btn btn-danger btn-xs" onclick="b_del('+plate["bid"]+')">删除</button>' +
-                                    '</form>';
-                            }
-                            plate_all = plate_all +
-                                '<tr>' +
-                                '<td>'+plate_num+'</td>' +
-                                '<td>'+plate["bname"]+'</td>' +
-                                '<td>'+plate["btime"]+'</td>' +
-                                '<!-- 操作 -->' +
-                                '<td class=" text-center" id="plate_caozuo">'+plate_caozuo+'</td>' +
-                                '</tr>';
-                        }
-                        $("#plate_all").html(plate_all);
-                        //板块总数
-                        $("#plate_total").html('（'+data["plate_total"]+'条）');
-                        /*########################################### 板块管理-end ############################################################*/
-                    },
-                    error : function() {
-                        layer.msg("异常！",{icon: 5});
-                    }
-                });
-                layer.msg("成功");
-            } else if (result.resultCode == 201){
-                layer.tips('该板块名已存在！', '#bname_Update', {
-                    tips: [1, '#ff6620'] //还可配置颜色
-                });
-            } else {
-                layer.msg("失败",{icon: 7});
-            }
-        },
-        error : function() {
-            layer.msg("异常！",{icon: 5});
+            layer.msg("出错！",{icon: 5});
         }
     });
 }

@@ -1,7 +1,7 @@
 package com.liang.service;
 
 import com.liang.bean.PhotoPro;
-import com.liang.bean.TbPhoto;
+import com.liang.bean.impl.PhotoProImpl;
 import com.liang.dao.PhotoProMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,22 +13,13 @@ public class PhotoProService {
 
 	@Autowired
 	PhotoProMapper photoProMapper;
-	
-	/**
-	 * 获取相册分类信息(按userid)
-	 * @param userid
-	 */
-	public List<PhotoPro> getPhotoPro(int userid) {
-
-		return photoProMapper.selectByUserid(userid);
-	}
 
 	/**
 	 * 创建相册
 	 * @param photoPro
 	 */
 	public void setPhotoPro(PhotoPro photoPro) {
-		
+
 		photoProMapper.insert(photoPro);
 	}
 
@@ -36,25 +27,34 @@ public class PhotoProService {
 	 * 删除相册
 	 * @param fid
 	 */
-	public void deletePhotoPro(int fid) {
+	public void deletePhotoPro(String fid) {
 
-		photoProMapper.deleteByPrimaryKey(fid);
+		photoProMapper.deleteByKey(fid);
 	}
 
 	/**
 	 * 编辑相册
 	 * @param photoPro
 	 */
-    public void updateName(PhotoPro photoPro) {
-		photoProMapper.updateName(photoPro);
-    }
+	public void updateName(PhotoPro photoPro) {
+		photoProMapper.updateNameByKey(photoPro);
+	}
+
+	/**
+	 * 获取相册分类信息(按userid)
+	 * @param userid
+	 */
+	public List<PhotoProImpl> getPhotoPro(String userid) {
+
+		return photoProMapper.selectPhotoProImplByUserid(userid);
+	}
 
 	/**
 	 * 按fid（相册id）查询相册信息
 	 * @param fid
 	 */
-	public PhotoPro selectByPrimaryKey(int fid) {
-		return photoProMapper.selectByPrimaryKey(fid);
+	public PhotoPro selectByPrimaryKey(String fid) {
+		return photoProMapper.selectPhotoProByKey(fid);
 	}
 
 	/**
@@ -63,6 +63,6 @@ public class PhotoProService {
 	 * @return
 	 */
 	public List<PhotoPro> selectByName(PhotoPro photoPro) {
-		return photoProMapper.selectByName(photoPro);
+		return photoProMapper.selectPhotoProByUN(photoPro);
 	}
 }

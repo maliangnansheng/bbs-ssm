@@ -12,24 +12,6 @@ public class EnjoyService {
 
 	@Autowired
 	EnjoyMapper enjoyMapper;
-	
-	/**
-	 * 查询点赞信息（无条件）
-	 * @return
-	 */
-	public List<Enjoy> getEnjoy() {
-		
-		return enjoyMapper.selectByEnjoy();
-	}
-
-	/**
-	 * 删除点赞(按sid)
-	 * @param enjoy
-	 */
-	public void deleteEnjoy(Enjoy enjoy) {
-
-		enjoyMapper.deleteByEnjoy(enjoy);
-	}
 
 	/**
 	 * 添加点赞
@@ -41,13 +23,12 @@ public class EnjoyService {
 	}
 
 	/**
-	 * 按userid查询点赞信息（点赞了哪些帖子）
-	 * @param userid
-	 * @return
+	 * 删除点赞(按eid)
+	 * @param eid
 	 */
-	public List<Enjoy> getEnjoy(int userid) {
+	public void deleteEnjoy(String eid) {
 
-		return enjoyMapper.selectByEnjoyUserid(userid);
+		enjoyMapper.deleteByKey(eid);
 	}
 
 	/**
@@ -56,33 +37,24 @@ public class EnjoyService {
 	 */
 	public void deleteEnjoyUseridAndFid(Enjoy enjoy) {
 
-		enjoyMapper.deleteEnjoyUseridAndFid(enjoy);
+		enjoyMapper.deleteByUF(enjoy);
 	}
 
 	/**
-	 * 按fid删除点赞信息
-	 * @param fid
+	 * 查询点赞信息（无条件）
+	 * @return
 	 */
-	public void deleteEnjoyFid(int fid) {
-
-		enjoyMapper.deleteByEnjoyFid(fid);
+	public List<Enjoy> getEnjoy() {
+		
+		return enjoyMapper.selectEnjoy();
 	}
 
 	/**
-	 * 删除该用户对应的点赞信息(按userid)
-	 * @param userid
-	 */
-	public void deleteEnjoyUserid(int userid) {
-
-		enjoyMapper.deleteEnjoyUserid(userid);
-	}
-
-	/**
-	 * 按点赞者id和被点赞帖子id进行查询
+	 * 按点赞者id和被点赞文章id进行查询
 	 * @param enjoy
 	 * @return
 	 */
     public Enjoy getEnjoyFid(Enjoy enjoy) {
-    	return enjoyMapper.getEnjoyFid(enjoy);
+    	return enjoyMapper.selectEnjoyByUF(enjoy);
     }
 }

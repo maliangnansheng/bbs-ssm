@@ -1,43 +1,58 @@
 package com.liang.dao;
 
 import com.liang.bean.User;
+import com.liang.bean.impl.UserImpl;
+
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
-
 public interface UserMapper {
 
-    //删除用户
-    int deleteByPrimaryKey(Integer userid);
+    // 新增用户信息
+    void insert(User record);
 
-    int insert(User record);
+    // 删除用户信息
+    void deleteByKey(String userid);
 
-    int insertSelective(User record);
+    // 编辑用户信息
+    void updateByKey(User record);
 
-    //登录查询（按姓名和密码）
-    List<User> selectByUser(User user);
-    
-    //注册按用户名查询
-    List<User> selectByUserName(User user);
-    
-    //查询用户信息（分页）
-    List<User> selectByUserAll(Map map);
-    
-    //按userid查询用户
-    List<User> selectByUserId(int userid);
-    
-    //按userid查询用户
-    User selectByPrimaryKey(Integer userid);
+    // 修改用户名
+    void updateNameByKey(User user);
 
-    int updateByPrimaryKeySelective(User record);
-    
-    //编辑个人资料（修改user表）
-    int updateByPrimaryKey(User record);
-    
-    //基本设置信息的修改（修改user表）
-    int updateSetupByPrimaryKey(User record);
+    // 修改密码
+    void updatePasswordByKey(User user);
 
-    //查询用户总数
+    // 修改Email
+    void updateEmailByKey(User user);
+
+    // 按姓名（Email）和密码查询用户信息
+    UserImpl selectUserImplByNEP(User user);
+
+    // 按用户名查询用户信息
+    User selectUserByName(String name);
+
+    // 按Email查询用户信息
+    User selectUserByEmail(String name);
+    
+    // 查询用户信息（分页）
+    List<UserImpl> selectUserImplPaging(Map<String, Object> map);
+    
+    // 按userid查询用户信息
+    User selectUserByKey(String userid);
+
+    // 按userid和密码查询用户信息
+    User selectUserByUP(User user);
+
+    // 按文章数获取用户排名
+    List<UserImpl> selectUserImplRankByArticleSum();
+
+    // 获取新注册用户信息
+    List<UserImpl> selectNewUserImpl();
+
+    // 按userid查询关注信息
+    List<UserImpl> selectUserImplByKey(Map<String, Object> map);
+
+    // 查询用户总数
     int selectCount();
 }

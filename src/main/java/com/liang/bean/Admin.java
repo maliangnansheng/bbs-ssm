@@ -1,33 +1,31 @@
 package com.liang.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 
 public class Admin {
-	private Integer aid;
-
+	// 管理员id
+	private String aid;
+	// 管理员名字
 	private String aname;
-
+	// 管理员密码
+	@JsonIgnore
 	private String apassword;
-
-	private String atime;
+	// 管理员创建时间
+	private Date createTime;
+	// 管理员更新时间
+	private Date updateTime;
 
 	public Admin() {
 		super();
 	}
 
-	public Admin(Integer aid, String aname, String apassword, String atime) {
-		super();
-		this.aid = aid;
-		this.aname = aname;
-		this.apassword = apassword;
-		this.atime = atime;
-	}
-
-	public Integer getAid() {
+	public String getAid() {
 		return aid;
 	}
 
-	public void setAid(Integer aid) {
+	public void setAid(String aid) {
 		this.aid = aid;
 	}
 
@@ -36,7 +34,7 @@ public class Admin {
 	}
 
 	public void setAname(String aname) {
-		this.aname = aname == null ? null : aname.trim();
+		this.aname = aname;
 	}
 
 	public String getApassword() {
@@ -44,20 +42,33 @@ public class Admin {
 	}
 
 	public void setApassword(String apassword) {
-		this.apassword = apassword == null ? null : apassword.trim();
+		this.apassword = apassword;
 	}
 
-	public String getAtime() {
-		return atime;
+	public Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setAtime(String atime) {
-		this.atime = atime.substring(0,atime.length()-2);
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 
 	@Override
 	public String toString() {
-		return "Admin [aid=" + aid + ", aname=" + aname + ", apassword=" + apassword + ", atime=" + atime + "]";
+		return "Admin{" +
+				"aid='" + aid + '\'' +
+				", aname='" + aname + '\'' +
+				", apassword='" + apassword + '\'' +
+				", createTime=" + createTime +
+				", updateTime=" + updateTime +
+				'}';
 	}
-
 }

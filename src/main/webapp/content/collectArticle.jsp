@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>收藏帖子展示</title>
+    <title>收藏文章展示</title>
     <%
         pageContext.setAttribute("APP_PATH", request.getContextPath());
     %>

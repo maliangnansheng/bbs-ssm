@@ -52,4 +52,16 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
+	<!-- 处理PUT提交参数(只对基础表单生效) -->
+	<filter>
+		<filter-name>httpPutFormContentFilter</filter-name>
+		<filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>httpPutFormContentFilter</filter-name>
+		<!-- 拦截所有 -->
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- 处理PUT提交参数(只对基础表单生效)-end -->
+
 </web-app>

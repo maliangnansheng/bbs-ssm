@@ -26,7 +26,27 @@
 						<h3 class="modal-title text-center" id="exampleModalLabel">上传你的头像</h3>
 						<p class="text-center">听说，带有个性的头像很有趣</p>
 					</div>
-					<div class="modal-body" id="userPhotoEdit_all"></div>
+					<div class="modal-body" id="userPhotoEdit_all">
+						<form method="put" enctype="multipart/form-data">
+							<%-- 进度条 --%>
+							<jsp:include page="/content/progress.jsp"></jsp:include>
+							<p class="text-muted">在本地选择你的头像：</p>
+							<div class="form-group">
+								<div id="user_preview">
+									<a href="javascript:void(0)">
+										<img class="img-thumbnail" style="position: relative; width: 100%; height: 100%;" id="user_imghead"
+											src="${APP_PATH}/static/img/fatiePhoto.png" onclick='$("#user_previewImg").click();'>
+									</a>
+								</div>
+								<%-- accept="image/*"：接受所有的图像文件、audio/*、video/*、MIME_type --%>
+								<input type="file" onchange="user_previewImage(this)" style="display: none;" id="user_previewImg" name="photo" accept="image/*">
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+								<button type="button" class="btn btn-primary" onclick="userPhotoUpdate()">保存</button>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>

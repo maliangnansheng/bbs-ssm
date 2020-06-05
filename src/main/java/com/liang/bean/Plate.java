@@ -3,28 +3,24 @@ package com.liang.bean;
 import java.util.Date;
 
 public class Plate {
-    private Integer bid;
-
+    // 板块id
+    private String bid;
+    // 板块名
     private String bname;
-
-    private String btime;
+    // 板块创建时间
+    private Date createTime;
+    // 板块更新时间
+    private Date updateTime;
 
     public Plate() {
 		super();
 	}
 
-	public Plate(Integer bid, String bname, String btime) {
-		super();
-		this.bid = bid;
-		this.bname = bname;
-		this.btime = btime;
-	}
-
-	public Integer getBid() {
+    public String getBid() {
         return bid;
     }
 
-    public void setBid(Integer bid) {
+    public void setBid(String bid) {
         this.bid = bid;
     }
 
@@ -33,20 +29,32 @@ public class Plate {
     }
 
     public void setBname(String bname) {
-        this.bname = bname == null ? null : bname.trim();
+        this.bname = bname;
     }
 
-    public String getBtime() {
-        return btime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setBtime(String btime) {
-        this.btime = btime.substring(0,btime.length()-2);
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-	@Override
-	public String toString() {
-		return "Plate [bid=" + bid + ", bname=" + bname + ", btime=" + btime + "]";
-	}
-    
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Plate{" +
+                "bid='" + bid + '\'' +
+                ", bname='" + bname + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

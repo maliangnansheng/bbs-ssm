@@ -3,31 +3,32 @@ package com.liang.bean;
 import java.util.Date;
 
 public class Visit {
-    private Integer visitid;
-
+    // 访问记录编号
+    private String visitid;
+    // 访问者地址
     private String visiturl;
-
+    // 访问者ip
     private String visitip;
-
+    // 访问者所在国家
     private String visitcountry;
-
+    // 访问者省份
     private String visitprovince;
-
+    // 访问者城市
     private String visitcity;
-
+    // 主机名
     private String visithostname;
-
+    // 访问者操作系统
     private String visitos;
-
-    private String visittime;
-
+    // 访问时间
+    private Date visittime;
+    // 访问数量
     private int count;
 
-    public Integer getVisitid() {
+    public String getVisitid() {
         return visitid;
     }
 
-    public void setVisitid(Integer visitid) {
+    public void setVisitid(String visitid) {
         this.visitid = visitid;
     }
 
@@ -36,7 +37,7 @@ public class Visit {
     }
 
     public void setVisiturl(String visiturl) {
-        this.visiturl = visiturl == null ? null : visiturl.trim();
+        this.visiturl = visiturl;
     }
 
     public String getVisitip() {
@@ -44,7 +45,7 @@ public class Visit {
     }
 
     public void setVisitip(String visitip) {
-        this.visitip = visitip == null ? null : visitip.trim();
+        this.visitip = visitip;
     }
 
     public String getVisitcountry() {
@@ -52,7 +53,7 @@ public class Visit {
     }
 
     public void setVisitcountry(String visitcountry) {
-        this.visitcountry = visitcountry == null ? null : visitcountry.trim();
+        this.visitcountry = visitcountry;
     }
 
     public String getVisitprovince() {
@@ -60,7 +61,7 @@ public class Visit {
     }
 
     public void setVisitprovince(String visitprovince) {
-        this.visitprovince = visitprovince == null ? null : visitprovince.trim();
+        this.visitprovince = visitprovince;
     }
 
     public String getVisitcity() {
@@ -68,7 +69,7 @@ public class Visit {
     }
 
     public void setVisitcity(String visitcity) {
-        this.visitcity = visitcity == null ? null : visitcity.trim();
+        this.visitcity = visitcity;
     }
 
     public String getVisithostname() {
@@ -76,7 +77,7 @@ public class Visit {
     }
 
     public void setVisithostname(String visithostname) {
-        this.visithostname = visithostname == null ? null : visithostname.trim();
+        this.visithostname = visithostname;
     }
 
     public String getVisitos() {
@@ -84,15 +85,15 @@ public class Visit {
     }
 
     public void setVisitos(String visitos) {
-        this.visitos = visitos == null ? null : visitos.trim();
+        this.visitos = visitos;
     }
 
-    public String getVisittime() {
+    public Date getVisittime() {
         return visittime;
     }
 
-    public void setVisittime(String visittime) {
-    	this.visittime = visittime.substring(0,visittime.length()-2);
+    public void setVisittime(Date visittime) {
+    	this.visittime = visittime;
     }
 
     public int getCount() {

@@ -34,12 +34,12 @@
     position:relative;
     width: 35px;
     height: 35px;
-    padding-top: 5px;
-    border-radius: 8px;
+    /*padding-top: 5px;*/
+    border-radius: 2px;
 }
 .bottom_left_name{
     position:relative;
-    top: 5px;
+    /*top: 5px;*/
 }
 .img_content{
     position:relative;
@@ -100,4 +100,128 @@ a:hover {
 }
 a:active {
     text-decoration: none;
+}
+
+/*----------------------------- 仪表盘 -----------------------------*/
+.admin-h1 h1 {
+    font-size: 24px;
+}
+.ybp-user {
+    background-color: #00c0ef;
+    color: #fff;
+    border-radius: 2px;
+    position: relative;
+    display: block;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+.ybp-user>.inner {
+    padding: 10px;
+}
+.ybp-user h3 {
+    font-size: 38px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    white-space: nowrap;
+    padding: 0;
+}
+.ybp-user p {
+    font-size: 15px;
+    margin: 0 0 10px;
+}
+.ybp-user>.small-box-footer {
+    position: relative;
+    text-align: center;
+    padding: 3px 0;
+    color: #fff !important;
+    display: block;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.05);
+    text-decoration: none;
+}
+.ybp-user>.small-box-footer:hover {
+    background: rgba(0, 0, 0, 0.27);
+}
+
+.ybp-article {
+    background-color: #00a65a;
+}
+.ybp-plate {
+    background-color: #f39c12;
+}
+.ybp-visit {
+    background-color: #dd4b39;
+}
+
+/* 排行榜 */
+.ybp-phb {
+    background-color: #fff;
+    border-top: 3px solid #00c0ef;
+    border-radius: 2px;
+    position: relative;
+    display: block;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+.ybp-phb h4 {
+    margin: 10px 0 10px 10px;
+}
+.ybp-phb table {
+    width: 98%;
+    margin: 0 0 0 1%;
+}
+.ybp-phb th, .fwjl th, .bkgl th {
+    height: 45px;
+}
+.ybp-phb td, .fwjl td, .bkgl td {
+    height: 40px;
+}
+
+/* 新注册用户 */
+.ybp-newuser {
+    background-color: #fff;
+    border-top: 3px solid #dd4b39;
+    border-radius: 2px;
+    position: relative;
+    display: block;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+.ybp-newuser h4 {
+    margin: 10px 0 10px 10px;
+}
+.users-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.users-list>li {
+    width: 25%;
+    float: left;
+    padding: 10px;
+    text-align: center;
+}
+.users-list>li img {
+    border-radius: 50%;
+    max-width: 100%;
+    height: auto;
+}
+.users-list-name {
+    font-weight: 600;
+    color: #444;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.users-list-date {
+    color: #999;
+    font-size: 12px;
+}
+.users-list-name, .users-list-date {
+    display: block;
+}
+/*----------------------------- 仪表盘-end -----------------------------*/
+
+.layui-layer-btn .layui-layer-btn0 {
+    color: #fff !important;
 }

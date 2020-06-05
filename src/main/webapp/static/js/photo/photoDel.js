@@ -1,51 +1,51 @@
 /*相册删除*/
 function photoProDel(fid) {
-    var APP_PATH = document.getElementById("APP_PATH").value;
-    var userid = document.getElementById("session_userid").value;
-
     $.ajax({
-        url: APP_PATH + "/photoProController/deletePhotoPro?fid=" + fid,
-        type: "post",
+        url: APP_PATH + "/api/rest/nanshengbbs/v3.0/photoPro/deletePhotoPro?fid=" + fid,
+        type: "delete",
         dataType: "json",
-        success: function (result) {
-            if (result.resultCode == 200){
+        success: function (data) {
+            // 状态码
+            var code = data.code;
+            // 提示信息
+            var msg = data.msg;
+            if (code == 200) {
                 //隐藏删除相册
-                $("#showPhoto_Fid"+fid).hide();
-                layer.msg("成功");
-            } else {
-                layer.msg("失败",{icon: 7});
+                $("#showPhoto_Fid_" + fid).hide();
+                layer.msg(msg);
+            } else if (code == 500) {
+                layer.msg(msg, {icon: 5});
             }
         },
         error: function () {
-            layer.msg("异常！", {icon: 5});
+            layer.msg("出错！", {icon: 5});
         }
-
     });
-};
+}
 
 /*照片删除*/
 function tbPhotoDel(xid) {
-    var APP_PATH = document.getElementById("APP_PATH").value;
-    var userid = document.getElementById("session_userid").value;
-
     $.ajax({
         url: APP_PATH + "/tbPhotoController/deleteTbPhoto/" + xid,
-        type: "post",
+        type: "delete",
         dataType: "json",
-        success: function (result) {
-            if (result.resultCode == 200){
+        success: function (data) {
+            // 状态码
+            var code = data.code;
+            // 提示信息
+            var msg = data.msg;
+            if (code == 200) {
                 //隐藏删除相册
-                $("#showPhoto_Xid"+xid).hide();
-                layer.msg("成功");
-            } else {
-                layer.msg("失败",{icon: 7});
+                $("#showPhoto_Xid_" + xid).hide();
+                layer.msg(msg);
+            } else if (code == 500) {
+                layer.msg(msg, {icon: 5});
             }
         },
         error: function () {
-            layer.msg("异常！", {icon: 5});
+            layer.msg("出错！", {icon: 5});
         }
-
     });
-};
+}
 
 

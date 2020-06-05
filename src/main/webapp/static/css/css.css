@@ -7,6 +7,18 @@ body {
     height: 40px;
     top: -10px;
 }
+.head_userPhoto {
+    position: relative;
+    top: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+li.dropdown.head_login {
+    height: 50px;
+}
+
 /*.myself_img{*/
 /*    position: relative;*/
 /*    left: 20px;*/
@@ -38,18 +50,18 @@ body {
     position:relative;
     width: 35px;
     height: 35px;
-    padding-top: 5px;
-    border-radius: 8px;
+    /*padding-top: 5px;*/
+    border-radius: 2px;
 }
 .bottom_left_name{
     position:relative;
-    top: 5px;
+    /*top: 5px;*/
 }
 .img_content{
     position:relative;
     width: 100%;
     height: 100%;
-    border-radius: 3px;
+    border-radius: 2px;
 }
 /*.img_right_logo{*/
 /*    position:relative;*/
@@ -61,19 +73,6 @@ body {
     width: 70%;
     height: 70%;
 }
-
-
-
-
-.attention{ margin-top:20px;height:33px;line-height:35px;overflow:hidden;padding-left:10px;}
-.attention a {float:left;overflow:hidden;}
-.attention a:hover {padding-top:35px;}
-.attention .button2 {display:block;margin-top:-35px;}
-
-.attention_content{ height:33px;line-height:35px;overflow:hidden;padding-left:10px;}
-.attention_content a {float:left;overflow:hidden;}
-.attention_content a:hover {padding-top:35px;}
-.attention_content .button2 {display:block;margin-top:-35px;}
 
 .collect_start{
 	position:relative;
@@ -149,9 +148,22 @@ a:active {
     text-decoration: none;
 }
 
-#myself_article_titles:hover, #huifu_article_titles:hover, #other_article_titles:hover, #listArticle_titles:hover{
+#myself_article_titles:hover, #huifu_article_titles:hover, #other_article_titles:hover, #listArticle_titles:hover, #listArticle_sum:hover{
     color: #006493;
 }
 #myself_article_content:hover, #huifu_article_content:hover, #other_article_content:hover, #listArticle_fcontent:hover{
     color: #848484;
+}
+
+/* 版本说明 */
+.popover.right {
+    margin-left: 12px;
+}
+.popover {
+    border-radius: 2px;
+    border: 1px solid #00000012;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.11);
+}
+.popover-title {
+    background-color: #fff;
 }

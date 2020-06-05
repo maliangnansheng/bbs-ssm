@@ -1,15 +1,24 @@
 package com.liang.bean;
 
+import java.util.Date;
+
 public class Via {
-    private Integer userid;
-
+    // 用户id
+    private String userid;
+    // 用户头像名
     private String photo;
+    // 用户头像更新时间
+    private Date updateTime;
 
-    public Integer getUserid() {
+	public Via() {
+		super();
+	}
+
+    public String getUserid() {
         return userid;
     }
 
-    public void setUserid(Integer userid) {
+    public void setUserid(String userid) {
         this.userid = userid;
     }
 
@@ -18,22 +27,23 @@ public class Via {
     }
 
     public void setPhoto(String photo) {
-        this.photo = photo == null ? null : photo.trim();
+        this.photo = photo;
     }
 
-	public Via() {
-		super();
-	}
+    public Date getUpdateTime() {
+        return updateTime;
+    }
 
-	public Via(Integer userid, String photo) {
-		super();
-		this.userid = userid;
-		this.photo = photo;
-	}
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 
-	@Override
-	public String toString() {
-		return "Via [userid=" + userid + ", photo=" + photo + "]";
-	}
-    
+    @Override
+    public String toString() {
+        return "Via{" +
+                "userid='" + userid + '\'' +
+                ", photo='" + photo + '\'' +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

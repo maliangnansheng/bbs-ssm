@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>南生论坛-帖子修改</title>
+<title>南生论坛-文章修改</title>
 <%
 	pageContext.setAttribute("APP_PATH", request.getContextPath());
 %>
@@ -13,7 +13,7 @@
 <body>
 	<!-- 首页-头部 -->
 	<jsp:include page="/head/head.jsp"></jsp:include>
-	<!-- 首页-修改帖子 -->
+	<!-- 首页-修改文章 -->
 	<jsp:include page="/content/articleEdit.jsp"></jsp:include>
 	<!-- 首页-基本信息设置 -->
 	<jsp:include page="/head/setup.jsp"></jsp:include>

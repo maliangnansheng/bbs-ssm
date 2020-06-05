@@ -1,30 +1,23 @@
 package com.liang.dao;
 
-
 import com.liang.bean.TbPhoto;
 
 import java.util.List;
 
 public interface TbPhotoMapper {
 
-    //删除某一张照片
-    int deleteByPrimaryKey(Integer xid);
+    // 上传照片
+    void insert(TbPhoto record);
 
-    //上传照片
-    int insert(TbPhoto record);
+    // 删除某一张照片
+    void deleteByKey(String xid);
 
-    int insertSelective(TbPhoto record);
+    // 删除相册对应的照片
+    void deleteByFid(String fid);
 
     // 按xid查询照片信息
-    TbPhoto selectByPrimaryKey(Integer xid);
+    TbPhoto selectTbPhotoByKey(String xid);
 
-    int updateByPrimaryKeySelective(TbPhoto record);
-
-    int updateByPrimaryKey(TbPhoto record);
-
-    //获取相册分类下的对应的照片
-	List<TbPhoto> selectByFidAndUserid(TbPhoto tbPhoto);
-
-	//删除相册对应的照片
-	void deleteByFid(int fid);
+    // 获取相册分类下的对应的照片
+	List<TbPhoto> selectTbPhotoByFU(TbPhoto tbPhoto);
 }
