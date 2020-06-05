@@ -45,11 +45,12 @@
 
 如果可以帮忙点一次`Star`和`Fork`
 
-| 版本号 | 下载地址                                                     | 更新说明                                                     |   时间    | 展示                                                         |
-| :----: | :----------------------------------------------------------- | :----------------------------------------------------------- | :-------: | ------------------------------------------------------------ |
-| `v2.6` | github：[bbs-ssmv2.6](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.6/bbs-ssmv2.6.zip)<br/>gitee：[bbs-ssmv2.6](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322557/download) | 支持Markdown、新增分享功能、<br/>新增文章详情页面、首页文章显示<br/>简约化 | `2019.11` | [v2.6](http://blog.nanshengbbs.top/2020/01/06/南生论坛页面静态展示v2-6/) |
-| `v2.0` | github：[bbs-ssmv2.0](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.0/bbs-ssmv2.0.zip)<br/>gitee：[bbs-ssmv2.0](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322579/download) | 整体异步实现、新增统计饼图、<br/>优化人机交互、实现分页、新增<br/>相册功能、新增月周日访问记录 | `2019.05` | [v2.0](http://blog.nanshengbbs.top/2019/12/19/南生论坛页面静态展示/) |
-| `v1.0` | github：[bbs-ssmv1.0](https://github.com/maliangnansheng/bbs-ssm/releases/download/v1.0/bbs-ssmv1.0.zip)<br/>gitee：[bbs-ssmv1.0](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322556/download) | 登录【用户系统】可以：发帖、<br/>修改帖子、删除帖子、评论、删<br/>除评论、修改个人信息、关注、<br/>收藏<br/>登录【管理系统】可以：管<br/>理用户、管理帖子、管理板块、<br/>访问记录 | `2018.08` | [v1.0](http://blog.nanshengbbs.top/2019/12/19/南生论坛页面静态展示/) |
+|  版本号  | 下载地址                                                     | 详情说明                                                     |   时间    |
+| :------: | :----------------------------------------------------------- | :----------------------------------------------------------- | :-------: |
+| `v2.8.*` | github：[bbs-ssmv2.8.2](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.8.2/bbs-ssmv2.8.2.zip)<br/>gitee：[bbs-ssmv2.8.2](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/409400/download) | [v2.8.2](http://www.nanshengbbs.top/article.jsp?fid=20200604232448-f3a5d3d45d054d12ab3adb34103fb420)<br>[v2.8.1](http://www.nanshengbbs.top/article.jsp?fid=20200501225212-02c54864c9864f85a583630c6e687fde) | `2020.06` |
+|  `v2.6`  | github：[bbs-ssmv2.6](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.6/bbs-ssmv2.6.zip)<br/>gitee：[bbs-ssmv2.6](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322557/download) | [v2.6](http://blog.nanshengbbs.top/2020/01/06/南生论坛页面静态展示v2-6/) | `2019.11` |
+|  `v2.0`  | github：[bbs-ssmv2.0](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.0/bbs-ssmv2.0.zip)<br/>gitee：[bbs-ssmv2.0](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322579/download) | [v2.0](http://blog.nanshengbbs.top/2019/12/19/南生论坛页面静态展示/) | `2019.05` |
+|  `v1.0`  | github：[bbs-ssmv1.0](https://github.com/maliangnansheng/bbs-ssm/releases/download/v1.0/bbs-ssmv1.0.zip)<br/>gitee：[bbs-ssmv1.0](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322556/download) | [v1.0](http://blog.nanshengbbs.top/2019/12/19/南生论坛页面静态展示/) | `2018.08` |
 
 ## 项目源码
 
@@ -74,9 +75,7 @@
 
 ### 通用操作
 
-- 通过git将该项目(bbs-ssm)`clone`到本地
-
-  ![](picture/clone.png)
+- 下载自己需要的版本
 
 - 将bbs_test.sql导入MySQL数据库：
 
@@ -112,7 +111,7 @@
 
   等待Maven下载依赖包完成...
 
-- 修改项目部署路径
+- 修改项目部署路径`（v2.8.2及其以上不用操作这一步）`
 
   ![](picture/tomcat.png)
 
@@ -142,7 +141,7 @@
 
   等待Maven下载依赖包完成...
 
-- 修改项目部署路径
+- 修改项目部署路径`（v2.8.2及其以上不用操作这一步）`
 
   ![](/picture/idea003.png)
 
@@ -162,24 +161,12 @@
 
   ![image](picture/用户-登录v2.6.png)
 
-  `手机上的效果：`
-
-  <img src="picture/手机-登录v2.6.jpg" alt="image" width="30%;" />
-
 - **首页-登录后**
 
   ![image](picture/用户-首页-登陆后v2.6.png)
 
-  `手机上的效果：`
-
-  <img src="picture/手机-首页-登录后v2.6.jpg" alt="image" width="30%;" />
-
 - **首页-文章详情**
   ![image](picture/用户-文章详情v2.6.png)
-  
-  `手机上的效果：`
-  
-  <img src="picture/手机-文章详情v2.6.jpg" alt="image" width="30%;" />
 
 [查看全部](http://blog.nanshengbbs.top/2020/01/06/南生论坛页面静态展示v2-6/) 
 
