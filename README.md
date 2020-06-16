@@ -19,27 +19,21 @@
 
 - 用户系统-功能结构图
 
-  ![](picture/用户系统功能结构图.png)
+  ![](http://76.nanshengbbs.top/bbs-用户系统功能结构图.png)
 
   `注：发布的帖子需要管理员“审核通”过后才能在首页显示，可以在“我的主页”查看帖子状态`
 
 - 管理系统-功能结构图
 
-  ![](picture/管理系统功能结构图.png)
+  ![](http://76.nanshengbbs.top/bbs-管理系统功能结构图.png)
 
 ## 数据库获取or疑问解答
 
 > 需要数据库或者有疑问的同学加作者`QQ：924818949`
 
-## APP下载
+## 南生论坛APP
 
-### 南生论坛APP
-
-![](/picture/南生论坛下载（安卓-IOS-APP）.png)
-
-### 南生博客APP
-
-![](/picture/南生博客下载（安卓-IOS-APP）.png)
+![](http://76.nanshengbbs.top/bbs-南生论坛下载（安卓-IOS-APP）.png)
 
 ## 版本更新
 
@@ -105,19 +99,19 @@
 
 - 使用eclipse将ssm-bbs以maven的方式导入
 
-  ![](picture/maven1.png)
+  ![](http://76.nanshengbbs.top/bbs-maven1.png)
 
-  ![](picture/maven2.png)
+  ![](http://76.nanshengbbs.top/bbs-maven2.png)
 
   等待Maven下载依赖包完成...
 
 - 修改项目部署路径`（v2.8.2及其以上不用操作这一步）`
 
-  ![](picture/tomcat.png)
+  ![](http://76.nanshengbbs.top/bbs-tomcat.png)
 
 - 启动项目
 
-  ![](picture/run.png)
+  ![](http://76.nanshengbbs.top/bbs-run.png)
 
   可以正常访问与操作了...真好
 
@@ -133,23 +127,23 @@
 
 - 使用idea将ssm-bbs导入
 
-  ![](picture/idea001.png)
+  ![](http://76.nanshengbbs.top/bbs-idea001.png)
 
   点击“Enable Auto-Import”让其自动下载依赖包
 
-  ![](picture/idea002.png)
+  ![](http://76.nanshengbbs.top/bbs-idea002.png)
 
   等待Maven下载依赖包完成...
 
 - 修改项目部署路径`（v2.8.2及其以上不用操作这一步）`
 
-  ![](/picture/idea003.png)
+  ![](/http://76.nanshengbbs.top/bbs-idea003.png)
 
-  ![](picture/idea004.png)
+  ![](http://76.nanshengbbs.top/bbs-idea004.png)
 
 - 启动项目
 
-  ![](picture/idea005.png)
+  ![](http://76.nanshengbbs.top/bbs-idea005.png)
 
   可以正常访问与操作了...真好
 
@@ -159,14 +153,14 @@
 
 - **登录**
 
-  ![image](picture/用户-登录v2.6.png)
+  ![image](http://76.nanshengbbs.top/bbs-用户-登录v2.6.png)
 
 - **首页-登录后**
 
-  ![image](picture/用户-首页-登陆后v2.6.png)
+  ![image](http://76.nanshengbbs.top/bbs-用户-首页-登陆后v2.6.png)
 
 - **首页-文章详情**
-  ![image](picture/用户-文章详情v2.6.png)
+  ![image](http://76.nanshengbbs.top/bbs-用户-文章详情v2.6.png)
 
 [查看全部](http://blog.nanshengbbs.top/2020/01/06/南生论坛页面静态展示v2-6/) 
 
