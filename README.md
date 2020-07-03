@@ -1,7 +1,7 @@
 ## 关于项目
 
 - 南生论坛基于`SSM`框架，自适应手机端和电脑端，界面简洁美观，功能完善。分为[用户系统](http://www.nanshengbbs.top)和[管理系统](http://www.nanshengbbs.top/admin)两部分
-- 该论坛适合`初学SSM`的同学学习。主要涉及技术包括`Spring 、SpringMVC 、MyBatis 、MySQL 、Bootstrap 、jQuery 、Ajax 、Layer、ECharts、Editor.md`
+- 该论坛适合`初学SSM`的同学学习。主要涉及技术包括`Spring 、SpringMVC 、MyBatis 、Redis、MySQL 、Bootstrap 、jQuery 、Ajax 、Layer、ECharts、Editor.md`
 
 ## 在线演示
 
@@ -57,11 +57,11 @@
 
 ## 技术栈
 
-> `Spring 、SpringMVC 、MyBatis 、MySQL 、Bootstrap 、jQuery 、Ajax 、Layer、ECharts、Editor.md`
+> `Spring 、SpringMVC 、MyBatis 、Redis、MySQL 、Bootstrap 、jQuery 、Ajax 、Layer、ECharts、Editor.md`
 
 ## 我的环境
 
-> `jdk1.8 、tomcat9 、mysql5.7 、maven3.5.4 、IntelliJ IDEA 2018.3 x64（eclipse4.7.1a）`
+> `jdk1.8 、tomcat9 、mysql8.0 、maven3.6.0 、IntelliJ IDEA 2019.3.1 x64（eclipse4.7.1a）`
 
 ## 引用本项目流程
 
