@@ -19,21 +19,17 @@
 
 - 用户系统-功能结构图
 
-  ![](http://76.nanshengbbs.top/bbs-用户系统功能结构图.png)
+  ![](http://76.nanshengbbs.top/bbs-用户系统功能结构图2.8.2-2.png)
 
   `注：发布的帖子需要管理员“审核通”过后才能在首页显示，可以在“我的主页”查看帖子状态`
 
 - 管理系统-功能结构图
 
-  ![](http://76.nanshengbbs.top/bbs-管理系统功能结构图.png)
+  ![](http://76.nanshengbbs.top/bbs-管理系统功能结构图2.8.2.png)
 
 ## 数据库获取or疑问解答
 
 > 需要数据库或者有疑问的同学加作者`QQ：924818949`
-
-## 南生论坛APP
-
-![](http://76.nanshengbbs.top/bbs-南生论坛下载（安卓-IOS-APP）.png)
 
 ## 版本更新
 
@@ -151,16 +147,25 @@
 
 ### 用户系统
 
-- **登录**
+- **首页**
 
-  ![image](http://76.nanshengbbs.top/bbs-用户-登录v2.6.png)
+  ![image](http://76.nanshengbbs.top/bbs-用户-首页v2.8.2.png)
 
-- **首页-登录后**
+- **文章详情**
 
-  ![image](http://76.nanshengbbs.top/bbs-用户-首页-登陆后v2.6.png)
+  ![image](http://76.nanshengbbs.top/bbs-用户-文章详情v2.8.2.png)
 
-- **首页-文章详情**
-  ![image](http://76.nanshengbbs.top/bbs-用户-文章详情v2.6.png)
+- **闲聊**
+  ![image](http://76.nanshengbbs.top/bbs-用户-闲聊v2.8.2.png)
+  
+- **毒鸡汤**
+  ![image](http://76.nanshengbbs.top/bbs-用户-毒鸡汤v2.8.2.png)
+
+### 管理系统
+
+- **仪表盘**
+
+  ![image](http://76.nanshengbbs.top/bbs-管理员-仪表盘v2.8.2.png)
 
 [查看全部](http://blog.nanshengbbs.top/2020/01/06/南生论坛页面静态展示v2-6/) 
 
