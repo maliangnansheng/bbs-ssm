@@ -1,3 +1,10 @@
+# Nan's BBS 南生论坛
+
+[![](https://img.shields.io/badge/Author-马亮南生-orange.svg)](http://blog.nanshengbbs.top/)
+[![](https://img.shields.io/badge/version-2.8.2-brightgreen.svg)](https://github.com/maliangnansheng/bbs-ssm)
+[![GitHub stars](https://img.shields.io/github/stars/maliangnansheng/bbs-ssm.svg?style=social&label=Stars)](https://github.com/maliangnansheng/bbs-ssm)
+[![GitHub forks](https://img.shields.io/github/forks/maliangnansheng/bbs-ssm.svg?style=social&label=Fork)](https://github.com/Exrick/xpay)
+
 ## 关于项目
 
 - 南生论坛基于`SSM`框架，自适应手机端和电脑端，界面简洁美观，功能完善。分为[用户系统](http://www.nanshengbbs.top)和[管理系统](http://www.nanshengbbs.top/admin)两部分
@@ -13,7 +20,14 @@
 
 > 为了避免大家删除数据，暂时不给后台账号，望理解！
 >
-> 作者`QQ：924818949`
+
+## 数据库获取or疑问解答
+
+> 需要数据库或者有疑问的同学加：
+>
+> 作者QQ（更贴心）：`924818949`
+>
+> 南生论坛交流群 `1065307159` [![](http://pub.idqqimg.com/wpa/images/group.png)](https://jq.qq.com/?wv=1027&k=zgmikQha)
 
 ## 功能结构
 
@@ -26,10 +40,6 @@
 - 管理系统-功能结构图
 
   ![](http://76.nanshengbbs.top/bbs-管理系统功能结构图2.8.2.png)
-
-## 数据库获取or疑问解答
-
-> 需要数据库或者有疑问的同学加作者`QQ：924818949`
 
 ## 版本更新
 
