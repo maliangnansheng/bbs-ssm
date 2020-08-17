@@ -140,7 +140,7 @@
 
 - 修改项目部署路径`（v2.8.2及其以上不用操作这一步）`
 
-  ![](/http://76.nanshengbbs.top/bbs-idea003.png)
+  ![](http://76.nanshengbbs.top/bbs-idea003.png)
 
   ![](http://76.nanshengbbs.top/bbs-idea004.png)
 
