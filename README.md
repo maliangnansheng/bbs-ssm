@@ -23,8 +23,7 @@
 
 ## 获取完整源码 + SQL脚本等
 
-- [获取 南生论坛（部署教程 + 完整源码 + SQL脚本 + 15000字的设计文档-论文）](http://pay.nanshengbbs.top/pay?url=nsbbs)
-
+- [获取 南生论坛（SQL脚本）- ￥19](http://pay.nanshengbbs.top/pay?url=nsbbs_sql)
 - [其它项目](http://www.nanshengbbs.top/paid.jsp)
 
 ## 疑问解答
