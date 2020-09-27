@@ -28,7 +28,6 @@
 > 为了有效防止他人继续恶意使用，故现在【SQL脚本】需要少许有偿才能获得，这完全是无奈之举`（5月之前完全开源）`
 
 - [获取 南生论坛（SQL脚本）- ￥19](http://pay.nanshengbbs.top/pay?url=nsbbs_sql)
-- [其它项目](http://www.nanshengbbs.top/paid.jsp)
 
 ## 疑问解答
 
