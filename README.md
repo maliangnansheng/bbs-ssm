@@ -14,7 +14,7 @@
 
 `手机上也有不错的展示效果...`
 
-用户系统：[http://www.nanshengbbs.top](http://www.nanshengbbs.top)
+用户系统：[http://www.nanshengbbs.top](http://www.nanshengbbs.top) - (测试账号：`椿/123456`；也可自己注册)
 
 管理系统：[http://www.nanshengbbs.top/admin](http://www.nanshengbbs.top/admin)    **↓↓↓**
 
