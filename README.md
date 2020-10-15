@@ -21,18 +21,18 @@
 > 为了避免大家删除数据，暂时不给后台账号，望理解！
 >
 
-## 获取SQL脚本
+## 获取SQL脚本or疑问解答
 
-> 由于最近发现有人恶意售卖该开源项目，所以我将数据库【隐藏】了，望理解
->
-> 为了有效防止他人继续恶意使用，故现在【SQL脚本】需要少许有偿才能获得，这完全是无奈之举`（5月之前完全开源）`
+> <b style="color:red">需要获取SQL脚本or有疑问的同学加作者QQ：`924818949`</b>
 
-- [获取 南生论坛（SQL脚本）- ￥19](http://pay.nanshengbbs.top/pay?url=nsbbs_sql)
-- [先用一分钱测试下 - ￥0.01](http://pay.nanshengbbs.top/pay)
+## 推荐理由
 
-## 疑问解答
-
-> 有疑问的同学加作者QQ：`924818949`
+- 注释十分详细、逻辑清晰、界面简洁美观、功能较完善、代码冗余度低、命名规范
+- 支持Markdown、Redis缓存技术、QQ分享文章
+- 图片/视频文件上七牛云、专注阅读
+- ECharts图表化展示、人机交互、异步加载、分页加载、
+- 作者每天晚上统一解决你遇到的技术问题和困难
+- ...
 
 ## 功能结构
 
@@ -70,9 +70,9 @@
 
 > `Spring 、SpringMVC 、MyBatis 、Redis、MySQL 、Bootstrap 、jQuery 、Ajax 、Layer、ECharts、Editor.md`
 
-## 我的环境
+## 运行环境
 
-> `jdk1.8 、tomcat9 、mysql8.0 、maven3.6.0 、IntelliJ IDEA 2019.3.1 x64（eclipse4.7.1a）`
+> `jdk1.8 、tomcat9 、mysql8.0 、maven3.6.0 、IntelliJ IDEA 2020.2.3 x64`
 
 ## 引用本项目流程
 
