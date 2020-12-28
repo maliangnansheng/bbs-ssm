@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
 
+/**
+ * master分支测试
+ */
 public class Admin {
 	// 管理员id
 	private String aid;
