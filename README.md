@@ -5,6 +5,10 @@
 [![GitHub stars](https://img.shields.io/github/stars/maliangnansheng/bbs-ssm.svg?style=social&label=Stars)](https://github.com/maliangnansheng/bbs-ssm)
 [![GitHub forks](https://img.shields.io/github/forks/maliangnansheng/bbs-ssm.svg?style=social&label=Fork)](https://github.com/maliangnansheng/bbs-ssm)
 
+## 南生论坛V3.0.0（SpringBoot+Vue）上线了
+[南生论坛v3.0.0](http://bbs.nanshengbbs.top/ "南生论坛v3.0.0")
+欢迎大家使用测试......
+
 ## 关于项目
 
 - 南生论坛基于`SSM`框架，自适应手机端和电脑端，界面简洁美观，功能完善。分为[用户系统](http://www.nanshengbbs.top)和[管理系统](http://www.nanshengbbs.top/admin)两部分
