@@ -1,4 +1,4 @@
-# Nan's BBS 南生论坛
+# Nan's BBS 南生论坛（SSM）
 
 [![](https://img.shields.io/badge/Author-马亮南生-orange.svg)](http://blog.nanshengbbs.top/)
 [![](https://img.shields.io/badge/version-2.8.2-brightgreen.svg)](https://github.com/maliangnansheng/bbs-ssm)
