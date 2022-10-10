@@ -29,7 +29,9 @@
 
 ## 获取SQL脚本or疑问解答
 
-> 需要获取SQL脚本or有疑问的童鞋加作者QQ：`924818949`
+> 需要获取SQL脚本or有疑问的童鞋加作者QQ：`924818949` => **有偿获取SQL**（你的捐赠将用于项目后期的维护和更新...）
+>
+> 无法接受有偿的童鞋，去完全开源的项目：[我的另一个基于【SpringBoot+Vue】的论坛项目](https://github.com/maliangnansheng/bbs-springboot)
 
 ## 推荐理由
 
