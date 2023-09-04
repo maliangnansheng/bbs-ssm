@@ -2,28 +2,28 @@
 
 # Nan's BBS 南生论坛（SSM）
 
-[![](https://img.shields.io/badge/Author-马亮南生-orange.svg)](http://blog.nanshengbbs.top/)
+[![](https://img.shields.io/badge/Author-马亮南生-orange.svg)](https://blog.nanshengbbs.top/)
 [![](https://img.shields.io/badge/version-2.8.2-brightgreen.svg)](https://github.com/maliangnansheng/bbs-ssm)
 [![GitHub stars](https://img.shields.io/github/stars/maliangnansheng/bbs-ssm.svg?style=social&label=Stars)](https://github.com/maliangnansheng/bbs-ssm)
 [![GitHub forks](https://img.shields.io/github/forks/maliangnansheng/bbs-ssm.svg?style=social&label=Fork)](https://github.com/maliangnansheng/bbs-ssm)
 
 ## 南生论坛V3.0.0（SpringBoot+Vue）上线了
 
-[南生论坛v3.0.0](http://bbs.nanshengbbs.top/ "南生论坛v3.0.0")
+[南生论坛v3.0.0](https://bbs.nanshengbbs.top/ "南生论坛v3.0.0")
 欢迎大家使用......
 
 ## 关于项目
 
-- 南生论坛基于`SSM`框架，自适应手机端和电脑端，界面简洁美观，功能完善。分为[用户系统](http://www.nanshengbbs.top)和[管理系统](http://www.nanshengbbs.top/admin)两部分
+- 南生论坛基于`SSM`框架，自适应手机端和电脑端，界面简洁美观，功能完善。分为[用户系统](https://www.nanshengbbs.top)和[管理系统](https://www.nanshengbbs.top/admin)两部分
 - 该论坛适合`初学SSM`童鞋学习。主要涉及技术包括`Spring 、SpringMVC 、MyBatis 、Redis、MySQL 、Bootstrap 、jQuery 、Ajax 、Layer、ECharts、Editor.md`  
 
 ## 在线演示
 
 `手机上也有不错的展示效果...`
 
-用户系统：[http://www.nanshengbbs.top](http://www.nanshengbbs.top) - (测试账号：`椿/123456`；也可自己注册)
+用户系统：[https://www.nanshengbbs.top](https://www.nanshengbbs.top) - (测试账号：`椿/123456`；也可自己注册)
 
-管理系统：[http://www.nanshengbbs.top/admin](http://www.nanshengbbs.top/admin)    **↓↓↓**
+管理系统：[https://www.nanshengbbs.top/admin](https://www.nanshengbbs.top/admin)    **↓↓↓**
 
 > 为了避免大家删除数据，暂时不给后台账号，望理解！
 
@@ -46,13 +46,13 @@
 
 - 用户系统-功能结构图
 
-  ![](http://76.nanshengbbs.top/bbs-用户系统功能结构图2.8.2-2.png)
+  ![](https://76.nanshengbbs.top/bbs-用户系统功能结构图2.8.2-2.png)
 
   `注：发布的帖子需要管理员“审核通”过后才能在首页显示，可以在“我的主页”查看帖子状态`
 
 - 管理系统-功能结构图
 
-  ![](http://76.nanshengbbs.top/bbs-管理系统功能结构图2.8.2.png)
+  ![](https://76.nanshengbbs.top/bbs-管理系统功能结构图2.8.2.png)
 
 ## 版本更新
 
@@ -60,10 +60,10 @@
 
 |  版本号  | 下载地址                                                     | 详情说明                                                     |   时间    |
 | :------: | :----------------------------------------------------------- | :----------------------------------------------------------- | :-------: |
-| `v2.8.*` | github：[bbs-ssmv2.8.2](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.8.2/bbs-ssmv2.8.2.zip)<br/>gitee：[bbs-ssmv2.8.2](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/409400/download) | [v2.8.2](http://bbs.nanshengbbs.top/detail/28)<br>[v2.8.1](http://bbs.nanshengbbs.top/detail/37) | `2020.06` |
-|  `v2.6`  | github：[bbs-ssmv2.6](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.6/bbs-ssmv2.6.zip)<br/>gitee：[bbs-ssmv2.6](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322557/download) | [v2.6](http://bbs.nanshengbbs.top/detail/27)                 | `2019.11` |
-|  `v2.0`  | github：[bbs-ssmv2.0](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.0/bbs-ssmv2.0.zip)<br/>gitee：[bbs-ssmv2.0](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322579/download) | [v2.0](http://bbs.nanshengbbs.top/detail/26)                 | `2019.05` |
-|  `v1.0`  | github：[bbs-ssmv1.0](https://github.com/maliangnansheng/bbs-ssm/releases/download/v1.0/bbs-ssmv1.0.zip)<br/>gitee：[bbs-ssmv1.0](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322556/download) | [v1.0](http://bbs.nanshengbbs.top/detail/26)                 | `2018.0`  |
+| `v2.8.*` | github：[bbs-ssmv2.8.2](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.8.2/bbs-ssmv2.8.2.zip)<br/>gitee：[bbs-ssmv2.8.2](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/409400/download) | [v2.8.2](https://bbs.nanshengbbs.top/detail/28)<br>[v2.8.1](https://bbs.nanshengbbs.top/detail/37) | `2020.06` |
+|  `v2.6`  | github：[bbs-ssmv2.6](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.6/bbs-ssmv2.6.zip)<br/>gitee：[bbs-ssmv2.6](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322557/download) | [v2.6](https://bbs.nanshengbbs.top/detail/27)                 | `2019.11` |
+|  `v2.0`  | github：[bbs-ssmv2.0](https://github.com/maliangnansheng/bbs-ssm/releases/download/v2.0/bbs-ssmv2.0.zip)<br/>gitee：[bbs-ssmv2.0](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322579/download) | [v2.0](https://bbs.nanshengbbs.top/detail/26)                 | `2019.05` |
+|  `v1.0`  | github：[bbs-ssmv1.0](https://github.com/maliangnansheng/bbs-ssm/releases/download/v1.0/bbs-ssmv1.0.zip)<br/>gitee：[bbs-ssmv1.0](https://gitee.com/maliangnansheng/bbs-ssm/attach_files/322556/download) | [v1.0](https://bbs.nanshengbbs.top/detail/26)                 | `2018.0`  |
 
 ## 项目源码
 
@@ -118,19 +118,19 @@
 
 - 使用eclipse将ssm-bbs以maven的方式导入
 
-  ![](http://76.nanshengbbs.top/bbs-maven1.png)
+  ![](https://76.nanshengbbs.top/bbs-maven1.png)
 
-  ![](http://76.nanshengbbs.top/bbs-maven2.png)
+  ![](https://76.nanshengbbs.top/bbs-maven2.png)
 
   等待Maven下载依赖包完成...
 
 - 修改项目部署路径`（v2.8.2及其以上不用操作这一步）`
 
-  ![](http://76.nanshengbbs.top/bbs-tomcat.png)
+  ![](https://76.nanshengbbs.top/bbs-tomcat.png)
 
 - 启动项目
 
-  ![](http://76.nanshengbbs.top/bbs-run.png)
+  ![](https://76.nanshengbbs.top/bbs-run.png)
 
   可以正常访问与操作了...真好
 
@@ -138,7 +138,7 @@
 
 - IntelliJIDEA-tomcat在浏览器js乱码问题解决
 
-  [IntelliJIDEA-tomcat在浏览器js乱码问题解决](http://blog.nanshengbbs.top/2019/04/28/IntelliJIDEA-tomcat%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8js%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/)
+  [IntelliJIDEA-tomcat在浏览器js乱码问题解决](https://blog.nanshengbbs.top/2019/04/28/IntelliJIDEA-tomcat%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8js%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/)
 
 - 确保你安装了 Maven
 
@@ -146,23 +146,23 @@
 
 - 使用idea将ssm-bbs导入
 
-  ![](http://76.nanshengbbs.top/bbs-idea001.png)
+  ![](https://76.nanshengbbs.top/bbs-idea001.png)
 
   点击“Enable Auto-Import”让其自动下载依赖包
 
-  ![](http://76.nanshengbbs.top/bbs-idea002.png)
+  ![](https://76.nanshengbbs.top/bbs-idea002.png)
 
   等待Maven下载依赖包完成...
 
 - 修改项目部署路径`（v2.8.2及其以上不用操作这一步）`
 
-  ![](http://76.nanshengbbs.top/bbs-idea003.png)
+  ![](https://76.nanshengbbs.top/bbs-idea003.png)
 
-  ![](http://76.nanshengbbs.top/bbs-idea004.png)
+  ![](https://76.nanshengbbs.top/bbs-idea004.png)
 
 - 启动项目
 
-  ![](http://76.nanshengbbs.top/bbs-idea005.png)
+  ![](https://76.nanshengbbs.top/bbs-idea005.png)
 
   可以正常访问与操作了...真好
 
@@ -172,26 +172,26 @@
 
 - **首页**
 
-  ![image](http://76.nanshengbbs.top/bbs-用户-首页v2.8.2.png)
+  ![image](https://76.nanshengbbs.top/bbs-用户-首页v2.8.2.png)
 
 - **文章详情**
 
-  ![image](http://76.nanshengbbs.top/bbs-用户-文章详情v2.8.2.png)
+  ![image](https://76.nanshengbbs.top/bbs-用户-文章详情v2.8.2.png)
 
 - **闲聊**
-  ![image](http://76.nanshengbbs.top/bbs-用户-闲聊v2.8.2.png)
+  ![image](https://76.nanshengbbs.top/bbs-用户-闲聊v2.8.2.png)
 
 - **毒鸡汤**
-  ![image](http://76.nanshengbbs.top/bbs-用户-毒鸡汤v2.8.2.png)
+  ![image](https://76.nanshengbbs.top/bbs-用户-毒鸡汤v2.8.2.png)
 
 ### 管理系统
 
 - **仪表盘**
 
-  ![image](http://76.nanshengbbs.top/bbs-管理员-仪表盘v2.8.2.png)
+  ![image](https://76.nanshengbbs.top/bbs-管理员-仪表盘v2.8.2.png)
 
-[查看全部](http://blog.nanshengbbs.top/2020/07/08/南生论坛页面静态展示v2-8-2/) 
+[查看全部](https://blog.nanshengbbs.top/2020/07/08/南生论坛页面静态展示v2-8-2/) 
 
 **↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓**
 
- [前往查看南生论坛所有页面的展示效果](http://blog.nanshengbbs.top/2020/07/08/南生论坛页面静态展示v2-8-2/)
+ [前往查看南生论坛所有页面的展示效果](https://blog.nanshengbbs.top/2020/07/08/南生论坛页面静态展示v2-8-2/)
