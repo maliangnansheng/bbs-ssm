@@ -46,7 +46,7 @@
 
 - 用户系统-功能结构图
 
-  ![](https://76.nanshengbbs.top/bbs_ssm/bbs-用户系统功能结构图2.8.2-2.png)
+  ![](https://76.nanshengbbs.top/bbs_ssm/bbs-user2.8.2-3.png)
 
   `注：发布的帖子需要管理员“审核通”过后才能在首页显示，可以在“我的主页”查看帖子状态`
 
@@ -118,7 +118,7 @@
 
 - 使用eclipse将ssm-bbs以maven的方式导入
 
-  ![](https://76.nanshengbbs.top/bbs_ssm/bbs-maven1.png)
+  ![](https://76.nanshengbbs.top/bbs_ssm/bbs-maven001.png)
 
   ![](https://76.nanshengbbs.top/bbs_ssm/bbs-maven2.png)
 
