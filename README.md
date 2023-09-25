@@ -46,13 +46,13 @@
 
 - 用户系统-功能结构图
 
-  ![](https://76.nanshengbbs.top/bbs-用户系统功能结构图2.8.2-2.png)
+  ![](https://76.nanshengbbs.top/bbs_ssm/bbs-用户系统功能结构图2.8.2-2.png)
 
   `注：发布的帖子需要管理员“审核通”过后才能在首页显示，可以在“我的主页”查看帖子状态`
 
 - 管理系统-功能结构图
 
-  ![](https://76.nanshengbbs.top/bbs-管理系统功能结构图2.8.2.png)
+  ![](https://76.nanshengbbs.top/bbs_ssm/bbs-管理系统功能结构图2.8.2.png)
 
 ## 版本更新
 
@@ -118,19 +118,19 @@
 
 - 使用eclipse将ssm-bbs以maven的方式导入
 
-  ![](https://76.nanshengbbs.top/bbs-maven1.png)
+  ![](https://76.nanshengbbs.top/bbs_ssm/bbs-maven1.png)
 
-  ![](https://76.nanshengbbs.top/bbs-maven2.png)
+  ![](https://76.nanshengbbs.top/bbs_ssm/bbs-maven2.png)
 
   等待Maven下载依赖包完成...
 
 - 修改项目部署路径`（v2.8.2及其以上不用操作这一步）`
 
-  ![](https://76.nanshengbbs.top/bbs-tomcat.png)
+  ![](https://76.nanshengbbs.top/bbs_ssm/bbs-tomcat.png)
 
 - 启动项目
 
-  ![](https://76.nanshengbbs.top/bbs-run.png)
+  ![](https://76.nanshengbbs.top/bbs_ssm/bbs-run.png)
 
   可以正常访问与操作了...真好
 
@@ -146,23 +146,23 @@
 
 - 使用idea将ssm-bbs导入
 
-  ![](https://76.nanshengbbs.top/bbs-idea001.png)
+  ![](https://76.nanshengbbs.top/bbs_ssm/bbs-idea001.png)
 
   点击“Enable Auto-Import”让其自动下载依赖包
 
-  ![](https://76.nanshengbbs.top/bbs-idea002.png)
+  ![](https://76.nanshengbbs.top/bbs_ssm/bbs-idea002.png)
 
   等待Maven下载依赖包完成...
 
 - 修改项目部署路径`（v2.8.2及其以上不用操作这一步）`
 
-  ![](https://76.nanshengbbs.top/bbs-idea003.png)
+  ![](https://76.nanshengbbs.top/bbs_ssm/bbs-idea003.png)
 
-  ![](https://76.nanshengbbs.top/bbs-idea004.png)
+  ![](https://76.nanshengbbs.top/bbs_ssm/bbs-idea004.png)
 
 - 启动项目
 
-  ![](https://76.nanshengbbs.top/bbs-idea005.png)
+  ![](https://76.nanshengbbs.top/bbs_ssm/bbs-idea005.png)
 
   可以正常访问与操作了...真好
 
@@ -172,23 +172,23 @@
 
 - **首页**
 
-  ![image](https://76.nanshengbbs.top/bbs-用户-首页v2.8.2.png)
+  ![image](https://76.nanshengbbs.top/bbs_ssm/bbs-用户-首页v2.8.2.png)
 
 - **文章详情**
 
-  ![image](https://76.nanshengbbs.top/bbs-用户-文章详情v2.8.2.png)
+  ![image](https://76.nanshengbbs.top/bbs_ssm/bbs-用户-文章详情v2.8.2.png)
 
 - **闲聊**
-  ![image](https://76.nanshengbbs.top/bbs-用户-闲聊v2.8.2.png)
+  ![image](https://76.nanshengbbs.top/bbs_ssm/bbs-用户-闲聊v2.8.2.png)
 
 - **毒鸡汤**
-  ![image](https://76.nanshengbbs.top/bbs-用户-毒鸡汤v2.8.2.png)
+  ![image](https://76.nanshengbbs.top/bbs_ssm/bbs-用户-毒鸡汤v2.8.2.png)
 
 ### 管理系统
 
 - **仪表盘**
 
-  ![image](https://76.nanshengbbs.top/bbs-管理员-仪表盘v2.8.2.png)
+  ![image](https://76.nanshengbbs.top/bbs_ssm/bbs-管理员-仪表盘v2.8.2.png)
 
 [查看全部](https://blog.nanshengbbs.top/2020/07/08/南生论坛页面静态展示v2-8-2/) 
 
