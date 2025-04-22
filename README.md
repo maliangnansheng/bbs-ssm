@@ -14,16 +14,16 @@
 
 ## 关于项目
 
-- 南生论坛基于`SSM`框架，自适应手机端和电脑端，界面简洁美观，功能完善。分为[用户系统](https://www.nanshengbbs.top)和[管理系统](https://www.nanshengbbs.top/admin)两部分
+- 南生论坛基于`SSM`框架，自适应手机端和电脑端，界面简洁美观，功能完善。分为[用户系统](https://ssm.nanshengbbs.top)和[管理系统](https://ssm.nanshengbbs.top/admin)两部分
 - 该论坛适合`初学SSM`童鞋学习。主要涉及技术包括`Spring 、SpringMVC 、MyBatis 、Redis、MySQL 、Bootstrap 、jQuery 、Ajax 、Layer、ECharts、Editor.md`  
 
 ## 在线演示
 
 `手机上也有不错的展示效果...`
 
-用户系统：[https://www.nanshengbbs.top](https://www.nanshengbbs.top) - (测试账号：`椿/123456`；也可自己注册)
+用户系统：[https://ssm.nanshengbbs.top](https://ssm.nanshengbbs.top) - (测试账号：`椿/123456`；也可自己注册)
 
-管理系统：[https://www.nanshengbbs.top/admin](https://www.nanshengbbs.top/admin)    **↓↓↓**
+管理系统：[https://ssm.nanshengbbs.top/admin](https://ssm.nanshengbbs.top/admin)    **↓↓↓**
 
 > 为了避免大家删除数据，暂时不给后台账号，望理解！
 
