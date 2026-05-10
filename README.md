@@ -1,6 +1,8 @@
 > 推荐：[我的另一个基于【SpringBoot+Vue】的企业级项目](https://github.com/maliangnansheng/bbs-springboot)
 
-# Nan's BBS 南生论坛（SSM）
+⚠️ 此版本已停止维护和运营
+
+# 南生论坛SSM版本
 
 [![](https://img.shields.io/badge/Author-马亮南生-orange.svg)](https://blog.nansin.top/)
 [![](https://img.shields.io/badge/version-2.8.2-brightgreen.svg)](https://github.com/maliangnansheng/bbs-ssm)
@@ -10,7 +12,7 @@
 
 ## 关于项目
 
-- 南生论坛基于`SSM`框架，自适应手机端和电脑端，界面简洁美观，功能完善。分为 **用户系统** 和 **管理系统** 两部分
+- 南生论坛SSM版本基于`SSM`框架，自适应手机端和电脑端，界面简洁美观，功能完善。分为 **用户系统** 和 **管理系统** 两部分
 - 该论坛适合`初学SSM`童鞋学习。主要涉及技术包括`Spring 、SpringMVC 、MyBatis 、Redis、MySQL 、Bootstrap 、jQuery 、Ajax 、Layer、ECharts、Editor.md`  
 
 ## 默认账号
@@ -162,9 +164,3 @@
 - **仪表盘**
 
   ![image](https://76.nansin.top/bbs_ssm/bbs-管理员-仪表盘v2.8.2.png)
-
-[查看全部](https://blog.nansin.top/2020/07/08/南生论坛页面静态展示v2-8-2/) 
-
-**↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓**
-
- [前往查看南生论坛所有页面的展示效果](https://blog.nansin.top/2020/07/08/南生论坛页面静态展示v2-8-2/)
